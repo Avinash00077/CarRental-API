@@ -5,10 +5,15 @@ import pgsql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 import { QueryTypes } from 'sequelize';
 
-const GetCarsDTO = async () => {
+const GetCarsDTO = async (location, from_date, to_date) => {
   try {
+    const replacements = {
+      location: location ? location : null,
+      from_date: from_date ? from_date : null,
+      to_date: to_date ? to_date : null,
+    };
     const query = DB.QUERY.GET_CARS;
-    const data = await pgsql.query(query, { type: QueryTypes.SELECT });
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetCarsDTO: error.message });

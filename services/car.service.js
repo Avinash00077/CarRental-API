@@ -6,9 +6,10 @@ import logger from '../utility/logger.utility.js';
 
 const { customExceptionMessage } = customUtility;
 
-const GetCarsService = async () => {
+const GetCarsService = async (request) => {
   try {
-    const data = await CarDTO.GetCarsDTO();
+    const { location, from_date, to_date } = request.headers;
+    const data = await CarDTO.GetCarsDTO(location, from_date, to_date);
     return data;
   } catch (error) {
     logger.error({ GetCarsService: error.message });
@@ -19,6 +20,11 @@ const GetCarsService = async () => {
 const GetCarByIdService = async (request) => {
   try {
     const { car_id } = request.headers;
+    const adminId = request.adminId;
+
+    if (!adminId) {
+      return customExceptionMessage(401, 'Please login with admin account to add car');
+    }
     const data = await CarDTO.GetCarByIdDTO(car_id);
     return data;
   } catch (error) {
@@ -30,6 +36,11 @@ const GetCarByIdService = async (request) => {
 const GetCarByRegistrationNumberService = async (request) => {
   try {
     const { registration_number } = request.headers;
+    const adminId = request.adminId;
+
+    if (!adminId) {
+      return customExceptionMessage(401, 'Please login with admin account to add car');
+    }
     const data = await CarDTO.GetCarByRegistrationNumberDTO(registration_number);
     return data;
   } catch (error) {
