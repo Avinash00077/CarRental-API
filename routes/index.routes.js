@@ -19,8 +19,13 @@ Router.get('/user/auth', UserValidations.UserloginValidation, UserController.Get
 
 Router.post('/user/add', UserValidations.addUserCheck, UserController.AddNewUserController);
 
+Router.get('/user/password-reset/otp', UserValidations.UserEmailCheck, UserController.GenerateOtpForUserPasswordController);
+
+Router.put('/user/password-reset/confirm', UserValidations.ConfirmPasswordCheck, UserController.UpdateUserPasswordController);
+
 //admin
 Router.get('/admin/auth', UserValidations.UserloginValidation, AdminController.GetAuthController);
+
 
 Router.use(JWT.VerifyToken);
 

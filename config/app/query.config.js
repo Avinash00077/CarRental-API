@@ -2,6 +2,11 @@
 import properties from '../index.config.js';
 
 const QUERY = {
+  //
+  INSERT_OTP: properties.get('query.insert_otp'),
+  GET_OTP: properties.get('query.get_otp'),
+  UPDATE_OTP: properties.get('query.update_otp'),
+
   //user
   GET_USER_BY_EMAIL: properties.get('query.get_userbyemail'),
   GET_USERBY_ID: properties.get('query.get_userby_id'),

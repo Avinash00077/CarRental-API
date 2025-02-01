@@ -1,4 +1,6 @@
 'use strict'
+
+import {generate} from 'otp-generator';
 const customExceptionMessage =(errorCode,errorMessage)=>{
     return {errorCode,errorMessage}
 }
@@ -14,6 +16,7 @@ const formatDateTime = (date, time) => {
     const istTime = new Date(now.getTime() + offset).toISOString().replace('T', ' ').substring(0, 19);
     return istTime;
   };
+const generateOtp = () => generate(6,{upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false});
 
-const customUtility = {customExceptionMessage, formatDateTime, istTimestamp};
+const customUtility = {customExceptionMessage, formatDateTime, istTimestamp, generateOtp};
 export default customUtility;

@@ -22,7 +22,7 @@ const AddNewUserController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      return response.status(200).json({ message: 'User Added Successfully' });
+      return response.status(200).json({ message: 'User Added Successfully', data:data });
     }
   } catch (error) {
     logger.error({ AddNewUserController: error.message });
@@ -40,5 +40,33 @@ const GetUserByIdController = async (request, response) => {
   }
 };
 
-const UserController = { GetAuthController, AddNewUserController, GetUserByIdController };
+const GenerateOtpForUserPasswordController = async (request, response) => {
+  try {
+    const data = await UserService.GenerateOtpForUserPassword(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      return response.status(200).json({ message: 'OTP sent Successfully', data });
+    }
+  } catch (error) {
+    logger.error({ GenerateOtpForUserPasswordController: error.message });
+    response.status(500).json({ message: 'Internal server Error' });
+  }
+};
+
+const UpdateUserPasswordController = async (request, response) => {
+  try {
+    const data = await UserService.UpdateUserPasswordService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      return response.status(200).json({ message: 'Password Updated Successfully' });
+    }
+  } catch (error) {
+    logger.error({ UpdateUserPasswordController: error.message });
+    response.status(500).json({ message: 'Internal server Error' });
+  }
+};
+
+const UserController = { GetAuthController, AddNewUserController, GetUserByIdController,GenerateOtpForUserPasswordController, UpdateUserPasswordController };
 export default UserController;
