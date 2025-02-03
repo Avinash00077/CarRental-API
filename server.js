@@ -48,7 +48,7 @@ app.get('/health', async (req, res) => {
   }
 });
 
-app.get('/health/mointor', async (req, res) => {
+app.get('/health/monitor', async (req, res) => {
   logger.info('Health check initiated by monitor');
   const timestamp = customUtility.istTimestamp();
   const message = 'OK';
