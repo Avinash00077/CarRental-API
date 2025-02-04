@@ -27,7 +27,7 @@ const addUserCheck = [
 ];
 
 const UserEmailCheck = [
-  body('email').trim().notEmpty().isEmail().withMessage('Enter valid Email'),
+  header('email').trim().notEmpty().isEmail().withMessage('Enter valid Email'),
   (request, response, next) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {

@@ -15,6 +15,8 @@ const sequelize = new Sequelize({
     ssl: {
       require: true,
       rejectUnauthorized: false, // This is typically needed if the server uses self-signed SSL certificates
+      timezone: 'Asia/Kolkata', // Ensures timestamps use IST
+
     },
   },
   pool: {

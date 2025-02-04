@@ -28,15 +28,16 @@ const GetUserByIdDTO = async (user_id) => {
   }
 };
 
-const AddNewUserDTO = async (name, email, password, phone_number, created_by) => {
+const AddNewUserDTO = async (first_name, last_name, email, password, phone_number, created_by) => {
   try {
     const query = DB.QUERY.ADD_NEW_USER;
     const replacements = {
-      name: name,
+      first_name: first_name,
+      last_name: last_name,
       email: email,
       password: password,
       phone_number: phone_number,
-      created_by: created_by
+      created_by: created_by,
     };
     const data = await pgsql.query(query, { type: pgsql.QueryTypes.INSERT, replacements: replacements });
     return data;
@@ -46,11 +47,12 @@ const AddNewUserDTO = async (name, email, password, phone_number, created_by) =>
   }
 };
 
-const UpdateUserDTO = async (name, email, user_id) => {
+const UpdateUserDTO = async (first_name, last_name, email, user_id) => {
   try {
     const query = DB.QUERY.UPDATE_USER;
     const replacements = {
-      name,
+      first_name,
+      last_name,
       email,
       user_id,
     };
