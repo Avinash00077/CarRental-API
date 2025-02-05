@@ -38,7 +38,7 @@ const GetAuthService = async (request) => {
 
 const AddNewUserService = async (request) => {
   try {
-    const { name, email, password, phone_number } = request.body;
+    const { first_name, last_name, email, password, phone_number } = request.body;
 
     const GetUserByEmail = await UserDTO.GetUserByEmailDTO(email);
     if (GetUserByEmail.length > 0) {
@@ -49,7 +49,7 @@ const AddNewUserService = async (request) => {
       return customExceptionMessage(400, 'User already exist with this mobile number');
     }
     const hashedPassword = await bcrypt.hash(password, 12);
-    await UserDTO.AddNewUserDTO(name, email, hashedPassword, phone_number, 'guest');
+    await UserDTO.AddNewUserDTO(first_name, last_name, email, hashedPassword, phone_number, 'guest');
     request.headers.email = email;
     request.headers.password = password;
     const loginData = await GetAuthService(request);
