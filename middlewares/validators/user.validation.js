@@ -15,7 +15,7 @@ const UserloginValidation = [
 const addUserCheck = [
   body('email').trim().notEmpty().isEmail().withMessage('Enter valid Email'),
   body('password').trim().notEmpty().isLength({ min: 7, max: 20 }).withMessage('Enter valid password'),
-  body('name').trim().notEmpty().isLength({ min: 2, max: 100 }).withMessage('Enter valid name'),
+  //body('name').trim().notEmpty().isLength({ min: 2, max: 100 }).withMessage('Enter valid name'),
   body('phone_number').trim().notEmpty().isLength({ min: 10, max: 10 }).isInt().withMessage('Enter valid Phone Number'),
   (request, response, next) => {
     const errors = validationResult(request);
