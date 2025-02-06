@@ -7,6 +7,8 @@ import bcrypt from 'bcrypt';
 import logger from '../utility/logger.utility.js';
 import OtpDTO from '../dto/otp.dto.js';
 import AppConfig from '../config/app/app.config.js';
+import sendEmail from '../utility/email.utility.js';
+import emailTemplates from '../config/app/email.template.js';
 
 const { OTP_CODES } = AppConfig;
 const { customExceptionMessage, generateOtp } = customUtility;
@@ -28,7 +30,9 @@ const GetAuthService = async (request) => {
       name: data[0].name,
       email: data[0].email,
       phone_number: data[0].phone_number,
+      last_login: data[0].last_login,
     };
+    await UserDTO.UpdateLastLoginDTO(userDetails.user_id);
     return { token, userDetails };
   } catch (error) {
     logger.error({ GetAuthService: error.message });
@@ -52,6 +56,11 @@ const AddNewUserService = async (request) => {
     await UserDTO.AddNewUserDTO(first_name, last_name, email, hashedPassword, phone_number, 'guest');
     request.headers.email = email;
     request.headers.password = password;
+    const user_name = `${first_name+ ' ' +last_name}`
+    const emailTemplate = emailTemplates.userRegestartionTemplate(user_name)
+    const subject = emailTemplate.subject;
+    const body = emailTemplate.body;
+    await sendEmail(email,subject, body);
     const loginData = await GetAuthService(request);
     return loginData;
   } catch (error) {
@@ -102,7 +111,12 @@ const GenerateOtpForUserPassword = async (request) => {
     const user_id = userDetails[0].user_id;
     const otp = generateOtp();
     await OtpDTO.InserOtpDTO(user_id, otp, OTP_CODES.RESET_PASSWORD);
-    return otp;
+    const user_name = `${userDetails[0].first_name+ ' ' +userDetails[0].last_name}`
+    const emailTemplate = emailTemplates.passwordResetTemplate(user_name, otp)
+    const subject = emailTemplate.subject;
+    const body = emailTemplate.body;
+    await sendEmail(email,subject, body);
+    return true;
   } catch (error) {
     logger.error({ GenerateOtpForUserPassword: error.message });
     throw new Error(error.message);

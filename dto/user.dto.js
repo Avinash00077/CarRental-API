@@ -1,5 +1,6 @@
 'use strict';
 
+import { QueryTypes } from 'sequelize';
 import DB from '../config/app/query.config.js';
 import pgsql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
@@ -79,6 +80,20 @@ const UserPasswordDTO = async (password, user_id) => {
     throw new Error(error.message);
   }
 };
-const UserDTO = { GetUserByEmailDTO, AddNewUserDTO, UpdateUserDTO, GetUserByIdDTO, UserPasswordDTO };
+
+const UpdateLastLoginDTO = async (user_id) => {
+  try {
+    const replacements = {
+      user_id,
+    };
+    const query = DB.QUERY.UPDATE_LAST_LOGIN;
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateLastLoginDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+const UserDTO = { GetUserByEmailDTO, AddNewUserDTO, UpdateUserDTO, GetUserByIdDTO, UserPasswordDTO, UpdateLastLoginDTO };
 
 export default UserDTO;

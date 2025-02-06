@@ -9,10 +9,13 @@ import UserValidations from '../middlewares/validators/user.validation.js';
 import CarController from '../controllers/car.controller.js';
 import BookingController from '../controllers/booking.controller.js';
 import CarValidations from '../middlewares/validators/car.validation.js';
+import customUtility from '../utility/custom.utility.js';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
 const Router = express.Router();
+
+Router.use(customUtility.setTimeZone)
 
 //user
 Router.get('/user/auth', UserValidations.UserloginValidation, UserController.GetAuthController);

@@ -1,6 +1,7 @@
 'use strict'
 
 import {generate} from 'otp-generator';
+import pgsql from '../config/database/database.config.js';
 const customExceptionMessage =(errorCode,errorMessage)=>{
     return {errorCode,errorMessage}
 }
@@ -18,5 +19,11 @@ const formatDateTime = (date, time) => {
   };
 const generateOtp = () => generate(6,{upperCaseAlphabets: false, lowerCaseAlphabets: false, specialChars: false});
 
-const customUtility = {customExceptionMessage, formatDateTime, istTimestamp, generateOtp};
+const setTimeZone = async (req, res, next) => {
+  
+  await pgsql.query("SET TIME ZONE 'Asia/Kolkata'"); // Enforces IST per session
+  next();
+};
+
+const customUtility = {customExceptionMessage, formatDateTime, istTimestamp, generateOtp, setTimeZone};
 export default customUtility;

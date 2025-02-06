@@ -13,6 +13,7 @@ const QUERY = {
   ADD_NEW_USER: properties.get('query.post_newuser'),
   UPDATE_USER: properties.get('query.update_user'),
   CHANGE_USER_PASSWORD: properties.get('query.change_user_password'),
+  UPDATE_LAST_LOGIN: properties.get('query.update_last_login'),
 
   //admin
   GET_ADMIN_BY_EMAIL: properties.get('query.get_adminbyemail'),
