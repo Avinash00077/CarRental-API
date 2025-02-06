@@ -47,9 +47,9 @@ const AddBookingService = async (request) => {
         start_date,
         end_date,
       );
-      if (havingConflict[0].is_conflict) {
-        return customExceptionMessage(409, 'Conflict booking found');
-      }
+      // if (havingConflict[0].is_conflict) {
+      //   return customExceptionMessage(409, 'Conflict booking found');
+      // }
     const data = await BookingDTO.AddBoookingDTO(
       userId,
       car_id,
@@ -60,6 +60,7 @@ const AddBookingService = async (request) => {
       payment_mode,
       'user',
     );
+    console.log([data][0].booking_id)
     return data;
   } catch (error) {
     logger.error({ AddBookingService: error.message });
@@ -98,6 +99,7 @@ const AddBookingByAdminService = async (request) => {
       payment_mode,
       adminId,
     );
+   
     return data;
   } catch (error) {
     logger.error({ AddBookingByAdminService: error.message });
@@ -107,27 +109,24 @@ const AddBookingByAdminService = async (request) => {
 
 const UpdateBookingService = async (request) => {
   try {
-    const { booking_id, start_date, end_date, total_price, booking_status, payment_mode } = request.body;
+    const { booking_id, booking_status, transaction_id } = request.body;
     const bookingData = await BookingDTO.GetBookingDTO(booking_id);
     if (bookingData.length === 0 || bookingData[0].booking_status === 'COMPLETED') {
       return customExceptionMessage(409, 'Car rental already completed or data not available');
     }
-    const havingConflict = await BookingDTO.GetBookingConflictDTO(
-      bookingData[0].car_id,
-      booking_id,
-      start_date,
-      end_date,
-    );
-    if (havingConflict[0].is_conflict) {
-      return customExceptionMessage(409, 'Conflict booking found');
-    }
+    // const havingConflict = await BookingDTO.GetBookingConflictDTO(
+    //   bookingData[0].car_id,
+    //   booking_id,
+    //   start_date,
+    //   end_date,
+    // );
+    // if (havingConflict[0].is_conflict) {
+    //   return customExceptionMessage(409, 'Conflict booking found');
+    // }
     const data = await BookingDTO.UpdateBoookingDTO(
       booking_id,
-      start_date,
-      end_date,
-      total_price,
       booking_status,
-      payment_mode,
+      transaction_id,
       'user',
     );
     return data;

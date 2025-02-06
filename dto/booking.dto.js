@@ -74,21 +74,15 @@ const AddBoookingDTO = async (
 
 const UpdateBoookingDTO = async (
   booking_id,
-  start_date,
-  end_date,
-  total_price,
   booking_status,
-  payment_mode,
+  transaction_id,
   updated_by,
 ) => {
   try {
     const replacements = {
       booking_id,
-      start_date,
-      end_date,
-      total_price,
       booking_status,
-      payment_mode,
+      transaction_id,
       updated_by,
     };
     const query = DB.QUERY.UPDATE_BOOKING;

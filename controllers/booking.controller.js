@@ -32,7 +32,7 @@ const AddBookingController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(201).json({ message: 'Rental Booking Sucessfull' });
+      response.status(201).json({ message: 'Rental Booking Sucessfull', data: [data][0][0][0] });
     }
   } catch (error) {
     logger.error({ AddBookingController: error.message });
