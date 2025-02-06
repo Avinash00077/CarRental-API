@@ -46,7 +46,7 @@ const GenerateOtpForUserPasswordController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      return response.status(200).json({ message: 'OTP sent Successfully', data });
+      return response.status(200).json({ message: 'OTP sent Successfully' });
     }
   } catch (error) {
     logger.error({ GenerateOtpForUserPasswordController: error.message });
