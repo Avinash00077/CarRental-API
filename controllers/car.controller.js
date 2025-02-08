@@ -2,6 +2,16 @@
 import CarService from '../services/car.service.js';
 import logger from '../utility/logger.utility.js';
 
+const GetRandomCarsController = async (request, response) => {
+  try {
+    const data = await CarService.GetRandomCarsService(request);
+    return response.status(200).json({ message: 'Okay Request successfull', data: data });
+  } catch (error) {
+    logger.error({ GetRandomCarsController: error.message });
+    response.status(500).json({ message: 'internalServerError' });
+  }
+};
+
 const GetCarsController = async (request, response) => {
   try {
     const data = await CarService.GetCarsService(request);
@@ -89,6 +99,7 @@ const UpdateCarImageController = async (request, response) => {
 };
 
 const CarController = {
+  GetRandomCarsController,
   GetCarByIdController,
   GetCarByRegistrationNumberController,
   GetCarsController,

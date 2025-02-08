@@ -23,7 +23,11 @@ const GetAuthService = async (request) => {
     if (!comparePasssword) {
       return customExceptionMessage(401, 'Invalid password please check the password');
     }
-    const userData = { userId: data[0].user_id, verified: data[0].verified };
+    const userData = {
+      userId: data[0].user_id,
+      driving_license_verified: data[0].driving_license_verified,
+      aadhar_verified: data[0].aadhar_verified,
+    };
     const token = JWT.GenerateToken(userData);
     const userDetails = {
       user_id: data[0].user_id,
@@ -31,7 +35,8 @@ const GetAuthService = async (request) => {
       email: data[0].email,
       phone_number: data[0].phone_number,
       last_login: data[0].last_login,
-      verified: data[0].verified,
+      driving_license_verified: data[0].driving_license_verified,
+      aadhar_verified: data[0].aadhar_verified,
     };
     await UserDTO.UpdateLastLoginDTO(userDetails.user_id);
     return { token, userDetails };

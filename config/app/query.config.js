@@ -26,6 +26,7 @@ const QUERY = {
   CHANGE_ADMIN_PASSWORD: properties.get('query.change_admin_password'),
 
   //cars
+  GET_RANDOM_CARS: properties.get('query.get_random_cars'),
   GET_CARS: properties.get('query.get_cars'),
   GET_CAR_BY_ID: properties.get('query.get_car_by_id'),
   GET_CAR_BY_NUMBER: properties.get('query.get_car_by_number'),

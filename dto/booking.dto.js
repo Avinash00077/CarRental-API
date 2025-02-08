@@ -24,17 +24,19 @@ const GetBookingDTO = async (booking_id, email, phone_number, car_id, booking_st
   }
 };
 
-const GetBookingConflictDTO = async (car_id, booking_id, from_date, to_date) => {
+const GetBookingConflictDTO = async (car_id, start_date, start_time, end_date, end_time) => {
   try {
     const replacements = {
-      car_id: car_id ? car_id : null,
-      booking_id: booking_id ? booking_id : null,
-      from_date: from_date ? from_date : null,
-      to_date: to_date ? to_date : null,
+      car_id,
+      start_date,
+      start_time,
+      end_date,
+      end_time,
     };
     const query = DB.QUERY.GET_BOOKING_CONFLICT;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
-    return data;
+    const [data] = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const Conflict = data.availability_status === 0 ? false : true;
+    return Conflict;
   } catch (error) {
     logger.error({ GetBookingConflictDTO: error.message });
     throw new Error(error.message);
@@ -45,7 +47,9 @@ const AddBoookingDTO = async (
   user_id,
   car_id,
   start_date,
+  start_time,
   end_date,
+  end_time,
   total_price,
   booking_status,
   payment_mode,
@@ -56,7 +60,9 @@ const AddBoookingDTO = async (
       user_id,
       car_id,
       start_date,
+      start_time,
       end_date,
+      end_time,
       total_price,
       booking_status,
       payment_mode,
@@ -64,7 +70,9 @@ const AddBoookingDTO = async (
     };
     const query = DB.QUERY.ADD_BOOKING;
     const data = await pgsql.query(query, { replacements, type: QueryTypes.INSERT });
-    return data;
+    const [bookingData] = await pgsql.query('SELECT LAST_INSERT_ID() AS booking_id')
+    console.log(bookingData)
+    return bookingData;
   } catch (error) {
     console.log(error);
     logger.error({ AddBoookingDTO: error.message });
@@ -72,12 +80,7 @@ const AddBoookingDTO = async (
   }
 };
 
-const UpdateBoookingDTO = async (
-  booking_id,
-  booking_status,
-  transaction_id,
-  updated_by,
-) => {
+const UpdateBoookingDTO = async (booking_id, booking_status, transaction_id, updated_by) => {
   try {
     const replacements = {
       booking_id,

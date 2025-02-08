@@ -35,32 +35,18 @@ const GetBookingsService = async (request) => {
 
 const AddBookingService = async (request) => {
   try {
-    const { car_id, start_date, end_date, total_price, payment_mode } = request.body;
+    const { car_id, start_date, start_time, end_date, end_time, total_price, payment_mode } = request.body;
     const userId = request.userId;
     const carData = await CarDTO.GetCarByIdDTO(car_id);
     if (carData.length === 0) {
       return customExceptionMessage(409, 'Car already booked or car not available');
     }
-    const havingConflict = await BookingDTO.GetBookingConflictDTO(
-        car_id,
-        null,
-        start_date,
-        end_date,
-      );
-      // if (havingConflict[0].is_conflict) {
-      //   return customExceptionMessage(409, 'Conflict booking found');
-      // }
-    const data = await BookingDTO.AddBoookingDTO(
-      userId,
-      car_id,
-      start_date,
-      end_date,
-      total_price,
-      'PENDING',
-      payment_mode,
-      'user',
-    );
-    console.log([data][0].booking_id)
+    const havingConflict = await BookingDTO.GetBookingConflictDTO(car_id, start_date, start_time, end_date, end_time);
+    if (havingConflict) {
+      return customExceptionMessage(409, 'Conflict booking found');
+    }
+    const [data] = await BookingDTO.AddBoookingDTO(userId, car_id, start_date, start_time, end_date, end_time, total_price, 'PENDING', payment_mode, 'user');
+    console.log(data.booking_id);
     return data;
   } catch (error) {
     logger.error({ AddBookingService: error.message });
@@ -76,30 +62,16 @@ const AddBookingByAdminService = async (request) => {
       return customExceptionMessage(401, 'Please login with admin acccount');
     }
     const carData = await CarDTO.GetCarByIdDTO(car_id);
-    if (carData.length === 0 ) {
+    if (carData.length === 0) {
       return customExceptionMessage(409, 'Car already booked or car not available');
     }
 
-    const havingConflict = await BookingDTO.GetBookingConflictDTO(
-        car_id,
-        null,
-        start_date,
-        end_date,
-      );
-      if (havingConflict[0].is_conflict) {
-        return customExceptionMessage(409, 'Conflict booking found');
-      }
-    const data = await BookingDTO.AddBoookingDTO(
-      user_id,
-      car_id,
-      start_date,
-      end_date,
-      total_price,
-      booking_status,
-      payment_mode,
-      adminId,
-    );
-   
+    const havingConflict = await BookingDTO.GetBookingConflictDTO(car_id, null, start_date, end_date);
+    if (havingConflict[0].is_conflict) {
+      return customExceptionMessage(409, 'Conflict booking found');
+    }
+    const data = await BookingDTO.AddBoookingDTO(user_id, car_id, start_date, end_date, total_price, booking_status, payment_mode, adminId);
+
     return data;
   } catch (error) {
     logger.error({ AddBookingByAdminService: error.message });
@@ -123,12 +95,7 @@ const UpdateBookingService = async (request) => {
     // if (havingConflict[0].is_conflict) {
     //   return customExceptionMessage(409, 'Conflict booking found');
     // }
-    const data = await BookingDTO.UpdateBoookingDTO(
-      booking_id,
-      booking_status,
-      transaction_id,
-      'user',
-    );
+    const data = await BookingDTO.UpdateBoookingDTO(booking_id, booking_status, transaction_id, 'user');
     return data;
   } catch (error) {
     logger.error({ UpdateBookingService: error.message });
@@ -148,24 +115,11 @@ const UpdateBookingByAdminService = async (request) => {
       return customExceptionMessage(409, 'Car rental already completed or data not available');
     }
 
-    const havingConflict = await BookingDTO.GetBookingConflictDTO(
-        bookingData[0].car_id,
-        booking_id,
-        start_date,
-        end_date,
-      );
-      if (havingConflict[0].is_conflict) {
-        return customExceptionMessage(409, 'Conflict booking found');
-      }
-    const data = await BookingDTO.UpdateBoookingDTO(
-      booking_id,
-      start_date,
-      end_date,
-      total_price,
-      booking_status,
-      payment_mode,
-      adminId,
-    );
+    const havingConflict = await BookingDTO.GetBookingConflictDTO(bookingData[0].car_id, booking_id, start_date, end_date);
+    if (havingConflict[0].is_conflict) {
+      return customExceptionMessage(409, 'Conflict booking found');
+    }
+    const data = await BookingDTO.UpdateBoookingDTO(booking_id, start_date, end_date, total_price, booking_status, payment_mode, adminId);
     return data;
   } catch (error) {
     logger.error({ UpdateBookingByAdminService: error.message });

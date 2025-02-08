@@ -10,6 +10,7 @@ import CarController from '../controllers/car.controller.js';
 import BookingController from '../controllers/booking.controller.js';
 import CarValidations from '../middlewares/validators/car.validation.js';
 import customUtility from '../utility/custom.utility.js';
+import BookingValidation from '../middlewares/validators/booking.validation.js';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -28,6 +29,9 @@ Router.put('/user/password-reset/confirm', UserValidations.ConfirmPasswordCheck,
 
 //admin
 Router.get('/admin/auth', UserValidations.UserloginValidation, AdminController.GetAuthController);
+
+//car
+Router.get('/car/random', CarValidations.LocationCheck, CarController.GetRandomCarsController);
 
 Router.use(JWT.VerifyToken);
 
@@ -74,7 +78,7 @@ Router.get('/bookings', BookingController.GetUserBookingsController);
 
 Router.get('/admin/bookings', BookingController.GetBookingsController);
 
-Router.post('/booking', BookingController.AddBookingController);
+Router.post('/booking', BookingValidation.AddbookingValidation, BookingController.AddBookingController);
 
 Router.post('/admin/booking', BookingController.AddBookingByAdminController);
 

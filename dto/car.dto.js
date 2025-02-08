@@ -5,6 +5,21 @@ import pgsql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 import { QueryTypes } from 'sequelize';
 
+const GetRandomCarsDTO = async (location) => {
+  try {
+    const replacements = {
+      location
+    };
+    const query = DB.QUERY.GET_RANDOM_CARS;
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetRandomCarsDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+
 const GetCarsDTO = async (location, start_date, end_date, start_time, end_time) => {
   try {
     const replacements = {
@@ -168,6 +183,7 @@ const UpdatecarImageDTO = async (car_id, image, image_ext, updated_by) => {
 };
 
 const CarDTO = {
+  GetRandomCarsDTO,
   GetCarsDTO,
   GetCarByIdDTO,
   GetCarByRegistrationNumberDTO,

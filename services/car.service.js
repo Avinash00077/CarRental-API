@@ -6,6 +6,17 @@ import logger from '../utility/logger.utility.js';
 
 const { customExceptionMessage } = customUtility;
 
+const GetRandomCarsService = async (request) => {
+  try {
+    const { location } = request.headers;
+    const data = await CarDTO.GetRandomCarsDTO(location);
+    return data;
+  } catch (error) {
+    logger.error({ GetRandomCarsService: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetCarsService = async (request) => {
   try {
     const { location, start_date, end_date, start_time, end_time } = request.headers;
@@ -180,6 +191,7 @@ const UpdateCarImageService = async (request) => {
 };
 
 const CarService = {
+  GetRandomCarsService,
   AddCarService,
   GetCarByIdService,
   GetCarByRegistrationNumberService,

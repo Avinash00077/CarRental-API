@@ -22,9 +22,11 @@ const VerifyToken = (request, response, next) => {
     const decodedToken = jwt.verify(token, AppConfig.JWTSECRETKEY);
     request.adminId = decodedToken.adminId ? decodedToken.adminId : null;
     const userId = decodedToken.userId ? decodedToken.userId : null;
-    const verified = decodedToken.verified ? decodedToken.verified : null;
+    const aadhar_verified = decodedToken.aadhar_verified ? decodedToken.aadhar_verified : null;
+    const driving_license_verified = decodedToken.driving_license_verified ? decodedToken.driving_license_verified : null;
     request.userId = userId;
-    request.verified = verified;
+    request.aadhar_verified = aadhar_verified;
+    request.driving_license_verified = driving_license_verified;
     next();
   } catch (error) {
     logger.error({ VerifyToken: error.message });
