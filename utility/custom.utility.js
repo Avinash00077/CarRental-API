@@ -21,8 +21,8 @@ const generateOtp = () => generate(6,{upperCaseAlphabets: false, lowerCaseAlphab
 
 const setTimeZone = async (req, res, next) => {
   
-  //await pgsql.query("SET time_zone = '+05:30';"); // Enforces IST per session
-  await pgsql.query("SET TIME ZONE 'Asia/Kolkata'");
+  await pgsql.query("SET time_zone = '+05:30';"); // Enforces IST per session
+  //await pgsql.query("SET TIME ZONE 'Asia/Kolkata'");
   next();
 };
 

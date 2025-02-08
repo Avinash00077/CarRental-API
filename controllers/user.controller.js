@@ -22,10 +22,39 @@ const AddNewUserController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      return response.status(200).json({ message: 'User Added Successfully', data:data });
+      return response.status(200).json({ message: 'User Added Successfully', data: data });
     }
   } catch (error) {
     logger.error({ AddNewUserController: error.message });
+    response.status(500).json({ message: 'Internal server Error' });
+  }
+};
+
+const UpdateUserController = async (request, response) => {
+  try {
+    const data = await UserService.UpdateUserService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      return response.status(200).json({ message: 'User Updated Successfully' });
+    }
+  } catch (error) {
+    logger.error({ UpdateUserController: error.message });
+    response.status(500).json({ message: 'Internal server Error' });
+  }
+};
+
+const UserImageUploadController = async (request, response) => {
+  try {
+    const data = await UserService.userImageUploadService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      const {image_type} = request.body
+      return response.status(200).json({ message: `${image_type} Image Updated Successfully` });
+    }
+  } catch (error) {
+    logger.error({ UserImageUploadController: error.message });
     response.status(500).json({ message: 'Internal server Error' });
   }
 };
@@ -68,5 +97,13 @@ const UpdateUserPasswordController = async (request, response) => {
   }
 };
 
-const UserController = { GetAuthController, AddNewUserController, GetUserByIdController,GenerateOtpForUserPasswordController, UpdateUserPasswordController };
+const UserController = {
+  GetAuthController,
+  AddNewUserController,
+  GetUserByIdController,
+  GenerateOtpForUserPasswordController,
+  UpdateUserPasswordController,
+  UpdateUserController,
+  UserImageUploadController,
+};
 export default UserController;

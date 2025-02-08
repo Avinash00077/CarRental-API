@@ -22,7 +22,9 @@ const VerifyToken = (request, response, next) => {
     const decodedToken = jwt.verify(token, AppConfig.JWTSECRETKEY);
     request.adminId = decodedToken.adminId ? decodedToken.adminId : null;
     const userId = decodedToken.userId ? decodedToken.userId : null;
+    const verified = decodedToken.verified ? decodedToken.verified : null;
     request.userId = userId;
+    request.verified = verified;
     next();
   } catch (error) {
     logger.error({ VerifyToken: error.message });

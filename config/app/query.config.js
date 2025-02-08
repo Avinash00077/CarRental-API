@@ -14,6 +14,9 @@ const QUERY = {
   UPDATE_USER: properties.get('query.update_user'),
   CHANGE_USER_PASSWORD: properties.get('query.change_user_password'),
   UPDATE_LAST_LOGIN: properties.get('query.update_last_login'),
+  UPDATE_USER_IMAGE: properties.get('query.update_user_image'),
+  UPDATE_USER_AADHAR:properties.get('query.update_user_aadhar'),
+  UPDATE_USER_DRIVING_LICENSE: properties.get('query.update_user_driving_license'),
 
   //admin
   GET_ADMIN_BY_EMAIL: properties.get('query.get_adminbyemail'),

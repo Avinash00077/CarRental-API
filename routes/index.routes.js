@@ -15,7 +15,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 const Router = express.Router();
 
-Router.use(customUtility.setTimeZone)
+Router.use(customUtility.setTimeZone);
 
 //user
 Router.get('/user/auth', UserValidations.UserloginValidation, UserController.GetAuthController);
@@ -29,14 +29,26 @@ Router.put('/user/password-reset/confirm', UserValidations.ConfirmPasswordCheck,
 //admin
 Router.get('/admin/auth', UserValidations.UserloginValidation, AdminController.GetAuthController);
 
-
 Router.use(JWT.VerifyToken);
 
 //user
 Router.get('/user/id', UserController.GetUserByIdController);
 
+Router.put('/user/update', UserValidations.updateUserCheck, UserController.UpdateUserController);
+
+Router.put(
+  '/user/image-upload',
+  upload.fields([
+    { name: 'profile_image', maxCount: 1 },
+    { name: 'aadhar_image', maxCount: 1 },
+    { name: 'driving_license_image', maxCount: 1 },
+  ]),
+  UserValidations.UserImageValidation,
+  UserController.UserImageUploadController,
+);
+
 //admin
-Router.post('/admin/add', UserValidations.addUserCheck, AdminController.AddNewAdminController);
+Router.post('/admin/add', AdminController.AddNewAdminController);
 
 Router.get('/admin/id', AdminController.GetAdminByIdController);
 
@@ -48,13 +60,13 @@ Router.get('/admin/car/id', CarController.GetCarByIdController);
 
 Router.get('/admin/car/registration-number', CarController.GetCarByRegistrationNumberController);
 
-Router.post('/car', upload.single('image'), CarController.AddCarController);
+Router.post('/car', upload.fields([{ name: 'car_image', maxCount: 1 }]), CarValidations.AddCarValidation, CarController.AddCarController);
 
 Router.put('/car', CarController.UpdateCarController);
 
 Router.put('/car/avilability', CarController.UpdateCarAvilabilityController);
 
-Router.put('/car/image', upload.single('image'), CarController.UpdateCarImageController);
+Router.put('/car/image', upload.fields({ name: 'car_image', maxCount: 1 }), CarController.UpdateCarImageController);
 
 //booking
 

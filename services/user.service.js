@@ -23,7 +23,7 @@ const GetAuthService = async (request) => {
     if (!comparePasssword) {
       return customExceptionMessage(401, 'Invalid password please check the password');
     }
-    const userData = { userId: data[0].user_id };
+    const userData = { userId: data[0].user_id, verified: data[0].verified };
     const token = JWT.GenerateToken(userData);
     const userDetails = {
       user_id: data[0].user_id,
@@ -31,6 +31,7 @@ const GetAuthService = async (request) => {
       email: data[0].email,
       phone_number: data[0].phone_number,
       last_login: data[0].last_login,
+      verified: data[0].verified,
     };
     await UserDTO.UpdateLastLoginDTO(userDetails.user_id);
     return { token, userDetails };
@@ -42,7 +43,7 @@ const GetAuthService = async (request) => {
 
 const AddNewUserService = async (request) => {
   try {
-    const { first_name, last_name, email, password, phone_number } = request.body;
+    const { first_name, last_name, gender, email, password, phone_number, dob } = request.body;
 
     const GetUserByEmail = await UserDTO.GetUserByEmailDTO(email);
     if (GetUserByEmail.length > 0) {
@@ -53,14 +54,14 @@ const AddNewUserService = async (request) => {
       return customExceptionMessage(400, 'User already exist with this mobile number');
     }
     const hashedPassword = await bcrypt.hash(password, 12);
-    await UserDTO.AddNewUserDTO(first_name, last_name, email, hashedPassword, phone_number, 'guest');
+    await UserDTO.AddNewUserDTO(first_name, last_name, email, gender, hashedPassword, phone_number, dob);
     request.headers.email = email;
     request.headers.password = password;
-    const user_name = `${first_name+ ' ' +last_name}`
-    const emailTemplate = emailTemplates.userRegestartionTemplate(user_name)
+    const user_name = `${first_name + ' ' + last_name}`;
+    const emailTemplate = emailTemplates.userRegestartionTemplate(user_name);
     const subject = emailTemplate.subject;
     const body = emailTemplate.body;
-    await sendEmail(email,subject, body);
+    await sendEmail(email, subject, body);
     const loginData = await GetAuthService(request);
     return loginData;
   } catch (error) {
@@ -72,7 +73,7 @@ const AddNewUserService = async (request) => {
 const GetUserByIdService = async (request) => {
   try {
     const { user_id } = request.headers;
-    const userId = user_id ? user_id : request.userId;
+    const userId = request.userId ? request.userId : user_id;
     const data = await UserDTO.GetUserByIdDTO(userId);
     return data;
   } catch (error) {
@@ -83,7 +84,7 @@ const GetUserByIdService = async (request) => {
 
 const UpdateUserService = async (request) => {
   try {
-    const { name, email } = request.body;
+    const { first_name, last_name, email, gender, address, dob } = request.body;
     const userId = request.userId;
     const user = await UserDTO.GetUserByIdDTO(userId);
     if (user.length === 0) {
@@ -93,7 +94,7 @@ const UpdateUserService = async (request) => {
     if (GetUserByEmail.length > 0 && GetUserByEmail[0].user_id != userId) {
       return customExceptionMessage(400, 'User already exist with this email');
     }
-    const data = await UserDTO.UpdateUserDTO(name, email, userId);
+    const data = await UserDTO.UpdateUserDTO(first_name, last_name, email, gender, address, userId, dob);
     return data;
   } catch (error) {
     logger.error({ UpdateUserService: error.message });
@@ -111,11 +112,11 @@ const GenerateOtpForUserPassword = async (request) => {
     const user_id = userDetails[0].user_id;
     const otp = generateOtp();
     await OtpDTO.InserOtpDTO(user_id, otp, OTP_CODES.RESET_PASSWORD);
-    const user_name = `${userDetails[0].first_name+ ' ' +userDetails[0].last_name}`
-    const emailTemplate = emailTemplates.passwordResetTemplate(user_name, otp)
+    const user_name = `${userDetails[0].first_name + ' ' + userDetails[0].last_name}`;
+    const emailTemplate = emailTemplates.passwordResetTemplate(user_name, otp);
     const subject = emailTemplate.subject;
     const body = emailTemplate.body;
-    await sendEmail(email,subject, body);
+    await sendEmail(email, subject, body);
     return true;
   } catch (error) {
     logger.error({ GenerateOtpForUserPassword: error.message });
@@ -152,6 +153,33 @@ const UpdateUserPasswordService = async (request) => {
   }
 };
 
+const userImageUploadService = async (request) => {
+  try {
+    const { image_type, aadhar_number, driving_license_number } = request.body;
+    const user_id = request.userId;
+    let data;
+    if (image_type === 'profile') {
+      const image = request.files.profile_image[0].buffer;
+      const fileName = request.files.profile_image[0].originalname.split('.')?.pop();
+      data = await UserDTO.UpdateUserProfileDTO(user_id, image, fileName);
+    } else if (image_type === 'aadhar') {
+      const image = request.files.aadhar_image[0].buffer;
+      const fileName = request.files.aadhar_image[0].originalname.split('.')?.pop();
+      data = await UserDTO.UpdateUserAadharDTO(user_id, aadhar_number, image, fileName);
+    } else if (image_type === 'driving_license') {
+      const image = request.files.driving_license_image[0].buffer;
+      const fileName = request.files.driving_license_image[0].originalname.split('.')?.pop();
+      data = await UserDTO.UpdateUserDrivingLicenseDTO(user_id, driving_license_number, image, fileName);
+    } else {
+      return customExceptionMessage(400, 'Invalid Image Type');
+    }
+    return data;
+  } catch (error) {
+    logger.error({ userImageUploadService: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const UserService = {
   GetAuthService,
   AddNewUserService,
@@ -159,6 +187,7 @@ const UserService = {
   UpdateUserService,
   UpdateUserPasswordService,
   GenerateOtpForUserPassword,
+  userImageUploadService,
 };
 
 export default UserService;

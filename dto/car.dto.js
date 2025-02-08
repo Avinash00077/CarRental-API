@@ -5,12 +5,14 @@ import pgsql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 import { QueryTypes } from 'sequelize';
 
-const GetCarsDTO = async (location, from_date, to_date) => {
+const GetCarsDTO = async (location, start_date, end_date, start_time, end_time) => {
   try {
     const replacements = {
       location: location ? location : null,
-      from_date: from_date ? from_date : null,
-      to_date: to_date ? to_date : null,
+      end_date: end_date ? end_date : null,
+      start_date: start_date ? start_date : null,
+      start_time: start_time ? start_time : null,
+      end_time: end_time ? end_time : null,
     };
     const query = DB.QUERY.GET_CARS;
     const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
@@ -56,11 +58,17 @@ const AddCarDTO = async (
   daily_rent,
   availability,
   registration_number,
-  created_by,
   image,
   image_ext,
   location,
   description,
+  car_owner,
+  car_condition,
+  mileage,
+  car_type,
+  seater,
+  fastag_availability,
+  location_address,
 ) => {
   try {
     const query = DB.QUERY.ADD_CAR;
@@ -71,12 +79,19 @@ const AddCarDTO = async (
       daily_rent,
       availability,
       registration_number,
-      created_by,
       image,
       image_ext,
       location,
       description,
+      car_owner,
+      car_condition,
+      mileage,
+      car_type,
+      seater,
+      fastag_availability,
+      location_address,
     };
+    console.log(replacements);
     const data = await pgsql.query(query, { replacements, type: QueryTypes.INSERT });
     return data;
   } catch (error) {

@@ -8,8 +8,8 @@ const { customExceptionMessage } = customUtility;
 
 const GetCarsService = async (request) => {
   try {
-    const { location, from_date, to_date } = request.headers;
-    const data = await CarDTO.GetCarsDTO(location, from_date, to_date);
+    const { location, start_date, end_date, start_time, end_time } = request.headers;
+    const data = await CarDTO.GetCarsDTO(location, start_date, end_date, start_time, end_time);
     return data;
   } catch (error) {
     logger.error({ GetCarsService: error.message });
@@ -51,12 +51,26 @@ const GetCarByRegistrationNumberService = async (request) => {
 
 const AddCarService = async (request) => {
   try {
-    const { name, brand, model_year, daily_rent, availability, registration_number, location, description } =
+    const { name,
+      brand,
+      model_year,
+      daily_rent,
+      availability,
+      registration_number,
+      location,
+      description,
+      car_owner,
+      car_condition,
+      mileage,
+      car_type,
+      seater,
+      fastag_availability,
+      location_address,} =
       request.body;
 
     const adminId = request.adminId;
-    const image = request?.file?.buffer;
-    const fileName = request?.file?.originalname?.split('.')?.pop();
+    const image = request.files.car_image[0].buffer;
+      const image_ext = request.files.car_image[0].originalname.split('.')?.pop();
     if (!adminId) {
       return customExceptionMessage(401, 'Please login with admin account to add car');
     }
@@ -71,11 +85,17 @@ const AddCarService = async (request) => {
       daily_rent,
       availability,
       registration_number,
-      adminId,
       image,
-      fileName,
+      image_ext,
       location,
       description,
+      car_owner,
+      car_condition,
+      mileage,
+      car_type,
+      seater,
+      fastag_availability,
+      location_address,
     );
     return data;
   } catch (error) {

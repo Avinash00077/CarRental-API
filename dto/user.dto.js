@@ -29,16 +29,17 @@ const GetUserByIdDTO = async (user_id) => {
   }
 };
 
-const AddNewUserDTO = async (first_name, last_name, email, password, phone_number, created_by) => {
+const AddNewUserDTO = async (first_name, last_name, email, gender, password, phone_number,dob) => {
   try {
     const query = DB.QUERY.ADD_NEW_USER;
     const replacements = {
       first_name: first_name,
       last_name: last_name,
       email: email,
+      gender: gender,
       password: password,
       phone_number: phone_number,
-      created_by: created_by,
+      dob: dob,
     };
     const data = await pgsql.query(query, { type: pgsql.QueryTypes.INSERT, replacements: replacements });
     return data;
@@ -48,14 +49,17 @@ const AddNewUserDTO = async (first_name, last_name, email, password, phone_numbe
   }
 };
 
-const UpdateUserDTO = async (first_name, last_name, email, user_id) => {
+const UpdateUserDTO = async (first_name, last_name, email, gender, address, user_id, dob) => {
   try {
     const query = DB.QUERY.UPDATE_USER;
     const replacements = {
       first_name,
       last_name,
       email,
+      gender,
+      address : address ? address : null,
       user_id,
+      dob
     };
     const data = await pgsql.query(query, { type: pgsql.QueryTypes.UPDATE, replacements: replacements });
     return data;
@@ -94,6 +98,72 @@ const UpdateLastLoginDTO = async (user_id) => {
     throw new Error(error.message);
   }
 };
-const UserDTO = { GetUserByEmailDTO, AddNewUserDTO, UpdateUserDTO, GetUserByIdDTO, UserPasswordDTO, UpdateLastLoginDTO };
+
+const UpdateUserProfileDTO = async (user_id, profile_image, image_type) => {
+  try {
+    const replacements = {
+      user_id,
+      profile_image,
+      image_type,
+    };
+    const query = DB.QUERY.UPDATE_USER_IMAGE;
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateUserProfileDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateUserAadharDTO = async (user_id, aadhar_number, aadhar_image, aadhar_img_type) => {
+  try {
+    const replacements = {
+      user_id,
+      aadhar_number,
+      aadhar_image,
+      aadhar_img_type,
+    };
+    const query = DB.QUERY.UPDATE_USER_AADHAR;
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateUserAadharDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateUserDrivingLicenseDTO = async (
+  user_id,
+  driving_license_number,
+  driving_license_image,
+  driving_license_img_type,
+) => {
+  try {
+    const replacements = {
+      user_id,
+      driving_license_number,
+      driving_license_image,
+      driving_license_img_type,
+    };
+    const query = DB.QUERY.UPDATE_USER_DRIVING_LICENSE;
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateUserDrivingLicenseDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UserDTO = {
+  GetUserByEmailDTO,
+  AddNewUserDTO,
+  UpdateUserDTO,
+  GetUserByIdDTO,
+  UserPasswordDTO,
+  UpdateLastLoginDTO,
+  UpdateUserProfileDTO,
+  UpdateUserAadharDTO,
+  UpdateUserDrivingLicenseDTO,
+};
 
 export default UserDTO;
