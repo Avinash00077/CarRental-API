@@ -1,4 +1,5 @@
-import { body, header, validationResult } from 'express-validator';
+import { body, header, validationResult, check } from 'express-validator';
+import moment from 'moment';
 
 const validTimes = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
 
@@ -70,8 +71,100 @@ const AddbookingValidation = [
   },
 ];
 
+const slotsValidation = [
+  check('start_date')
+      .notEmpty().withMessage('Start date is required')
+      .isISO8601().withMessage('Start date must be in YYYY-MM-DD format')
+      .custom((value) => {
+          const now = moment().format('YYYY-MM-DD'); // Get current date
+          if (moment(value).isSameOrBefore(now)) {
+              throw new Error('Start date must be in the future');
+          }
+          return true;
+      }),
+
+  check('start_time')
+      .notEmpty().withMessage('Start time is required')
+      .matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage('Start time must be in HH:mm format')
+      .custom((value, { req }) => {
+          const now = moment();
+          const startDateTime = moment(`${req.headers.start_date} ${value}`, 'YYYY-MM-DD HH:mm');
+          if (startDateTime.isSameOrBefore(now)) {
+              throw new Error('Start time must be in the future');
+          }
+          return true;
+      }),
+
+  check('end_date')
+      .notEmpty().withMessage('End date is required')
+      .isISO8601().withMessage('End date must be in YYYY-MM-DD format')
+      .custom((value, { req }) => {
+          const startDate = req.headers.start_date;
+          if (moment(value).isBefore(startDate)) {
+              throw new Error('End date must be after start date');
+          }
+          return true;
+      }),
+
+  check('end_time')
+      .notEmpty().withMessage('End time is required')
+      .matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage('End time must be in HH:mm format'),
+
+  check('car_id')
+      .notEmpty().withMessage('Car ID is required')
+      .isNumeric().withMessage('Car ID must be a number'),
+
+  (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+      }
+      next();
+  }
+];
+
+const slotsAfterValidation = [
+  check('start_date')
+      .notEmpty().withMessage('Start date is required')
+      .isISO8601().withMessage('Start date must be in YYYY-MM-DD format')
+      .custom((value) => {
+          const now = moment().format('YYYY-MM-DD'); // Get current date
+          if (moment(value).isSameOrBefore(now)) {
+              throw new Error('Start date must be in the future');
+          }
+          return true;
+      }),
+
+  check('start_time')
+      .notEmpty().withMessage('Start time is required')
+      .matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage('Start time must be in HH:mm format')
+      .custom((value, { req }) => {
+          const now = moment();
+          const startDateTime = moment(`${req.headers.start_date} ${value}`, 'YYYY-MM-DD HH:mm');
+          if (startDateTime.isSameOrBefore(now)) {
+              throw new Error('Start time must be in the future');
+          }
+          return true;
+      }),
+
+  check('car_id')
+      .notEmpty().withMessage('Car ID is required')
+      .isNumeric().withMessage('Car ID must be a number'),
+
+  (req, res, next) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+          return res.status(400).json({ errors: errors.array() });
+      }
+      next();
+  }
+];
+
+
 const BookingValidation = {
     AddbookingValidation,
+    slotsValidation,
+    slotsAfterValidation
 }
 
 export default BookingValidation
