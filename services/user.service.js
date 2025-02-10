@@ -31,7 +31,8 @@ const GetAuthService = async (request) => {
     const token = JWT.GenerateToken(userData);
     const userDetails = {
       user_id: data[0].user_id,
-      name: data[0].name,
+      first_name: data[0].first_name,
+      last_name: data[0].last_name,
       email: data[0].email,
       phone_number: data[0].phone_number,
       last_login: data[0].last_login,

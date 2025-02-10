@@ -45,7 +45,18 @@ const AddBookingService = async (request) => {
     if (havingConflict) {
       return customExceptionMessage(409, 'Conflict booking found');
     }
-    const [data] = await BookingDTO.AddBoookingDTO(userId, car_id, start_date, start_time, end_date, end_time, total_price, 'PENDING', payment_mode, 'user');
+    const [data] = await BookingDTO.AddBoookingDTO(
+      userId,
+      car_id,
+      start_date,
+      start_time,
+      end_date,
+      end_time,
+      total_price,
+      'PENDING',
+      payment_mode,
+      'user',
+    );
     console.log(data.booking_id);
     return data;
   } catch (error) {
@@ -127,6 +138,28 @@ const UpdateBookingByAdminService = async (request) => {
   }
 };
 
+const GetAvilableSlotsService = async (request) => {
+  try {
+    const { start_date, start_time, end_date, end_time, car_id } = request.headers;
+    const data = await BookingDTO.GetAvilableSlotsDTO(start_date, start_time, end_date, end_time, car_id);
+    return data;
+  } catch (error) {
+    logger.error({ GetAvilableSlotsService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const GetAvilableSlotsByStartDateService = async (request) => {
+  try {
+    const { start_date, start_time, car_id } = request.headers;
+    const data = await BookingDTO.GetAvilableSlotsByStartDateDTO(start_date, start_time, car_id);
+    return data;
+  } catch (error) {
+    logger.error({ GetAvilableSlotsByStartDateService: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const BookingService = {
   GetUserBookingsService,
   GetBookingsService,
@@ -134,6 +167,8 @@ const BookingService = {
   AddBookingByAdminService,
   UpdateBookingService,
   UpdateBookingByAdminService,
+  GetAvilableSlotsService,
+  GetAvilableSlotsByStartDateService,
 };
 
 export default BookingService;

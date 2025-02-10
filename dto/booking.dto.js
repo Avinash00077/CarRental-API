@@ -70,8 +70,8 @@ const AddBoookingDTO = async (
     };
     const query = DB.QUERY.ADD_BOOKING;
     const data = await pgsql.query(query, { replacements, type: QueryTypes.INSERT });
-    const [bookingData] = await pgsql.query('SELECT LAST_INSERT_ID() AS booking_id')
-    console.log(bookingData)
+    const [bookingData] = await pgsql.query('SELECT LAST_INSERT_ID() AS booking_id');
+    console.log(bookingData);
     return bookingData;
   } catch (error) {
     console.log(error);
@@ -97,6 +97,37 @@ const UpdateBoookingDTO = async (booking_id, booking_status, transaction_id, upd
   }
 };
 
-const BookingDTO = { AddBoookingDTO, GetBookingDTO, GetBookingConflictDTO, UpdateBoookingDTO };
+const GetAvilableSlotsDTO = async (start_date, start_time, end_date, end_time, car_id) => {
+  try {
+    const replacements = { start_date, start_time, end_date, end_time, car_id };
+    const query = DB.QUERY.GET_AVILABLE_SLOTS;
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetAvilableSlotsDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const GetAvilableSlotsByStartDateDTO = async (start_date, start_time, car_id) => {
+  try {
+    const replacements = { start_date, start_time, car_id };
+    const query = DB.QUERY.GET_AVILABLE_SLOTS_BY_START_DATE;
+    console.log(query)
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetAvilableSlotsByStartDateDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+const BookingDTO = {
+  AddBoookingDTO,
+  GetBookingDTO,
+  GetBookingConflictDTO,
+  UpdateBoookingDTO,
+  GetAvilableSlotsByStartDateDTO,
+  GetAvilableSlotsDTO,
+};
 
 export default BookingDTO;

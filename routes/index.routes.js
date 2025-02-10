@@ -74,6 +74,10 @@ Router.put('/car/image', upload.fields({ name: 'car_image', maxCount: 1 }), CarC
 
 //booking
 
+Router.get('/bookings/slots', BookingController.GetAvilableSlotsController);
+
+Router.get('/bookings/slots-start-date', BookingController.GetAvilableSlotsByStartDateController);
+
 Router.get('/bookings', BookingController.GetUserBookingsController);
 
 Router.get('/admin/bookings', BookingController.GetBookingsController);

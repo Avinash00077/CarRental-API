@@ -34,12 +34,16 @@ const QUERY = {
   UPDATE_CAR: properties.get('query.update_car'),
   UPDATE_CAR_AVILABILITY: properties.get('query.update_car_avilability'),
   UPDATE_CAR_IMAGE: properties.get('query.update_car_image'),
+ 
+
 
   //booking
   GET_BOOKING: properties.get('query.get_booking'),
   ADD_BOOKING: properties.get('query.add_booking'),
   UPDATE_BOOKING: properties.get('query.update_booking'),
   GET_BOOKING_CONFLICT: properties.get('query.get_booking_conflict'),
+  GET_AVILABLE_SLOTS: properties.get('query.get_avilable_slots'),
+  GET_AVILABLE_SLOTS_BY_START_DATE: properties.get('query.get_avilable_slots_by_start_date'),
 };
 
 const DB = { QUERY };

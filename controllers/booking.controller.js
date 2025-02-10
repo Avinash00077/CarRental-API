@@ -82,6 +82,34 @@ const UpdateBookingByAdminController = async (request, response) => {
   }
 };
 
+const GetAvilableSlotsController = async (request, response) => {
+  try {
+    const data = await BookingService.GetAvilableSlotsService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      response.status(200).json({ message: 'Okay Request sucessfull', data: data });
+    }
+  } catch (error) {
+    logger.error({ GetAvilableSlotsController: error.message });
+    response.status(500).json({ message: 'internalServerError' });
+  }
+};
+
+const GetAvilableSlotsByStartDateController = async (request, response) => {
+  try {
+    const data = await BookingService.GetAvilableSlotsByStartDateService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      response.status(200).json({ message: 'Okay Request sucessfull', data: data });
+    }
+  } catch (error) {
+    logger.error({ GetAvilableSlotsByStartDateController: error.message });
+    response.status(500).json({ message: 'internalServerError' });
+  }
+};
+
 const BookingController = {
   GetUserBookingsController,
   GetBookingsController,
@@ -89,6 +117,8 @@ const BookingController = {
   AddBookingByAdminController,
   UpdateBookingController,
   UpdateBookingByAdminController,
+  GetAvilableSlotsByStartDateController,
+  GetAvilableSlotsController,
 };
 
 export default BookingController;
