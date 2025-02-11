@@ -41,10 +41,11 @@ const GetUserByIdDTO = async (user_id) => {
   }
 };
 
-const AddNewUserDTO = async (first_name, last_name, email, gender, password, phone_number,dob) => {
+const AddNewUserDTO = async (user_name,first_name, last_name, email, gender, password, phone_number,dob) => {
   try {
     const query = DB.QUERY.ADD_NEW_USER;
     const replacements = {
+      user_name: user_name,
       first_name: first_name,
       last_name: last_name,
       email: email,

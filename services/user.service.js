@@ -64,7 +64,7 @@ const AddNewUserService = async (request) => {
       return customExceptionMessage(400, 'User already exist with this mobile number');
     }
     const hashedPassword = await bcrypt.hash(password, 12);
-    await UserDTO.AddNewUserDTO(first_name, last_name, email, gender, hashedPassword, phone_number, dob);
+    await UserDTO.AddNewUserDTO(user_name,first_name, last_name, email, gender, hashedPassword, phone_number, dob);
     request.headers.email = email;
     request.headers.password = password;
     const name = `${first_name + ' ' + last_name}`;
