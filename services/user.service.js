@@ -65,7 +65,7 @@ const AddNewUserService = async (request) => {
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     await UserDTO.AddNewUserDTO(user_name,first_name, last_name, email, gender, hashedPassword, phone_number, dob);
-    request.headers.email = email;
+    request.headers.user_name = user_name;
     request.headers.password = password;
     const name = `${first_name + ' ' + last_name}`;
     const emailTemplate = emailTemplates.userRegestartionTemplate(name);
