@@ -26,5 +26,10 @@ const setTimeZone = async (req, res, next) => {
   next();
 };
 
-const customUtility = {customExceptionMessage, formatDateTime, istTimestamp, generateOtp, setTimeZone};
+const maskEmail = (email) => {
+  const [localPart, domain] = email.split('@');
+  return `${localPart.slice(0, 5)}***@${domain}`;
+};
+
+const customUtility = {customExceptionMessage, formatDateTime, istTimestamp, generateOtp, setTimeZone, maskEmail};
 export default customUtility;

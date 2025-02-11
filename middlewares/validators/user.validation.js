@@ -1,8 +1,19 @@
 import { body, header, validationResult } from 'express-validator';
 
 const UserloginValidation = [
-  header('email').trim().notEmpty().isEmail().withMessage('Enter valid email'),
+  header('user_name').trim().notEmpty().withMessage('Enter valid user_name'),
   header('password').trim().notEmpty().isLength({ min: 7, max: 20 }).withMessage('Enter Valid password'),
+  (request, response, next) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ message: errors.array() });
+    }
+    next();
+  },
+];
+
+const UserNameValidation = [
+  header('user_name').trim().notEmpty().withMessage('Enter valid user_name'),
   (request, response, next) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -190,7 +201,7 @@ const UserEmailCheck = [
 ];
 
 const ConfirmPasswordCheck = [
-  body('email').trim().notEmpty().isEmail().withMessage('Enter valid Email'),
+  body('user_name').trim().notEmpty().withMessage('Enter valid Email'),
   body('password').trim().notEmpty().isLength({ min: 7, max: 20 }).withMessage('Enter valid password'),
   body('otp').trim().isLength({ min: 6, max: 6 }).withMessage('Enter valid otp'),
   (request, response, next) => {
@@ -208,6 +219,7 @@ const UserValidations = {
   UserImageValidation,
   UserEmailCheck,
   ConfirmPasswordCheck,
+  UserNameValidation,
 };
 
 export default UserValidations;

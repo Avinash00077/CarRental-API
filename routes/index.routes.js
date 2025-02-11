@@ -19,11 +19,14 @@ const Router = express.Router();
 Router.use(customUtility.setTimeZone);
 
 //user
+
+Router.get('/user-name/availability', UserValidations.UserNameValidation, UserController.GetUserNameAvailabilityController)
+
 Router.get('/user/auth', UserValidations.UserloginValidation, UserController.GetAuthController);
 
 Router.post('/user/add', UserValidations.addUserCheck, UserController.AddNewUserController);
 
-Router.get('/user/password-reset/otp', UserValidations.UserEmailCheck, UserController.GenerateOtpForUserPasswordController);
+Router.get('/user/password-reset/otp', UserValidations.UserNameValidation, UserController.GenerateOtpForUserPasswordController);
 
 Router.put('/user/password-reset/confirm', UserValidations.ConfirmPasswordCheck, UserController.UpdateUserPasswordController);
 

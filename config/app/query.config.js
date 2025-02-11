@@ -8,6 +8,7 @@ const QUERY = {
   UPDATE_OTP: properties.get('query.update_otp'),
 
   //user
+  GET_USER_BY_USER_NAME: properties.get('query.get_user_by_user_name'),
   GET_USER_BY_EMAIL: properties.get('query.get_userbyemail'),
   GET_USERBY_ID: properties.get('query.get_userby_id'),
   ADD_NEW_USER: properties.get('query.post_newuser'),

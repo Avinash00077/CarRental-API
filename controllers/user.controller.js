@@ -50,7 +50,7 @@ const UserImageUploadController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      const {image_type} = request.body
+      const { image_type } = request.body;
       return response.status(200).json({ message: `${image_type} Image Updated Successfully` });
     }
   } catch (error) {
@@ -69,13 +69,23 @@ const GetUserByIdController = async (request, response) => {
   }
 };
 
+const GetUserNameAvailabilityController = async (request, response) => {
+  try {
+    const data = await UserService.GetUserNameAvailabilityService(request);
+    return response.status(200).json({ userNameAvilable: data });
+  } catch (error) {
+    logger.error({ GetUserNameAvailabilityController: error.message });
+    response.status(500).json({ message: 'Internal server Error' });
+  }
+};
+
 const GenerateOtpForUserPasswordController = async (request, response) => {
   try {
     const data = await UserService.GenerateOtpForUserPassword(request);
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      return response.status(200).json({ message: 'OTP sent Successfully' });
+      return response.status(200).json({ message: `OTP sent Successfully to ${data}` });
     }
   } catch (error) {
     logger.error({ GenerateOtpForUserPasswordController: error.message });
@@ -86,7 +96,7 @@ const GenerateOtpForUserPasswordController = async (request, response) => {
 const UpdateUserPasswordController = async (request, response) => {
   try {
     const data = await UserService.UpdateUserPasswordService(request);
-    if (data.errorCode) {
+    if (data?.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
       return response.status(200).json({ message: 'Password Updated Successfully' });
@@ -105,5 +115,6 @@ const UserController = {
   UpdateUserPasswordController,
   UpdateUserController,
   UserImageUploadController,
+  GetUserNameAvailabilityController,
 };
 export default UserController;

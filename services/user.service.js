@@ -11,11 +11,11 @@ import sendEmail from '../utility/email.utility.js';
 import emailTemplates from '../config/app/email.template.js';
 
 const { OTP_CODES } = AppConfig;
-const { customExceptionMessage, generateOtp } = customUtility;
+const { customExceptionMessage, generateOtp, maskEmail } = customUtility;
 const GetAuthService = async (request) => {
   try {
-    const { email, password } = request.headers;
-    const data = await UserDTO.GetUserByEmailDTO(email);
+    const { user_name, password } = request.headers;
+    const data = await UserDTO.GetUserByUserNameDTO(user_name);
     if (data.length === 0) {
       return customExceptionMessage(401, 'User does not exist');
     }
@@ -30,6 +30,7 @@ const GetAuthService = async (request) => {
     };
     const token = JWT.GenerateToken(userData);
     const userDetails = {
+      user_name: data[0].user_name,
       user_id: data[0].user_id,
       first_name: data[0].first_name,
       last_name: data[0].last_name,
@@ -49,8 +50,11 @@ const GetAuthService = async (request) => {
 
 const AddNewUserService = async (request) => {
   try {
-    const { first_name, last_name, gender, email, password, phone_number, dob } = request.body;
-
+    const { user_name, first_name, last_name, gender, email, password, phone_number, dob } = request.body;
+    const data = await UserDTO.GetUserByUserNameDTO(user_name);
+    if (data.length > 0) {
+      return customExceptionMessage(401, 'User already exist with this username');
+    }
     const GetUserByEmail = await UserDTO.GetUserByEmailDTO(email);
     if (GetUserByEmail.length > 0) {
       return customExceptionMessage(400, 'User already exist with this email');
@@ -63,8 +67,8 @@ const AddNewUserService = async (request) => {
     await UserDTO.AddNewUserDTO(first_name, last_name, email, gender, hashedPassword, phone_number, dob);
     request.headers.email = email;
     request.headers.password = password;
-    const user_name = `${first_name + ' ' + last_name}`;
-    const emailTemplate = emailTemplates.userRegestartionTemplate(user_name);
+    const name = `${first_name + ' ' + last_name}`;
+    const emailTemplate = emailTemplates.userRegestartionTemplate(name);
     const subject = emailTemplate.subject;
     const body = emailTemplate.body;
     await sendEmail(email, subject, body);
@@ -88,6 +92,18 @@ const GetUserByIdService = async (request) => {
   }
 };
 
+const GetUserNameAvailabilityService = async (request) => {
+  try {
+    const { user_name } = request.headers;
+    const data = await UserDTO.GetUserByUserNameDTO(user_name);
+    return data.length > 0 ? false : true;
+  } catch (error) {
+    logger.error({ GetUserNameAvailabilityService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+
 const UpdateUserService = async (request) => {
   try {
     const { first_name, last_name, email, gender, address, dob } = request.body;
@@ -110,20 +126,21 @@ const UpdateUserService = async (request) => {
 
 const GenerateOtpForUserPassword = async (request) => {
   try {
-    const { email } = request.headers;
-    const userDetails = await UserDTO.GetUserByEmailDTO(email);
+    const { user_name } = request.headers;
+    const userDetails = await UserDTO.GetUserByUserNameDTO(user_name);
     if (userDetails.length === 0) {
       return customExceptionMessage(404, 'No user found with email');
     }
     const user_id = userDetails[0].user_id;
+    const email = userDetails[0].email;
     const otp = generateOtp();
     await OtpDTO.InserOtpDTO(user_id, otp, OTP_CODES.RESET_PASSWORD);
-    const user_name = `${userDetails[0].first_name + ' ' + userDetails[0].last_name}`;
-    const emailTemplate = emailTemplates.passwordResetTemplate(user_name, otp);
+    const name = `${userDetails[0].first_name + ' ' + userDetails[0].last_name}`;
+    const emailTemplate = emailTemplates.passwordResetTemplate(name, otp);
     const subject = emailTemplate.subject;
     const body = emailTemplate.body;
     await sendEmail(email, subject, body);
-    return true;
+    return maskEmail(email);
   } catch (error) {
     logger.error({ GenerateOtpForUserPassword: error.message });
     throw new Error(error.message);
@@ -132,10 +149,10 @@ const GenerateOtpForUserPassword = async (request) => {
 
 const UpdateUserPasswordService = async (request) => {
   try {
-    const { email, password, otp } = request.body;
-    const userDetails = await UserDTO.GetUserByEmailDTO(email);
+    const { user_name, password, otp } = request.body;
+    const userDetails = await UserDTO.GetUserByUserNameDTO(user_name);
     if (userDetails.length === 0) {
-      return customExceptionMessage(404, 'No user found with email');
+      return customExceptionMessage(404, 'No user found with user_name');
     }
     const user_id = userDetails[0].user_id;
     const [otpDetails] = await OtpDTO.GetOtpDTO(user_id, OTP_CODES.RESET_PASSWORD);
@@ -194,6 +211,7 @@ const UserService = {
   UpdateUserPasswordService,
   GenerateOtpForUserPassword,
   userImageUploadService,
+  GetUserNameAvailabilityService,
 };
 
 export default UserService;

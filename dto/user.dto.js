@@ -5,6 +5,18 @@ import DB from '../config/app/query.config.js';
 import pgsql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 
+const GetUserByUserNameDTO = async (user_name) => {
+  try {
+    const query = DB.QUERY.GET_USER_BY_USER_NAME;
+    const replacements = { user_name };
+    const data = await pgsql.query(query, { type: pgsql.QueryTypes.SELECT, replacements: replacements });
+    return data;
+  } catch (error) {
+    logger.error({ GetUserByUserNameDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetUserByEmailDTO = async (email, number) => {
   try {
     const query = DB.QUERY.GET_USER_BY_EMAIL;
@@ -164,6 +176,7 @@ const UserDTO = {
   UpdateUserProfileDTO,
   UpdateUserAadharDTO,
   UpdateUserDrivingLicenseDTO,
+  GetUserByUserNameDTO,
 };
 
 export default UserDTO;
