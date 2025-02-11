@@ -23,11 +23,16 @@ const GetAuthService = async (request) => {
     if (!comparePasssword) {
       return customExceptionMessage(401, 'Invalid password please check the password');
     }
+    const drivingLicenseExpiry = new Date(data[0].driving_license_expiry);
+    const today = new Date();
+    const driving_license_expiry = drivingLicenseExpiry <= today ? 'Y' : 'N';
     const userData = {
       userId: data[0].user_id,
       driving_license_verified: data[0].driving_license_verified,
       aadhar_verified: data[0].aadhar_verified,
+      driving_license_expiry,
     };
+
     const token = JWT.GenerateToken(userData);
     const userDetails = {
       user_name: data[0].user_name,
@@ -39,6 +44,7 @@ const GetAuthService = async (request) => {
       last_login: data[0].last_login,
       driving_license_verified: data[0].driving_license_verified,
       aadhar_verified: data[0].aadhar_verified,
+      driving_license_expiry: driving_license_expiry,
     };
     await UserDTO.UpdateLastLoginDTO(userDetails.user_id);
     return { token, userDetails };
@@ -64,7 +70,7 @@ const AddNewUserService = async (request) => {
       return customExceptionMessage(400, 'User already exist with this mobile number');
     }
     const hashedPassword = await bcrypt.hash(password, 12);
-    await UserDTO.AddNewUserDTO(user_name,first_name, last_name, email, gender, hashedPassword, phone_number, dob);
+    await UserDTO.AddNewUserDTO(user_name, first_name, last_name, email, gender, hashedPassword, phone_number, dob);
     request.headers.user_name = user_name;
     request.headers.password = password;
     const name = `${first_name + ' ' + last_name}`;
@@ -102,7 +108,6 @@ const GetUserNameAvailabilityService = async (request) => {
     throw new Error(error.message);
   }
 };
-
 
 const UpdateUserService = async (request) => {
   try {
@@ -178,7 +183,7 @@ const UpdateUserPasswordService = async (request) => {
 
 const userImageUploadService = async (request) => {
   try {
-    const { image_type, aadhar_number, driving_license_number } = request.body;
+    const { image_type, aadhar_number, driving_license_number, driving_license_expiry } = request.body;
     const user_id = request.userId;
     let data;
     if (image_type === 'profile') {
@@ -192,7 +197,11 @@ const userImageUploadService = async (request) => {
     } else if (image_type === 'driving_license') {
       const image = request.files.driving_license_image[0].buffer;
       const fileName = request.files.driving_license_image[0].originalname.split('.')?.pop();
-      data = await UserDTO.UpdateUserDrivingLicenseDTO(user_id, driving_license_number, image, fileName);
+      data = await UserDTO.UpdateUserDrivingLicenseDTO(user_id, driving_license_number, image, fileName, driving_license_expiry);
+    } else if (image_type === 'cover') {
+      const image = request.files.cover_image[0].buffer;
+      const fileName = request.files.cover_image[0].originalname.split('.')?.pop();
+      data = await UserDTO.UpdateUserCoverImageDTO(user_id, image, fileName);
     } else {
       return customExceptionMessage(400, 'Invalid Image Type');
     }

@@ -124,7 +124,11 @@ const updateUserCheck = [
       }
       return true;
     }),
-  body('address').trim().optional({values: 'falsy'}).isLength({ min: 5, max: 255 }).withMessage('Address must be between 5 and 255 characters'),
+  body('address')
+    .trim()
+    .optional({ values: 'falsy' })
+    .isLength({ min: 5, max: 255 })
+    .withMessage('Address must be between 5 and 255 characters'),
   (request, response, next) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -148,7 +152,14 @@ const UserImageValidation = [
       }
       return true;
     }),
-
+  body('cover_image')
+    .if(body('image_type').equals('cover'))
+    .custom((value, { req }) => {
+      if (!req.files || !req.files.cover_image) {
+        throw new Error('Profile image file is required');
+      }
+      return true;
+    }),
   body('aadhar_image')
     .if(body('image_type').equals('aadhar'))
     .custom((value, { req }) => {
@@ -171,6 +182,23 @@ const UserImageValidation = [
     .withMessage('Driving license number is required')
     .matches(/^[A-Z0-9]{5,20}$/)
     .withMessage('Driving license number must be alphanumeric and between 5 to 20 characters'),
+
+  body('driving_license_expiry')
+    .if(body('image_type').equals('driving_license'))
+    .notEmpty()
+    .withMessage('Driving license expiry is required')
+    .isISO8601()
+    .withMessage('Invalid date format (use YYYY-MM-DD)')
+    .custom((value) => {
+      const drivingLicenseExpiry = new Date(value);
+      const today = new Date();
+
+      // Ensure expiry date is in the future
+      if (drivingLicenseExpiry <= today) {
+        throw new Error('Driving license expiry date must be in the future.');
+      }
+      return true;
+    }),
 
   body('driving_license_image')
     .if(body('image_type').equals('driving_license'))

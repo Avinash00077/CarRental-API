@@ -24,9 +24,11 @@ const VerifyToken = (request, response, next) => {
     const userId = decodedToken.userId ? decodedToken.userId : null;
     const aadhar_verified = decodedToken.aadhar_verified ? decodedToken.aadhar_verified : null;
     const driving_license_verified = decodedToken.driving_license_verified ? decodedToken.driving_license_verified : null;
+    const driving_license_expiry = decodedToken.driving_license_expiry ? decodedToken.driving_license_expiry : null;
     request.userId = userId;
     request.aadhar_verified = aadhar_verified;
     request.driving_license_verified = driving_license_verified;
+    request.driving_license_expiry = driving_license_expiry;
     next();
   } catch (error) {
     logger.error({ VerifyToken: error.message });

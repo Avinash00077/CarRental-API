@@ -18,6 +18,7 @@ const QUERY = {
   UPDATE_USER_IMAGE: properties.get('query.update_user_image'),
   UPDATE_USER_AADHAR:properties.get('query.update_user_aadhar'),
   UPDATE_USER_DRIVING_LICENSE: properties.get('query.update_user_driving_license'),
+  UPDATE_USER_COVER_IMAGE: properties.get('query.update_user_cover_image'),
 
   //admin
   GET_ADMIN_BY_EMAIL: properties.get('query.get_adminbyemail'),

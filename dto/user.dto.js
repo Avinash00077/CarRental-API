@@ -41,7 +41,7 @@ const GetUserByIdDTO = async (user_id) => {
   }
 };
 
-const AddNewUserDTO = async (user_name,first_name, last_name, email, gender, password, phone_number,dob) => {
+const AddNewUserDTO = async (user_name, first_name, last_name, email, gender, password, phone_number, dob) => {
   try {
     const query = DB.QUERY.ADD_NEW_USER;
     const replacements = {
@@ -70,9 +70,9 @@ const UpdateUserDTO = async (first_name, last_name, email, gender, address, user
       last_name,
       email,
       gender,
-      address : address ? address : null,
+      address: address ? address : null,
       user_id,
-      dob
+      dob,
     };
     const data = await pgsql.query(query, { type: pgsql.QueryTypes.UPDATE, replacements: replacements });
     return data;
@@ -128,6 +128,22 @@ const UpdateUserProfileDTO = async (user_id, profile_image, image_type) => {
   }
 };
 
+const UpdateUserCoverImageDTO = async (user_id, cover_image, cover_image_type) => {
+  try {
+    const replacements = {
+      user_id,
+      cover_image,
+      cover_image_type,
+    };
+    const query = DB.QUERY.UPDATE_USER_COVER_IMAGE;
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateUserCoverImageDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const UpdateUserAadharDTO = async (user_id, aadhar_number, aadhar_image, aadhar_img_type) => {
   try {
     const replacements = {
@@ -150,6 +166,7 @@ const UpdateUserDrivingLicenseDTO = async (
   driving_license_number,
   driving_license_image,
   driving_license_img_type,
+  driving_license_expiry,
 ) => {
   try {
     const replacements = {
@@ -157,6 +174,7 @@ const UpdateUserDrivingLicenseDTO = async (
       driving_license_number,
       driving_license_image,
       driving_license_img_type,
+      driving_license_expiry,
     };
     const query = DB.QUERY.UPDATE_USER_DRIVING_LICENSE;
     const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
@@ -178,6 +196,7 @@ const UserDTO = {
   UpdateUserAadharDTO,
   UpdateUserDrivingLicenseDTO,
   GetUserByUserNameDTO,
+  UpdateUserCoverImageDTO,
 };
 
 export default UserDTO;

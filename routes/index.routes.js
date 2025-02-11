@@ -49,6 +49,7 @@ Router.put(
     { name: 'profile_image', maxCount: 1 },
     { name: 'aadhar_image', maxCount: 1 },
     { name: 'driving_license_image', maxCount: 1 },
+    {name: 'cover_image', maxCount: 1}
   ]),
   UserValidations.UserImageValidation,
   UserController.UserImageUploadController,
