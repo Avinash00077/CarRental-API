@@ -17,6 +17,18 @@ const GetUserByUserNameDTO = async (user_name) => {
   }
 };
 
+const GetUserNameDTO = async (email,dob) => {
+  try {
+    const query = DB.QUERY.GET_USER_NAME;
+    const replacements = { email, dob };
+    const data = await pgsql.query(query, { type: pgsql.QueryTypes.SELECT, replacements: replacements });
+    return data;
+  } catch (error) {
+    logger.error({ GetUserNameDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetUserByEmailDTO = async (email, number) => {
   try {
     const query = DB.QUERY.GET_USER_BY_EMAIL;
@@ -197,6 +209,7 @@ const UserDTO = {
   UpdateUserDrivingLicenseDTO,
   GetUserByUserNameDTO,
   UpdateUserCoverImageDTO,
+  GetUserNameDTO,
 };
 
 export default UserDTO;

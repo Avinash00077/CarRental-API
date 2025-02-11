@@ -30,6 +30,10 @@ Router.get('/user/password-reset/otp', UserValidations.UserNameValidation, UserC
 
 Router.put('/user/password-reset/confirm', UserValidations.ConfirmPasswordCheck, UserController.UpdateUserPasswordController);
 
+Router.get('/user/user-name/otp', UserValidations.UserEmailDobCheck, UserController.GenerateOtpForUserNameController);
+
+Router.get('/user/user-name/confirm', UserValidations.GetUserNameCheck, UserController.GetUserNameController);
+
 //admin
 Router.get('/admin/auth', UserValidations.UserloginValidation, AdminController.GetAuthController);
 

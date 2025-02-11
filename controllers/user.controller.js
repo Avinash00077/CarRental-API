@@ -107,6 +107,34 @@ const UpdateUserPasswordController = async (request, response) => {
   }
 };
 
+const GenerateOtpForUserNameController = async (request, response) => {
+  try {
+    const data = await UserService.GenerateOtpForUserNameService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      return response.status(200).json({ message: `OTP sent Successfully to ${data}` });
+    }
+  } catch (error) {
+    logger.error({ GenerateOtpForUserNameController: error.message });
+    response.status(500).json({ message: 'Internal server Error' });
+  }
+};
+
+const GetUserNameController = async (request, response) => {
+  try {
+    const data = await UserService.GetUserNameService(request);
+    if (data?.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      return response.status(200).json({ message: `Your user name is ${data}` });
+    }
+  } catch (error) {
+    logger.error({ GetUserNameController: error.message });
+    response.status(500).json({ message: 'Internal server Error' });
+  }
+};
+
 const UserController = {
   GetAuthController,
   AddNewUserController,
@@ -116,5 +144,7 @@ const UserController = {
   UpdateUserController,
   UserImageUploadController,
   GetUserNameAvailabilityController,
+  GenerateOtpForUserNameController,
+  GetUserNameController,
 };
 export default UserController;

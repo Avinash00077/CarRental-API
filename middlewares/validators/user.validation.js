@@ -141,7 +141,7 @@ const updateUserCheck = [
 const UserImageValidation = [
   body('image_type')
     .optional()
-    .isIn(['profile', 'aadhar', 'driving_license'])
+    .isIn(['profile', 'aadhar', 'driving_license','cover'])
     .withMessage('Invalid image type, must be "profile", "aadhar", or "driving_license"'),
 
   body('profile_image')
@@ -219,6 +219,60 @@ const UserImageValidation = [
 
 const UserEmailCheck = [
   header('email').trim().notEmpty().isEmail().withMessage('Enter valid Email'),
+  header('dob')
+    .trim()
+    .notEmpty()
+    .withMessage('Date of birth is required')
+    .isISO8601()
+    .withMessage('Invalid date format (use YYYY-MM-DD)')
+    .custom((value) => {
+      const dob = new Date(value);
+      const today = new Date();
+      const age = today.getFullYear() - dob.getFullYear();
+      if (age < 18) {
+        throw new Error('User must be at least 18 years old');
+      }
+      return true;
+    }),
+  (request, response, next) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ message: errors.array() });
+    }
+    next();
+  },
+];
+
+const GetUserNameCheck = [
+  header('email').trim().notEmpty().isEmail().withMessage('Enter valid Email'),
+  header('dob')
+    .trim()
+    .notEmpty()
+    .withMessage('Date of birth is required')
+    .isISO8601()
+    .withMessage('Invalid date format (use YYYY-MM-DD)')
+    .custom((value) => {
+      const dob = new Date(value);
+      const today = new Date();
+      const age = today.getFullYear() - dob.getFullYear();
+      if (age < 18) {
+        throw new Error('User must be at least 18 years old');
+      }
+      return true;
+    }),
+  header('otp').trim().isLength({ min: 6, max: 6 }).withMessage('Enter valid otp'),
+  (request, response, next) => {
+    const errors = validationResult(request);
+    if (!errors.isEmpty()) {
+      return response.status(400).json({ message: errors.array() });
+    }
+    next();
+  },
+];
+
+const UserEmailDobCheck = [
+  header('email').trim().notEmpty().isEmail().withMessage('Enter valid Email'),
+
   (request, response, next) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -248,6 +302,8 @@ const UserValidations = {
   UserEmailCheck,
   ConfirmPasswordCheck,
   UserNameValidation,
+  UserEmailDobCheck,
+  GetUserNameCheck
 };
 
 export default UserValidations;

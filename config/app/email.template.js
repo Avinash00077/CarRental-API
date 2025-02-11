@@ -197,9 +197,92 @@ const passwordResetTemplate = (user_name, otp) => {
   };
 };
 
+const getUserNameTemplate = (user_name, otp) => {
+    return {
+      subject: 'Your OTP for retrive Your user name 🔐',
+      body: `<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>OTP for Password Reset</title>
+      <style>
+          body {
+              font-family: Arial, sans-serif;
+              background-color: #fef4e6;
+              margin: 0;
+              padding: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+          }
+          .container {
+              width: 100%;
+              max-width: 500px;
+              background: #ffffff;
+              padding: 25px;
+              border-radius: 10px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+              text-align: center;
+          }
+          .header {
+              background: #6f82c6;
+              color: #ffffff;
+              padding: 20px;
+              font-size: 22px;
+              font-weight: bold;
+              border-radius: 10px 10px 0 0;
+          }
+          .content {
+              padding: 20px;
+              font-size: 18px;
+              color: #333;
+              line-height: 1.6;
+          }
+          .otp {
+              font-size: 24px;
+              font-weight: bold;
+              background: #6f82c6;
+              color: #ffffff;
+              display: inline-block;
+              padding: 10px 20px;
+              border-radius: 5px;
+              margin: 15px 0;
+          }
+          .footer {
+              margin-top: 20px;
+              font-size: 14px;
+              color: #777;
+              border-top: 1px solid #ddd;
+              padding-top: 15px;
+          }
+      </style>
+  </head>
+  <body>
+      <div class="container">
+          <div class="header">OTP for Retrive user name</div>
+          <div class="content">
+              <p>Hi <strong>${user_name}</strong>,</p>
+              <p>Your One-Time Password (OTP) to retrive your username is:</p>
+              <div class="otp">${otp}</div>
+              <p>Please use this OTP to  retrive your username. It is valid for a limited time only.</p>
+              <p>If you did not request retrive username, please ignore this email.</p>
+          </div>
+          <div class="footer">
+              <p>&copy; 2025 Car Rental Services. All rights reserved.</p>
+          </div>
+      </div>
+  </body>
+  </html>
+  `,
+    };
+  };
+
 const emailTemplates = {
   userRegestartionTemplate,
   passwordResetTemplate,
+  getUserNameTemplate,
 };
 
 export default emailTemplates;

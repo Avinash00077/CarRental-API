@@ -3,6 +3,7 @@ import properties from '../index.config.js';
 
 const OTP_CODES = {
   RESET_PASSWORD : 1,
+  USER_NAME: 2,
 }
 
 const AppConfig = {
