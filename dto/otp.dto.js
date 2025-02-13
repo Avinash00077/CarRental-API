@@ -5,11 +5,12 @@ import DB from '../config/app/query.config.js';
 import pgsql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 
-const GetOtpDTO = async (user_id, otp_type) => {
+const GetOtpDTO = async (user_id, otp_type, booking_id) => {
   try {
     const replacements = {
       user_id,
       otp_type,
+      booking_id : booking_id ? booking_id : null
     };
     const query = DB.QUERY.GET_OTP;
     const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
@@ -20,12 +21,13 @@ const GetOtpDTO = async (user_id, otp_type) => {
   }
 };
 
-const InserOtpDTO = async (user_id, otp_code, otp_type) => {
+const InserOtpDTO = async (user_id, otp_code, otp_type, booking_id) => {
   try {
     const replacements = {
       user_id,
       otp_code,
       otp_type,
+      booking_id: booking_id ? booking_id : null,
     };
     const query = DB.QUERY.INSERT_OTP;
     const data = await pgsql.query(query, { replacements, type: QueryTypes.INSERT });
@@ -52,10 +54,27 @@ const UpdateOtpDTO = async (user_id, otp_code, otp_type) => {
   }
 };
 
+const UpdateBookingOtpDTO = async (booking_id, otp_code, otp_type) => {
+  try {
+    const replacements = {
+      booking_id,
+      otp_code,
+      otp_type,
+    };
+    const query = DB.QUERY.UPDATE_BOOKING_OTP;
+    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateBookingOtpDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const OtpDTO = {
   GetOtpDTO,
   InserOtpDTO,
   UpdateOtpDTO,
+  UpdateBookingOtpDTO,
 };
 
 export default OtpDTO;

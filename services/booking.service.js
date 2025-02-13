@@ -1,11 +1,15 @@
 'use strict';
 
+import emailTemplates from '../config/app/email.template.js';
 import BookingDTO from '../dto/booking.dto.js';
 import CarDTO from '../dto/car.dto.js';
+import OtpDTO from '../dto/otp.dto.js';
 import customUtility from '../utility/custom.utility.js';
 import logger from '../utility/logger.utility.js';
+import AppConfig from '../config/app/app.config.js';
+import sendEmail from '../utility/email.utility.js';
 
-const { customExceptionMessage } = customUtility;
+const { customExceptionMessage, generateOtp } = customUtility;
 
 const GetUserBookingsService = async (request) => {
   try {
@@ -93,20 +97,20 @@ const AddBookingByAdminService = async (request) => {
 const UpdateBookingService = async (request) => {
   try {
     const { booking_id, booking_status, transaction_id } = request.body;
+    const user_id = request.userId
     const bookingData = await BookingDTO.GetBookingDTO(booking_id);
     if (bookingData.length === 0 || bookingData[0].booking_status === 'COMPLETED') {
       return customExceptionMessage(409, 'Car rental already completed or data not available');
     }
-    // const havingConflict = await BookingDTO.GetBookingConflictDTO(
-    //   bookingData[0].car_id,
-    //   booking_id,
-    //   start_date,
-    //   end_date,
-    // );
-    // if (havingConflict[0].is_conflict) {
-    //   return customExceptionMessage(409, 'Conflict booking found');
-    // }
     const data = await BookingDTO.UpdateBoookingDTO(booking_id, booking_status, transaction_id, 'user');
+    const { name, brand, car_name, user_email, start_date, start_time, end_date, end_time, car_location } = bookingData[0];
+    const model = `${brand}-${car_name}`
+    const otp = generateOtp();
+    await OtpDTO.InserOtpDTO(user_id, otp, AppConfig.OTP_CODES.BOOKING,booking_id);
+    const emailTemplate = emailTemplates.bookingTemplate(name, start_date, start_time, end_date, end_time, booking_id, model, car_location, otp);
+    const subject = emailTemplate.subject;
+    const body = emailTemplate.body;
+    await sendEmail(user_email, subject, body);
     return data;
   } catch (error) {
     logger.error({ UpdateBookingService: error.message });
@@ -146,7 +150,7 @@ const GetAvilableSlotsService = async (request) => {
       if (!acc[available_date]) acc[available_date] = [];
       acc[available_date].push(time_slot);
       return acc;
-  }, {});
+    }, {});
     return groupedResults;
   } catch (error) {
     logger.error({ GetAvilableSlotsService: error.message });
@@ -162,7 +166,7 @@ const GetAvilableSlotsByStartDateService = async (request) => {
       if (!acc[available_date]) acc[available_date] = [];
       acc[available_date].push(time_slot);
       return acc;
-  }, {});
+    }, {});
     return groupedResults;
   } catch (error) {
     logger.error({ GetAvilableSlotsByStartDateService: error.message });

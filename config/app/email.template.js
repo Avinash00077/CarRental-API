@@ -21,10 +21,10 @@ const userRegestartionTemplate = (user_name) => {
             height: 100vh;
         }
         .container {
-            width: 90%;
             max-width: 600px;
+            margin: 20px auto;
             background: #ffffff;
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
@@ -136,10 +136,10 @@ const passwordResetTemplate = (user_name, otp) => {
             height: 100vh;
         }
         .container {
-            width: 100%;
-            max-width: 500px;
+            max-width: 600px;
+            margin: 20px auto;
             background: #ffffff;
-            padding: 25px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             text-align: center;
@@ -218,14 +218,14 @@ const getUserNameTemplate = (user_name, otp) => {
               height: 100vh;
           }
           .container {
-              width: 100%;
-              max-width: 500px;
-              background: #ffffff;
-              padding: 25px;
-              border-radius: 10px;
-              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-              text-align: center;
-          }
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
           .header {
               background: #6f82c6;
               color: #ffffff;
@@ -279,10 +279,170 @@ const getUserNameTemplate = (user_name, otp) => {
     };
   };
 
+const bookingTemplate = (name, start_date,start_time, end_date, end_time, bookingId, model,location, otp) => {
+   return {
+    subject: 'Fasten Your Seatbelt! 🚘 Your Car Booking is Confirmed!',
+    body:
+    `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Booking Confirmation</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #6f82c6;
+        }
+        h2 {
+            color: #6f82c6;
+            text-align: center;
+        }
+        .details, .policies {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .details p, .policies p {
+            margin: 8px 0;
+            color: #333;
+        }
+        .otp {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: #6f82c6;
+            background: #D3D9ED;
+            padding: 12px;
+            border-radius: 8px;
+            border: 2px dashed #D3D9ED;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .note {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 15px;
+        }
+        .footer {
+            text-align: center;
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 20px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            max-width: 220px;
+            margin: 20px auto;
+            padding: 12px;
+            text-align: center;
+            background-color:  #6f82c6;;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: #D3D9ED;
+            color: #6f82c6;
+        }
+        .section-title {
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            color:  #6f82c6;;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🚗 Car Booking Confirmed</h2>
+
+    <p>Dear <strong>${name}</strong>,</p>
+    <p>We’re excited to confirm your car booking with <strong>DND CarRental</strong>. Below are your booking details:</p>
+
+    <div class="details">
+        <p><strong>Booking ID:</strong> ${bookingId}</p>
+        <p><strong>Car:</strong> ${model}</p>
+        <p><strong>Pickup Date & Time:</strong> ${start_date} ${start_time}</p>
+        <p><strong>Drop-off Date & Time:</strong> ${end_date} ${end_time}</p>
+        <p><strong>Pickup Location:</strong> ${location}</p>
+        <p><strong>Drop-off Location:</strong> ${location}</p>
+    </div>
+
+    <div class="otp">
+        🔑 Your OTP: <strong>${otp}</strong>
+    </div>
+
+    <p style="text-align: center; font-weight: bold;">Please share this OTP with our executive at the time of vehicle pickup.</p>
+
+    <p class="section-title">📌 Required Documents for Car Pickup:</p>
+    <ul>
+        <li>Aadhar Card (or any valid Government-issued ID)</li>
+        <li>Valid Driving License (matching the renter's name)</li>
+    </ul>
+
+    <p class="section-title">📢 Important Guidelines:</p>
+    <ul>
+        <li>Arrive at the pickup location 15 minutes before your scheduled time.</li>
+        <li>The car will be inspected before and after your trip for any damages.</li>
+        <li>Ensure the fuel level is the same as at pickup to avoid refueling charges.</li>
+        <li>Late returns may attract additional charges as per rental policy.</li>
+        <li>The renter is responsible for toll charges, parking fees, and traffic violations.</li>
+    </ul>
+
+    <div class="policies">
+        <p class="section-title">⚠️ Company Policies:</p>
+        <ul>
+            <li><strong>Damage Policy:</strong> Any damage beyond normal wear and tear will be charged as per company guidelines.</li>
+            <li><strong>Cancellation & Refund:</strong> Cancellations made <strong>6 hours</strong> before the pickup time will be eligible for a refund as per our policy.</li>
+            <li><strong>Usage Restrictions:</strong> The rented car must not be used for commercial purposes, racing, or illegal activities. Violations may result in legal action.</li>
+        </ul>
+    </div>
+
+    <p class="note"><strong>By proceeding with the booking, you agree to our <a href="[Company Website]" style="color: #007bff;">Terms & Conditions</a>.</strong></p>
+
+    <a href="[Company Website]" class="btn">Manage Your Booking</a>
+
+    <div class="footer">
+        <p>For any assistance, contact us at <a href="mailto:[Customer Support Email]" style="color: #007bff;">[Customer Support Email]</a> or call <strong>[Customer Support Number]</strong>.</p>
+        <p>&copy; <span id="year"></span>DND CarRental. All rights reserved.</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
+`,
+   }
+}
+
 const emailTemplates = {
   userRegestartionTemplate,
   passwordResetTemplate,
   getUserNameTemplate,
+  bookingTemplate,
 };
 
 export default emailTemplates;

@@ -68,7 +68,7 @@ const databaseConnection = async () => {
     await pgsql.authenticate();
     logger.info('Database connected sucessfully');
   } catch (error) {
-    logger.error(` database connection faild with ${error.message}`);
+    logger.error(` database connection failed with ${error.message}`);
   }
 };
 

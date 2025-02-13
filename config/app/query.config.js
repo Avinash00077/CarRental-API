@@ -6,6 +6,8 @@ const QUERY = {
   INSERT_OTP: properties.get('query.insert_otp'),
   GET_OTP: properties.get('query.get_otp'),
   UPDATE_OTP: properties.get('query.update_otp'),
+  UPDATE_BOOKING_OTP: properties.get('query.update_booking_otp'),
+
 
   //user
   GET_USER_NAME: properties.get('query.get_user_name'),
