@@ -23,6 +23,7 @@ const QUERY = {
   UPDATE_USER_DRIVING_LICENSE: properties.get('query.update_user_driving_license'),
   UPDATE_USER_COVER_IMAGE: properties.get('query.update_user_cover_image'),
   GET_USERS_FOR_VERIFICATION: properties.get('query.get_users_for_verification'),
+  UPDATE_USER_VERFICATION: properties.get('query.update_user_verfication'),
 
   //admin
   GET_ADMIN_BY_EMAIL: properties.get('query.get_adminbyemail'),

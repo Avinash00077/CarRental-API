@@ -198,9 +198,9 @@ const passwordResetTemplate = (user_name, otp) => {
 };
 
 const getUserNameTemplate = (user_name, otp) => {
-    return {
-      subject: 'Your OTP for retrive Your user name 🔐',
-      body: `<!DOCTYPE html>
+  return {
+    subject: 'Your OTP for retrive Your user name 🔐',
+    body: `<!DOCTYPE html>
   <html>
   <head>
       <meta charset="UTF-8">
@@ -276,14 +276,13 @@ const getUserNameTemplate = (user_name, otp) => {
   </body>
   </html>
   `,
-    };
   };
+};
 
-const bookingTemplate = (name, start_date,start_time, end_date, end_time, bookingId, model,location, otp) => {
-   return {
+const bookingTemplate = (name, start_date, start_time, end_date, end_time, bookingId, model, location, otp) => {
+  return {
     subject: 'Fasten Your Seatbelt! 🚘 Your Car Booking is Confirmed!',
-    body:
-    `<!DOCTYPE html>
+    body: `<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -435,14 +434,138 @@ const bookingTemplate = (name, start_date,start_time, end_date, end_time, bookin
 </body>
 </html>
 `,
-   }
-}
+  };
+};
+
+const verficationTemplate = (STATUS, USER_NAME, APPROVED, DOCUMENT_TYPE) => {
+  return {
+    subject: APPROVED
+      ? `✅ ${DOCUMENT_TYPE} Verification Approved - You're Ready to Rent a Car!`
+      : `⚠️ ${DOCUMENT_TYPE} Verification Failed - Action Required`,
+    body: `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verification Status</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            background: #ffffff;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #6f82c6;
+        }
+        .header {
+            background-color: #6f82c6;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .content {
+            padding: 20px;
+            text-align: center;
+            font-size: 17px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .approved {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .rejected {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .divider {
+            height: 1px;
+            background: #ddd;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            color: #6c757d;
+            border-top: 1px solid #ddd;
+            margin-top: 20px;
+            background: #f8f9fa;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            max-width: 220px;
+            margin: 20px auto;
+            padding: 12px;
+            text-align: center;
+            background-color: #6f82c6;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out;
+        }
+        .button:hover {
+            background-color: #D3D9ED;
+            color: #6f82c6;
+        }
+        .note {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">Verification Status</div>
+        <div class="content">
+            <p>Dear <strong>${USER_NAME}</strong>,</p>
+            <p>Your <strong>${DOCUMENT_TYPE}</strong> verification for our car rental service has been <strong class="${STATUS}">${STATUS}</strong>.</p>
+            
+            <div class="divider"></div>
+            
+            ${
+              APPROVED
+                ? `
+            <p class="success">🎉 Congratulations! Your verification was successful.</p>`
+                : `
+            <p class="error">⚠️ Unfortunately, we were unable to verify your document. Please ensure the details are correct and try again.</p>
+            <a href="#" class="button">Re-upload Document</a>
+            `
+            }
+        </div>
+        <div class="footer">
+            <p>For any assistance, contact our support team.</p>
+            <p>&copy; 2025 Car Rental Service</p>
+        </div>
+    </div>
+</body>
+</html>
+`,
+  };
+};
 
 const emailTemplates = {
   userRegestartionTemplate,
   passwordResetTemplate,
   getUserNameTemplate,
   bookingTemplate,
+  verficationTemplate,
 };
 
 export default emailTemplates;

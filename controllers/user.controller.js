@@ -151,6 +151,20 @@ const GetUsersForVerficationController = async (request, response) => {
   }
 };
 
+const UpdateUsersVerficationController = async (request, response) => {
+  try {
+    const data = await UserService.UpdateUserVerficationService(request);
+    if (data?.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      return response.status(200).json({ message: STATUS_MESSAGES[200]});
+    }
+  } catch (error) {
+    logger.error({ UpdateUsersVerficationController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
+  }
+};
+
 const UserController = {
   GetAuthController,
   AddNewUserController,
@@ -163,5 +177,6 @@ const UserController = {
   GenerateOtpForUserNameController,
   GetUserNameController,
   GetUsersForVerficationController,
+  UpdateUsersVerficationController,
 };
 export default UserController;

@@ -200,13 +200,29 @@ const UpdateUserDrivingLicenseDTO = async (
 const GetUsersForVerficationDTO = async () => {
   try {
     const query = DB.QUERY.GET_USERS_FOR_VERIFICATION;
-    const data = await mysql.query(query);
+    const data = await mysql.query(query, {type:QueryTypes.SELECT});
     return data;
   } catch (error) {
     logger.error({ GetUsersForVerficationDTO: error.message });
     throw new Error(error.message);
   }
 };
+
+const UpdateUserVerficationDTO = async (user_id, driving_license_verified, aadhar_verified) => {
+  try {
+    const replacements = {
+      user_id, 
+      driving_license_verified,
+      aadhar_verified,
+    }
+    const query = DB.QUERY.UPDATE_USER_VERFICATION;
+    const data = await mysql.query(query, {replacements,type:QueryTypes.UPDATE});
+    return data;
+  } catch (error) {
+    logger.error({ UpdateUserVerficationDTO: error.message });
+    throw new Error(error.message);
+  } 
+}
 
 const UserDTO = {
   GetUserByEmailDTO,
@@ -222,6 +238,7 @@ const UserDTO = {
   UpdateUserCoverImageDTO,
   GetUserNameDTO,
   GetUsersForVerficationDTO,
+  UpdateUserVerficationDTO,
 };
 
 export default UserDTO;

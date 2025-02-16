@@ -18,7 +18,7 @@ const Router = express.Router();
 
 Router.use(customUtility.setTimeZone);
 
-Router.get('/auth', UserValidations.UserloginValidation, AdminController.GetAuthController);
+Router.get('/auth', AdminController.GetAuthController);
 
 Router.post('/add', AdminController.AddNewAdminController);
 
@@ -28,12 +28,27 @@ Router.use(JWT.VerifyToken);
 Router.get('/id', AdminController.GetAdminByIdController);
 
 //user
-Router.get('/verfication', UserController.GetUsersForVerficationController);
+Router.get('/user/verfication', UserController.GetUsersForVerficationController);
+
+Router.put('/user/verfication', UserController.UpdateUsersVerficationController);
+
+//car
+
+Router.get('/car', CarValidations.GetCarCheck, CarController.GetCarsController);
+
+Router.post('/car', upload.fields([{ name: 'car_image', maxCount: 1 }]), CarValidations.AddCarValidation, CarController.AddCarController);
+
+Router.put('/car', CarController.UpdateCarController);
+
+Router.put('/car/avilability', CarController.UpdateCarAvilabilityController);
+
+Router.put('/car/image', upload.fields({ name: 'car_image', maxCount: 1 }), CarController.UpdateCarImageController);
 
 Router.get('/car/id', CarController.GetCarByIdController);
 
 Router.get('/car/registration-number', CarController.GetCarByRegistrationNumberController);
 
+//booking
 Router.get('/bookings', BookingController.GetBookingsController);
 
 Router.post('/booking', BookingController.AddBookingByAdminController);

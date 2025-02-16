@@ -30,7 +30,7 @@ const GetAuthService = async (request) => {
       userId: data[0].user_id,
       driving_license_verified: data[0].driving_license_verified,
       aadhar_verified: data[0].aadhar_verified,
-      driving_license_expiry,
+      driving_license_expiry: driving_license_expiry,
     };
 
     const token = JWT.GenerateToken(userData);
@@ -166,7 +166,7 @@ const UpdateUserService = async (request) => {
       return customExceptionMessage(400, 'User not found');
     }
     const GetUserByEmail = await UserDTO.GetUserByEmailDTO(email);
-    console.log(GetUserByEmail[0].user_id != userId, GetUserByEmail[0].user_id , userId)
+    console.log(GetUserByEmail[0].user_id != userId, GetUserByEmail[0].user_id, userId);
     if (GetUserByEmail.length > 0 && GetUserByEmail[0].user_id != userId) {
       return customExceptionMessage(400, 'User already exist with this email');
     }
@@ -275,6 +275,50 @@ const GetUsersForVerficationService = async (request) => {
   }
 };
 
+const UpdateUserVerficationService = async (request) => {
+  try {
+    const adminId = request.adminId;
+    if (!adminId) {
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
+    }
+    let { user_id, driving_license_verified, aadhar_verified } = request.body;
+    const userData = await UserDTO.GetUsersForVerficationDTO();
+    const user = userData.filter((u) => u.user_id === user_id);
+    if (!user) {
+      return customExceptionMessage(404, STATUS_MESSAGES[400]);
+    }
+    const driving_license_verified_email_flag = driving_license_verified ? true : false;
+    const aadhar_verified_email_flag = aadhar_verified ? true : false;
+
+    driving_license_verified = driving_license_verified ? driving_license_verified : user[0].driving_license_verified;
+
+    aadhar_verified = aadhar_verified ? aadhar_verified : user[0].aadhar_verified;
+    const data = await UserDTO.UpdateUserVerficationDTO(user_id, driving_license_verified, aadhar_verified);
+    if (driving_license_verified_email_flag) {
+      const approved = driving_license_verified === 'Y' ? true : false;
+      const status = driving_license_verified === 'Y' ? 'approved' : 'rejected';
+      const userName = `${user[0].first_name} ${user[0].last_name}`;
+      const emailTemplate = emailTemplates.verficationTemplate(status, userName, approved, 'Driving Lisence');
+      const subject = emailTemplate.subject;
+      const body = emailTemplate.body;
+      await sendEmail(user[0].email, subject, body);
+    }
+    if (aadhar_verified_email_flag) {
+      const approved = aadhar_verified === 'Y' ? true : false;
+      const status = aadhar_verified === 'Y' ? 'approved' : 'rejected';
+      const userName = `${user[0].first_name} ${user[0].last_name}`;
+      const emailTemplate = emailTemplates.verficationTemplate(status, userName, approved, 'Aadhar');
+      const subject = emailTemplate.subject;
+      const body = emailTemplate.body;
+      await sendEmail(user[0].email, subject, body);
+    }
+    return data;
+  } catch (error) {
+    logger.error({ UpdateUserVerficationService: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const UserService = {
   GetAuthService,
   AddNewUserService,
@@ -287,6 +331,7 @@ const UserService = {
   GenerateOtpForUserNameService,
   GetUserNameService,
   GetUsersForVerficationService,
+  UpdateUserVerficationService,
 };
 
 export default UserService;

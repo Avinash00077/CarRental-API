@@ -57,18 +57,6 @@ Router.put(
   UserController.UserImageUploadController,
 );
 
-//car
-
-Router.get('/car', CarValidations.GetCarCheck, CarController.GetCarsController);
-
-Router.post('/car', upload.fields([{ name: 'car_image', maxCount: 1 }]), CarValidations.AddCarValidation, CarController.AddCarController);
-
-Router.put('/car', CarController.UpdateCarController);
-
-Router.put('/car/avilability', CarController.UpdateCarAvilabilityController);
-
-Router.put('/car/image', upload.fields({ name: 'car_image', maxCount: 1 }), CarController.UpdateCarImageController);
-
 //booking
 
 Router.get('/bookings/slots', BookingValidation.slotsValidation, BookingController.GetAvilableSlotsController);

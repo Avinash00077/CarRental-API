@@ -40,7 +40,13 @@ const GetBookingsService = async (request) => {
 const AddBookingService = async (request) => {
   try {
     const { car_id, start_date, start_time, end_date, end_time, total_price, payment_mode } = request.body;
-    const userId = request.userId;
+    const {userId,aadhar_verified, driving_license_verified, driving_license_expiry} = request;
+    if(aadhar_verified !== 'Y' || driving_license_verified !== 'Y'){
+      return customExceptionMessage(422, 'User not verified for booking')
+    }
+    if(driving_license_expiry === 'Y'){
+      return customExceptionMessage(422, 'Driving lisence expired cannot procced with booking')
+    }
     const carData = await CarDTO.GetCarByIdDTO(car_id);
     if (carData.length === 0) {
       return customExceptionMessage(409, 'Car already booked or car not available');
