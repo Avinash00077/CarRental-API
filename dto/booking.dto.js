@@ -1,7 +1,7 @@
 'use strict';
 
 import DB from '../config/app/query.config.js';
-import pgsql from '../config/database/database.config.js';
+import mysql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 import { QueryTypes } from 'sequelize';
 
@@ -16,7 +16,7 @@ const GetBookingDTO = async (booking_id, email, phone_number, car_id, booking_st
       user_id: user_id ? user_id : null,
     };
     const query = DB.QUERY.GET_BOOKING;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetBookingDTO: error.message });
@@ -34,7 +34,7 @@ const GetBookingConflictDTO = async (car_id, start_date, start_time, end_date, e
       end_time,
     };
     const query = DB.QUERY.GET_BOOKING_CONFLICT;
-    const [data] = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const [data] = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     const Conflict = data.availability_status === 0 ? false : true;
     return Conflict;
   } catch (error) {
@@ -69,8 +69,8 @@ const AddBoookingDTO = async (
       created_by,
     };
     const query = DB.QUERY.ADD_BOOKING;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.INSERT });
-    const [bookingData] = await pgsql.query('SELECT LAST_INSERT_ID() AS booking_id');
+    const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
+    const [bookingData] = await mysql.query('SELECT LAST_INSERT_ID() AS booking_id');
     console.log(bookingData);
     return bookingData;
   } catch (error) {
@@ -89,7 +89,7 @@ const UpdateBoookingDTO = async (booking_id, booking_status, transaction_id, upd
       updated_by,
     };
     const query = DB.QUERY.UPDATE_BOOKING;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
     logger.error({ UpdateBoookingDTO: error.message });
@@ -101,7 +101,7 @@ const GetAvilableSlotsDTO = async (start_date, start_time, end_date, end_time, c
   try {
     const replacements = { start_date, start_time, end_date, end_time, car_id };
     const query = DB.QUERY.GET_AVILABLE_SLOTS;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetAvilableSlotsDTO: error.message });
@@ -114,7 +114,7 @@ const GetAvilableSlotsByStartDateDTO = async (start_date, start_time, car_id) =>
     const replacements = { start_date, start_time, car_id };
     const query = DB.QUERY.GET_AVILABLE_SLOTS_BY_START_DATE;
     console.log(query)
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetAvilableSlotsByStartDateDTO: error.message });

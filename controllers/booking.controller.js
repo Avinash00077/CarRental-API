@@ -1,14 +1,16 @@
 'use-strict';
 import BookingService from '../services/booking.service.js';
 import logger from '../utility/logger.utility.js';
+import AppConfig from '../config/app/app.config.js';
+const {STATUS_MESSAGES, BOOKING_MESSAGES} = AppConfig
 
 const GetUserBookingsController = async (request, response) => {
   try {
     const data = await BookingService.GetUserBookingsService(request);
-    response.status(200).json({ message: 'Okay Request Successful', data: data });
+    response.status(200).json({ message: STATUS_MESSAGES[200], data: data });
   } catch (error) {
     logger.error({ GetUserBookingsController: error.message });
-    response.status(500).json({ message: 'internalServerError' });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
   }
 };
 
@@ -18,11 +20,11 @@ const GetBookingsController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: 'Okay Request Sucessfull', data: data });
+      response.status(200).json({ message: STATUS_MESSAGES[200] , data: data });
     }
   } catch (error) {
     logger.error({ GetBookingsController: error.message });
-    response.status(500).json({ message: 'internalServerError' });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
   }
 };
 
@@ -32,11 +34,11 @@ const AddBookingController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(201).json({ message: 'Rental Booking Sucessfull', data: data });
+      response.status(201).json({ message: BOOKING_MESSAGES.BOOKING_CREATED, data: data });
     }
   } catch (error) {
     logger.error({ AddBookingController: error.message });
-    response.status(500).json({ message: 'internalServerError' });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
   }
 };
 
@@ -46,11 +48,11 @@ const AddBookingByAdminController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(201).json({ message: 'Rental Booking Sucessfull' });
+      response.status(201).json({ message: BOOKING_MESSAGES.BOOKING_CREATED });
     }
   } catch (error) {
     logger.error({ AddBookingByAdminController: error.message });
-    response.status(500).json({ message: 'internalServerError' });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
   }
 };
 
@@ -60,11 +62,11 @@ const UpdateBookingController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: 'Rental Booking update Sucessfull' });
+      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_CONFIRMED });
     }
   } catch (error) {
     logger.error({ UpdateBookingController: error.message });
-    response.status(500).json({ message: 'internalServerError' });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
   }
 };
 
@@ -74,11 +76,11 @@ const UpdateBookingByAdminController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: 'Rental Booking update Sucessfull' });
+      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_CONFIRMED});
     }
   } catch (error) {
     logger.error({ UpdateBookingByAdminController: error.message });
-    response.status(500).json({ message: 'internalServerError' });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
   }
 };
 
@@ -88,11 +90,11 @@ const GetAvilableSlotsController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: 'Okay Request sucessfull', data: data });
+      response.status(200).json({ message: STATUS_MESSAGES[200] , data: data });
     }
   } catch (error) {
     logger.error({ GetAvilableSlotsController: error.message });
-    response.status(500).json({ message: 'internalServerError' });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
   }
 };
 
@@ -102,11 +104,11 @@ const GetAvilableSlotsByStartDateController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: 'Okay Request sucessfull', data: data });
+      response.status(200).json({ message: STATUS_MESSAGES[200] , data: data });
     }
   } catch (error) {
     logger.error({ GetAvilableSlotsByStartDateController: error.message });
-    response.status(500).json({ message: 'internalServerError' });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
   }
 };
 

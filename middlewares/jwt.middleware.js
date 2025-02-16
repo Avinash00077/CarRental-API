@@ -16,11 +16,13 @@ const VerifyToken = (request, response, next) => {
   try {
     let token = request.get('Authorization');
     if (!token) {
-      return response.status(401).json({ message: 'Not Authorized' });
+      return response.status(401).json({ message: AppConfig.STATUS_MESSAGES[401] });
     }
     token = request.get('Authorization').split(' ')[1];
     const decodedToken = jwt.verify(token, AppConfig.JWTSECRETKEY);
+    //admin
     request.adminId = decodedToken.adminId ? decodedToken.adminId : null;
+    //user
     const userId = decodedToken.userId ? decodedToken.userId : null;
     const aadhar_verified = decodedToken.aadhar_verified ? decodedToken.aadhar_verified : null;
     const driving_license_verified = decodedToken.driving_license_verified ? decodedToken.driving_license_verified : null;

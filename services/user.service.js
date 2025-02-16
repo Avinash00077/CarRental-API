@@ -10,7 +10,7 @@ import AppConfig from '../config/app/app.config.js';
 import sendEmail from '../utility/email.utility.js';
 import emailTemplates from '../config/app/email.template.js';
 
-const { OTP_CODES } = AppConfig;
+const { OTP_CODES, STATUS_MESSAGES } = AppConfig;
 const { customExceptionMessage, generateOtp, maskEmail } = customUtility;
 const GetAuthService = async (request) => {
   try {
@@ -100,7 +100,7 @@ const GetUserByIdService = async (request) => {
 
 const GenerateOtpForUserNameService = async (request) => {
   try {
-    const {  email, dob } = request.headers;
+    const { email, dob } = request.headers;
     const userDetails = await UserDTO.GetUserNameDTO(email, dob);
     if (userDetails.length === 0) {
       return customExceptionMessage(404, 'No user found with email');
@@ -124,7 +124,7 @@ const GenerateOtpForUserNameService = async (request) => {
 const GetUserNameService = async (request) => {
   try {
     const { email, dob, otp } = request.headers;
-    const userDetails = await UserDTO.GetUserNameDTO(email, dob)
+    const userDetails = await UserDTO.GetUserNameDTO(email, dob);
     if (userDetails.length === 0) {
       return customExceptionMessage(404, 'No user found with email and dob');
     }
@@ -166,6 +166,7 @@ const UpdateUserService = async (request) => {
       return customExceptionMessage(400, 'User not found');
     }
     const GetUserByEmail = await UserDTO.GetUserByEmailDTO(email);
+    console.log(GetUserByEmail[0].user_id != userId, GetUserByEmail[0].user_id , userId)
     if (GetUserByEmail.length > 0 && GetUserByEmail[0].user_id != userId) {
       return customExceptionMessage(400, 'User already exist with this email');
     }
@@ -260,6 +261,20 @@ const userImageUploadService = async (request) => {
   }
 };
 
+const GetUsersForVerficationService = async (request) => {
+  try {
+    const adminId = request.adminId;
+    if (!adminId) {
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
+    }
+    const data = await UserDTO.GetUsersForVerficationDTO();
+    return data;
+  } catch (error) {
+    logger.error({ GetUsersForVerficationService: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const UserService = {
   GetAuthService,
   AddNewUserService,
@@ -271,6 +286,7 @@ const UserService = {
   GetUserNameAvailabilityService,
   GenerateOtpForUserNameService,
   GetUserNameService,
+  GetUsersForVerficationService,
 };
 
 export default UserService;

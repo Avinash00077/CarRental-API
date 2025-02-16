@@ -2,7 +2,7 @@
 
 import { QueryTypes } from 'sequelize';
 import DB from '../config/app/query.config.js';
-import pgsql from '../config/database/database.config.js';
+import mysql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 
 const GetOtpDTO = async (user_id, otp_type, booking_id) => {
@@ -13,7 +13,7 @@ const GetOtpDTO = async (user_id, otp_type, booking_id) => {
       booking_id : booking_id ? booking_id : null
     };
     const query = DB.QUERY.GET_OTP;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetOtpDTO: error.message });
@@ -30,7 +30,7 @@ const InserOtpDTO = async (user_id, otp_code, otp_type, booking_id) => {
       booking_id: booking_id ? booking_id : null,
     };
     const query = DB.QUERY.INSERT_OTP;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.INSERT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
     return data;
   } catch (error) {
     logger.error({ InserOtpDTO: error.message });
@@ -46,7 +46,7 @@ const UpdateOtpDTO = async (user_id, otp_code, otp_type) => {
       otp_type,
     };
     const query = DB.QUERY.UPDATE_OTP;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
     logger.error({ UpdateOtpDTO: error.message });
@@ -62,7 +62,7 @@ const UpdateBookingOtpDTO = async (booking_id, otp_code, otp_type) => {
       otp_type,
     };
     const query = DB.QUERY.UPDATE_BOOKING_OTP;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
     logger.error({ UpdateBookingOtpDTO: error.message });

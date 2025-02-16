@@ -20,57 +20,46 @@ Router.use(customUtility.setTimeZone);
 
 //user
 
-Router.get('/user-name/availability', UserValidations.UserNameValidation, UserController.GetUserNameAvailabilityController)
+Router.get('/user-name/availability', UserValidations.UserNameValidation, UserController.GetUserNameAvailabilityController);
 
-Router.get('/user/auth', UserValidations.UserloginValidation, UserController.GetAuthController);
+Router.get('/auth', UserValidations.UserloginValidation, UserController.GetAuthController);
 
-Router.post('/user/add', UserValidations.addUserCheck, UserController.AddNewUserController);
+Router.post('/add', UserValidations.addUserCheck, UserController.AddNewUserController);
 
-Router.get('/user/password-reset/otp', UserValidations.UserNameValidation, UserController.GenerateOtpForUserPasswordController);
+Router.get('/password-reset/otp', UserValidations.UserNameValidation, UserController.GenerateOtpForUserPasswordController);
 
-Router.put('/user/password-reset/confirm', UserValidations.ConfirmPasswordCheck, UserController.UpdateUserPasswordController);
+Router.put('/password-reset/confirm', UserValidations.ConfirmPasswordCheck, UserController.UpdateUserPasswordController);
 
-Router.get('/user/user-name/otp', UserValidations.UserEmailDobCheck, UserController.GenerateOtpForUserNameController);
+Router.get('/user-name/otp', UserValidations.UserEmailDobCheck, UserController.GenerateOtpForUserNameController);
 
-Router.get('/user/user-name/confirm', UserValidations.GetUserNameCheck, UserController.GetUserNameController);
-
-//admin
-Router.get('/admin/auth', UserValidations.UserloginValidation, AdminController.GetAuthController);
+Router.get('/user-name/confirm', UserValidations.GetUserNameCheck, UserController.GetUserNameController);
 
 //car
 Router.get('/car/random', CarValidations.LocationCheck, CarController.GetRandomCarsController);
 
+//JWT Verfication starts
 Router.use(JWT.VerifyToken);
 
 //user
-Router.get('/user/id', UserController.GetUserByIdController);
+Router.get('/id', UserController.GetUserByIdController);
 
-Router.put('/user/update', UserValidations.updateUserCheck, UserController.UpdateUserController);
+Router.put('/update', UserValidations.updateUserCheck, UserController.UpdateUserController);
 
 Router.put(
-  '/user/image-upload',
+  '/image-upload',
   upload.fields([
     { name: 'profile_image', maxCount: 1 },
     { name: 'aadhar_image', maxCount: 1 },
     { name: 'driving_license_image', maxCount: 1 },
-    {name: 'cover_image', maxCount: 1}
+    { name: 'cover_image', maxCount: 1 },
   ]),
   UserValidations.UserImageValidation,
   UserController.UserImageUploadController,
 );
 
-//admin
-Router.post('/admin/add', AdminController.AddNewAdminController);
-
-Router.get('/admin/id', AdminController.GetAdminByIdController);
-
 //car
 
 Router.get('/car', CarValidations.GetCarCheck, CarController.GetCarsController);
-
-Router.get('/admin/car/id', CarController.GetCarByIdController);
-
-Router.get('/admin/car/registration-number', CarController.GetCarByRegistrationNumberController);
 
 Router.post('/car', upload.fields([{ name: 'car_image', maxCount: 1 }]), CarValidations.AddCarValidation, CarController.AddCarController);
 
@@ -88,14 +77,8 @@ Router.get('/bookings/slots-start-date', BookingValidation.slotsAfterValidation,
 
 Router.get('/bookings', BookingController.GetUserBookingsController);
 
-Router.get('/admin/bookings', BookingController.GetBookingsController);
-
 Router.post('/booking', BookingValidation.AddbookingValidation, BookingController.AddBookingController);
 
-Router.post('/admin/booking', BookingController.AddBookingByAdminController);
-
 Router.put('/booking', BookingController.UpdateBookingController);
-
-Router.put('/admin/booking', BookingController.UpdateBookingByAdminController);
 
 export default Router;

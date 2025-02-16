@@ -1,7 +1,7 @@
 'use strict';
 
 import DB from '../config/app/query.config.js';
-import pgsql from '../config/database/database.config.js';
+import mysql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 import { QueryTypes } from 'sequelize';
 
@@ -11,7 +11,7 @@ const GetRandomCarsDTO = async (location) => {
       location
     };
     const query = DB.QUERY.GET_RANDOM_CARS;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetRandomCarsDTO: error.message });
@@ -30,7 +30,7 @@ const GetCarsDTO = async (location, start_date, end_date, start_time, end_time) 
       end_time: end_time ? end_time : null,
     };
     const query = DB.QUERY.GET_CARS;
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetCarsDTO: error.message });
@@ -44,7 +44,7 @@ const GetCarByIdDTO = async (car_id) => {
     const replacements = {
       car_id,
     };
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetCarByIdDTO: error.message });
@@ -58,7 +58,7 @@ const GetCarByRegistrationNumberDTO = async (registration_number) => {
     const replacements = {
       registration_number,
     };
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.SELECT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetCarByRegistrationNumberDTO: error.message });
@@ -107,7 +107,7 @@ const AddCarDTO = async (
       location_address,
     };
     console.log(replacements);
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.INSERT });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
     return data;
   } catch (error) {
     logger.error({ AddCarDTO: error.message });
@@ -141,7 +141,7 @@ const UpdateCarDTO = async (
       location,
       description,
     };
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
     logger.error({ UpdateCarDTO: error.message });
@@ -157,7 +157,7 @@ const UpdateAvilabilityDTO = async (car_id, availability, updated_by) => {
       availability,
       updated_by,
     };
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
     logger.error({ UpdateAvilabilityDTO: error.message });
@@ -174,7 +174,7 @@ const UpdatecarImageDTO = async (car_id, image, image_ext, updated_by) => {
       image_ext,
       updated_by,
     };
-    const data = await pgsql.query(query, { replacements, type: QueryTypes.UPDATE });
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
     logger.error({ UpdateAvilabilityDTO: error.message });

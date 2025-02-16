@@ -24,6 +24,7 @@ const UserNameValidation = [
 ];
 
 const addUserCheck = [
+  body('user_name').trim().notEmpty().isLength({min:5, max:10}).withMessage('Enter valid user_name'),
   body('first_name')
     .trim()
     .notEmpty()
@@ -283,7 +284,7 @@ const UserEmailDobCheck = [
 ];
 
 const ConfirmPasswordCheck = [
-  body('user_name').trim().notEmpty().withMessage('Enter valid Email'),
+  body('user_name').trim().notEmpty().withMessage('Enter valid user_name'),
   body('password').trim().notEmpty().isLength({ min: 7, max: 20 }).withMessage('Enter valid password'),
   body('otp').trim().isLength({ min: 6, max: 6 }).withMessage('Enter valid otp'),
   (request, response, next) => {

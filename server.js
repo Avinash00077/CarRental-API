@@ -8,9 +8,11 @@ import AppConfig from './config/app/app.config.js';
 import cors from 'cors';
 import helmet from 'helmet';
 import pgsql from './config/database/database.config.js';
-import Router from './routes/index.routes.js';
+import UserRoutes from './routes/user.routes.js';
+import AdminRoutes from './routes/admin.routes.js'
 import logger from './utility/logger.utility.js';
 import customUtility from './utility/custom.utility.js';
+const {STATUS_MESSAGES }= AppConfig
 
 const app = express();
 
@@ -21,6 +23,17 @@ app.use(helmet());
 app.use(cors());
 
 app.use(express.urlencoded({ extended: false }));
+
+// Handle invalid JSON in request body
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+      return res.status(400).json({
+          status: 400,
+          message: "Invalid JSON format in request body."
+      });
+  }
+  next();
+});
 
 app.get('/health', async (req, res) => {
   let dbStatus;
@@ -42,9 +55,9 @@ app.get('/health', async (req, res) => {
   };
   logger.info(`Health check status completed and overall status is ${message}`);
   if (message === 'OK') {
-    return res.status(200).json({ status: healthCheck });
+    return res.status(200).json({message: STATUS_MESSAGES[200], status: healthCheck });
   } else {
-    return res.status(503).json({ status: healthCheck });
+    return res.status(503).json({ message: STATUS_MESSAGES[503], status: healthCheck });
   }
 });
 
@@ -58,10 +71,20 @@ app.get('/health/monitor', async (req, res) => {
     timestamp,
   };
   logger.info(`Health check status completed and overall status is ${message}`);
-  return res.status(200).json({ status: healthCheck });
+  return res.status(200).json({ message: STATUS_MESSAGES[200], status: healthCheck });
 });
 
-app.use(Router);
+app.use('/user', UserRoutes);
+
+app.use('/admin', AdminRoutes);
+
+// Handle invalid routes (404)
+app.use((request, response) => {
+ return response.status(404).json({
+      status: 404,
+      message: "Route not found."
+  });
+});
 
 const databaseConnection = async () => {
   try {
