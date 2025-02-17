@@ -24,6 +24,20 @@ const GetBookingDTO = async (booking_id, email, phone_number, car_id, booking_st
   }
 };
 
+const GetCurrentBookingsDTO = async (location) => {
+  try {
+    const replacements = {
+      location: location ? location: null
+    };
+    const query = DB.QUERY.GET_CURRENT_BOOKINGS;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetCurrentBookingsDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetBookingConflictDTO = async (car_id, start_date, start_time, end_date, end_time) => {
   try {
     const replacements = {
@@ -128,6 +142,7 @@ const BookingDTO = {
   UpdateBoookingDTO,
   GetAvilableSlotsByStartDateDTO,
   GetAvilableSlotsDTO,
+  GetCurrentBookingsDTO,
 };
 
 export default BookingDTO;

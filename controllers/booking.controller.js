@@ -28,6 +28,20 @@ const GetBookingsController = async (request, response) => {
   }
 };
 
+const GetCurrentBookingsController = async (request, response) => {
+  try {
+    const data = await BookingService.GetCurrentBookingsService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      response.status(200).json({ message: STATUS_MESSAGES[200] , data: data });
+    }
+  } catch (error) {
+    logger.error({ GetCurrentBookingsController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+  }
+};
+
 const AddBookingController = async (request, response) => {
   try {
     const data = await BookingService.AddBookingService(request);
@@ -121,6 +135,7 @@ const BookingController = {
   UpdateBookingByAdminController,
   GetAvilableSlotsByStartDateController,
   GetAvilableSlotsController,
+  GetCurrentBookingsController,
 };
 
 export default BookingController;

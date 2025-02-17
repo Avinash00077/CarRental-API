@@ -8,7 +8,7 @@ import customUtility from '../utility/custom.utility.js';
 import logger from '../utility/logger.utility.js';
 import AppConfig from '../config/app/app.config.js';
 import sendEmail from '../utility/email.utility.js';
-
+const {STATUS_MESSAGES, OTP_CODES} = AppConfig
 const { customExceptionMessage, generateOtp } = customUtility;
 
 const GetUserBookingsService = async (request) => {
@@ -27,12 +27,27 @@ const GetBookingsService = async (request) => {
     const adminId = request.adminId;
     const { booking_id, email, phone_number, car_id, booking_status, user_id } = request.headers;
     if (!adminId) {
-      return customExceptionMessage(401, 'Please login with admin account to get car data');
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
     }
     const data = await BookingDTO.GetBookingDTO(booking_id, email, phone_number, car_id, booking_status, user_id);
     return data;
   } catch (error) {
     logger.error({ GetBookingsService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const GetCurrentBookingsService = async (request) => {
+  try {
+    const adminId = request.adminId;
+    const { location } = request.headers;
+    if (!adminId) {
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
+    }
+    const data = await BookingDTO.GetCurrentBookingsDTO(location);
+    return data;
+  } catch (error) {
+    logger.error({ GetCurrentBookingsService: error.message });
     throw new Error(error.message);
   }
 };
@@ -112,7 +127,7 @@ const UpdateBookingService = async (request) => {
     const { name, brand, car_name, user_email, start_date, start_time, end_date, end_time, car_location } = bookingData[0];
     const model = `${brand}-${car_name}`
     const otp = generateOtp();
-    await OtpDTO.InserOtpDTO(user_id, otp, AppConfig.OTP_CODES.BOOKING,booking_id);
+    await OtpDTO.InserOtpDTO(user_id, otp, OTP_CODES.BOOKING,booking_id);
     const emailTemplate = emailTemplates.bookingTemplate(name, start_date, start_time, end_date, end_time, booking_id, model, car_location, otp);
     const subject = emailTemplate.subject;
     const body = emailTemplate.body;
@@ -189,6 +204,7 @@ const BookingService = {
   UpdateBookingByAdminService,
   GetAvilableSlotsService,
   GetAvilableSlotsByStartDateService,
+  GetCurrentBookingsService,
 };
 
 export default BookingService;

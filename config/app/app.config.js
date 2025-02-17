@@ -54,6 +54,8 @@ const BOOKING_MESSAGES = {
   BOOKING_ALREADY_EXISTS: 'You already have a booking for this car during the selected dates.',
 };
 
+const USER_IMAGE_NAMES = ['profile_image', 'aadhar_image', 'driving_license_image', 'cover_image'];
+
 const AppConfig = {
   PORT: properties.get('app.port'),
   APPNAME: properties.get('app.appName'),
@@ -64,6 +66,7 @@ const AppConfig = {
   USER_MESSAGES: USER_MESSAGES,
   CAR_MESSAGES: CAR_MESSAGES,
   BOOKING_MESSAGES: BOOKING_MESSAGES,
+  USER_IMAGE_NAMES: USER_IMAGE_NAMES,
 };
 
 export default AppConfig;

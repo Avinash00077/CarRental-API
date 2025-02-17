@@ -51,6 +51,8 @@ Router.get('/car/registration-number', CarController.GetCarByRegistrationNumberC
 //booking
 Router.get('/bookings', BookingController.GetBookingsController);
 
+Router.get('/bookings/current', BookingController.GetCurrentBookingsController);
+
 Router.post('/booking', BookingController.AddBookingByAdminController);
 
 Router.put('/booking', BookingController.UpdateBookingByAdminController);

@@ -124,12 +124,11 @@ const UpdateLastLoginDTO = async (user_id) => {
   }
 };
 
-const UpdateUserProfileDTO = async (user_id, profile_image, image_type) => {
+const UpdateUserProfileDTO = async (user_id, profile_img_url) => {
   try {
     const replacements = {
       user_id,
-      profile_image,
-      image_type,
+      profile_img_url,
     };
     const query = DB.QUERY.UPDATE_USER_IMAGE;
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
@@ -140,12 +139,11 @@ const UpdateUserProfileDTO = async (user_id, profile_image, image_type) => {
   }
 };
 
-const UpdateUserCoverImageDTO = async (user_id, cover_image, cover_image_type) => {
+const UpdateUserCoverImageDTO = async (user_id, cover_img_url) => {
   try {
     const replacements = {
       user_id,
-      cover_image,
-      cover_image_type,
+      cover_img_url,
     };
     const query = DB.QUERY.UPDATE_USER_COVER_IMAGE;
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
@@ -156,13 +154,12 @@ const UpdateUserCoverImageDTO = async (user_id, cover_image, cover_image_type) =
   }
 };
 
-const UpdateUserAadharDTO = async (user_id, aadhar_number, aadhar_image, aadhar_img_type) => {
+const UpdateUserAadharDTO = async (user_id, aadhar_number, aadhar_img_url) => {
   try {
     const replacements = {
       user_id,
       aadhar_number,
-      aadhar_image,
-      aadhar_img_type,
+      aadhar_img_url,
     };
     const query = DB.QUERY.UPDATE_USER_AADHAR;
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
@@ -173,19 +170,12 @@ const UpdateUserAadharDTO = async (user_id, aadhar_number, aadhar_image, aadhar_
   }
 };
 
-const UpdateUserDrivingLicenseDTO = async (
-  user_id,
-  driving_license_number,
-  driving_license_image,
-  driving_license_img_type,
-  driving_license_expiry,
-) => {
+const UpdateUserDrivingLicenseDTO = async (user_id, driving_license_number, driving_license_img_url, driving_license_expiry) => {
   try {
     const replacements = {
       user_id,
       driving_license_number,
-      driving_license_image,
-      driving_license_img_type,
+      driving_license_img_url,
       driving_license_expiry,
     };
     const query = DB.QUERY.UPDATE_USER_DRIVING_LICENSE;
@@ -200,7 +190,7 @@ const UpdateUserDrivingLicenseDTO = async (
 const GetUsersForVerficationDTO = async () => {
   try {
     const query = DB.QUERY.GET_USERS_FOR_VERIFICATION;
-    const data = await mysql.query(query, {type:QueryTypes.SELECT});
+    const data = await mysql.query(query, { type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetUsersForVerficationDTO: error.message });
@@ -211,18 +201,18 @@ const GetUsersForVerficationDTO = async () => {
 const UpdateUserVerficationDTO = async (user_id, driving_license_verified, aadhar_verified) => {
   try {
     const replacements = {
-      user_id, 
+      user_id,
       driving_license_verified,
       aadhar_verified,
-    }
+    };
     const query = DB.QUERY.UPDATE_USER_VERFICATION;
-    const data = await mysql.query(query, {replacements,type:QueryTypes.UPDATE});
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
     logger.error({ UpdateUserVerficationDTO: error.message });
     throw new Error(error.message);
-  } 
-}
+  }
+};
 
 const UserDTO = {
   GetUserByEmailDTO,
