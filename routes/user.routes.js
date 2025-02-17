@@ -57,6 +57,9 @@ Router.put(
   UserController.UserImageUploadController,
 );
 
+//car
+Router.get('/car', CarValidations.GetCarCheck, CarController.GetCarsController);
+
 //booking
 
 Router.get('/bookings/slots', BookingValidation.slotsValidation, BookingController.GetAvilableSlotsController);
