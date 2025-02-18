@@ -73,8 +73,7 @@ const AddCarDTO = async (
   daily_rent,
   availability,
   registration_number,
-  image,
-  image_ext,
+  car_cover_img_url,
   location,
   description,
   car_owner,
@@ -94,8 +93,7 @@ const AddCarDTO = async (
       daily_rent,
       availability,
       registration_number,
-      image,
-      image_ext,
+      car_cover_img_url,
       location,
       description,
       car_owner,
@@ -165,14 +163,12 @@ const UpdateAvilabilityDTO = async (car_id, availability, updated_by) => {
   }
 };
 
-const UpdatecarImageDTO = async (car_id, image, image_ext, updated_by) => {
+const UpdatecarImageDTO = async (car_id, car_cover_img_url) => {
   try {
     const query = DB.QUERY.UPDATE_CAR_IMAGE;
     const replacements = {
       car_id,
-      image,
-      image_ext,
-      updated_by,
+      car_cover_img_url,
     };
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;

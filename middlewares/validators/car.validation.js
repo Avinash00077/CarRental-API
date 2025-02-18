@@ -73,7 +73,7 @@ const LocationCheck = [
     }
     next();
   },
-]
+];
 const AddCarValidation = [
   // Name (required, must be a string)
   body('name').trim().notEmpty().withMessage('Car name is required').isString().withMessage('Car name must be a valid string'),

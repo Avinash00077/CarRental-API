@@ -3,8 +3,9 @@
 import CarDTO from '../dto/car.dto.js';
 import customUtility from '../utility/custom.utility.js';
 import logger from '../utility/logger.utility.js';
-
+import cloudinaryUtils from '../utility/cloudinary.js';
 const { customExceptionMessage } = customUtility;
+const {uploadToCloudinary} = cloudinaryUtils
 
 const GetRandomCarsService = async (request) => {
   try {
@@ -80,8 +81,7 @@ const AddCarService = async (request) => {
       request.body;
 
     const adminId = request.adminId;
-    const image = request.files.car_image[0].buffer;
-      const image_ext = request.files.car_image[0].originalname.split('.')?.pop();
+
     if (!adminId) {
       return customExceptionMessage(401, 'Please login with admin account to add car');
     }
@@ -89,6 +89,7 @@ const AddCarService = async (request) => {
     if (GetCar.length > 0) {
       return customExceptionMessage(400, 'Car already exist with registration number');
     }
+    const imageUrl = await uploadToCloudinary(request.files.car_image[0]);
     const data = await CarDTO.AddCarDTO(
       name,
       brand,
@@ -96,8 +97,7 @@ const AddCarService = async (request) => {
       daily_rent,
       availability,
       registration_number,
-      image,
-      image_ext,
+      imageUrl,
       location,
       description,
       car_owner,
