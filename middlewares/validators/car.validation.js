@@ -1,5 +1,6 @@
 import { body, header, validationResult } from 'express-validator';
 import moment from 'moment';
+import logger from '../../utility/logger.utility.js';
 
 const validTimes = ['10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00'];
 
@@ -57,6 +58,7 @@ const GetCarCheck = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      logger.error({errors: errors.array()})
       return res.status(400).json({ errors: errors.array() });
     }
     next();
