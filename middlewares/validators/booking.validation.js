@@ -65,6 +65,7 @@ const AddbookingValidation = [
   (request, response, next) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
+      logger.error({errors: errors.array()})
       return response.status(400).json({ message: errors.array() });
     }
     next();
