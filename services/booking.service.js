@@ -8,7 +8,7 @@ import customUtility from '../utility/custom.utility.js';
 import logger from '../utility/logger.utility.js';
 import AppConfig from '../config/app/app.config.js';
 import sendEmail from '../utility/email.utility.js';
-const {STATUS_MESSAGES, OTP_CODES} = AppConfig
+const { STATUS_MESSAGES, OTP_CODES } = AppConfig;
 const { customExceptionMessage, generateOtp } = customUtility;
 
 const GetUserBookingsService = async (request) => {
@@ -27,6 +27,7 @@ const GetBookingsService = async (request) => {
     const adminId = request.adminId;
     const { booking_id, email, phone_number, car_id, booking_status, user_id } = request.headers;
     if (!adminId) {
+      logger.warn({ message: STATUS_MESSAGES[403] });
       return customExceptionMessage(403, STATUS_MESSAGES[403]);
     }
     const data = await BookingDTO.GetBookingDTO(booking_id, email, phone_number, car_id, booking_status, user_id);
@@ -42,6 +43,7 @@ const GetCurrentBookingsService = async (request) => {
     const adminId = request.adminId;
     const { location } = request.headers;
     if (!adminId) {
+      logger.warn({ message: STATUS_MESSAGES[403] });
       return customExceptionMessage(403, STATUS_MESSAGES[403]);
     }
     const data = await BookingDTO.GetCurrentBookingsDTO(location);
@@ -55,19 +57,23 @@ const GetCurrentBookingsService = async (request) => {
 const AddBookingService = async (request) => {
   try {
     const { car_id, start_date, start_time, end_date, end_time, total_price, payment_mode } = request.body;
-    const {userId,aadhar_verified, driving_license_verified, driving_license_expiry} = request;
-    if(aadhar_verified !== 'Y' || driving_license_verified !== 'Y'){
-      return customExceptionMessage(422, 'User not verified for booking')
+    const { userId, aadhar_verified, driving_license_verified, driving_license_expiry } = request;
+    if (aadhar_verified !== 'Y' || driving_license_verified !== 'Y') {
+      logger.warn({ message: 'User not verified for booking' });
+      return customExceptionMessage(422, 'User not verified for booking');
     }
-    if(driving_license_expiry === 'Y'){
-      return customExceptionMessage(422, 'Driving lisence expired cannot procced with booking')
+    if (driving_license_expiry === 'Y') {
+      logger.warn({ message: 'Driving lisence expired cannot procced with booking' });
+      return customExceptionMessage(422, 'Driving lisence expired cannot procced with booking');
     }
     const carData = await CarDTO.GetCarByIdDTO(car_id);
     if (carData.length === 0) {
+      logger.warn({ message: 'Car already booked or car not available' });
       return customExceptionMessage(409, 'Car already booked or car not available');
     }
     const havingConflict = await BookingDTO.GetBookingConflictDTO(car_id, start_date, start_time, end_date, end_time);
     if (havingConflict) {
+      logger.warn({ message: 'Conflict booking found' });
       return customExceptionMessage(409, 'Conflict booking found');
     }
     const [data] = await BookingDTO.AddBoookingDTO(
@@ -118,17 +124,28 @@ const AddBookingByAdminService = async (request) => {
 const UpdateBookingService = async (request) => {
   try {
     const { booking_id, booking_status, transaction_id } = request.body;
-    const user_id = request.userId
+    const user_id = request.userId;
     const bookingData = await BookingDTO.GetBookingDTO(booking_id);
     if (bookingData.length === 0 || bookingData[0].booking_status === 'COMPLETED') {
+      logger.warn({ message: 'Car rental already completed or data not available' });
       return customExceptionMessage(409, 'Car rental already completed or data not available');
     }
     const data = await BookingDTO.UpdateBoookingDTO(booking_id, booking_status, transaction_id, 'user');
     const { name, brand, car_name, user_email, start_date, start_time, end_date, end_time, car_location } = bookingData[0];
-    const model = `${brand}-${car_name}`
+    const model = `${brand}-${car_name}`;
     const otp = generateOtp();
-    await OtpDTO.InserOtpDTO(user_id, otp, OTP_CODES.BOOKING,booking_id);
-    const emailTemplate = emailTemplates.bookingTemplate(name, start_date, start_time, end_date, end_time, booking_id, model, car_location, otp);
+    await OtpDTO.InserOtpDTO(user_id, otp, OTP_CODES.BOOKING, booking_id);
+    const emailTemplate = emailTemplates.bookingTemplate(
+      name,
+      start_date,
+      start_time,
+      end_date,
+      end_time,
+      booking_id,
+      model,
+      car_location,
+      otp,
+    );
     const subject = emailTemplate.subject;
     const body = emailTemplate.body;
     await sendEmail(user_email, subject, body);

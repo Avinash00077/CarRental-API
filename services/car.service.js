@@ -5,7 +5,7 @@ import customUtility from '../utility/custom.utility.js';
 import logger from '../utility/logger.utility.js';
 import cloudinaryUtils from '../utility/cloudinary.js';
 const { customExceptionMessage } = customUtility;
-const {uploadToCloudinary} = cloudinaryUtils
+const { uploadToCloudinary } = cloudinaryUtils;
 
 const GetRandomCarsService = async (request) => {
   try {
@@ -35,6 +35,7 @@ const GetCarByIdService = async (request) => {
     const adminId = request.adminId;
 
     if (!adminId) {
+      logger.warn({ message: 'Please login with admin account to add car' });
       return customExceptionMessage(401, 'Please login with admin account to add car');
     }
     const data = await CarDTO.GetCarByIdDTO(car_id);
@@ -51,6 +52,7 @@ const GetCarByRegistrationNumberService = async (request) => {
     const adminId = request.adminId;
 
     if (!adminId) {
+      logger.warn({ message: 'Please login with admin account to add car' });
       return customExceptionMessage(401, 'Please login with admin account to add car');
     }
     const data = await CarDTO.GetCarByRegistrationNumberDTO(registration_number);
@@ -63,7 +65,8 @@ const GetCarByRegistrationNumberService = async (request) => {
 
 const AddCarService = async (request) => {
   try {
-    const { name,
+    const {
+      name,
       brand,
       model_year,
       daily_rent,
@@ -77,16 +80,18 @@ const AddCarService = async (request) => {
       car_type,
       seater,
       fastag_availability,
-      location_address,} =
-      request.body;
+      location_address,
+    } = request.body;
 
     const adminId = request.adminId;
 
     if (!adminId) {
+      logger.warn({ message: 'Please login with admin account to add car' });
       return customExceptionMessage(401, 'Please login with admin account to add car');
     }
     const GetCar = await CarDTO.GetCarByRegistrationNumberDTO(registration_number);
     if (GetCar.length > 0) {
+      logger.warn({ message: 'Car already exist with registration number' });
       return customExceptionMessage(400, 'Car already exist with registration number');
     }
     const imageUrl = await uploadToCloudinary(request.files.car_image[0]);
@@ -117,15 +122,16 @@ const AddCarService = async (request) => {
 
 const UpdateCarService = async (request) => {
   try {
-    const { car_id, name, brand, model_year, daily_rent, availability, registration_number, location, description } =
-      request.body;
+    const { car_id, name, brand, model_year, daily_rent, availability, registration_number, location, description } = request.body;
     const adminId = request.adminId;
 
     if (!adminId) {
-      return customExceptionMessage(401, 'Please login with admin account to add car');
+      logger.warn({ message: 'Please login with admin account to update car' });
+      return customExceptionMessage(401, 'Please login with admin account to update car');
     }
     const GetCar = await CarDTO.GetCarByIdDTO(car_id);
     if (GetCar.length === 0) {
+      logger.warn({ message: 'No car found to update' });
       return customExceptionMessage(400, 'No car found to update');
     }
     const data = await CarDTO.UpdateCarDTO(
@@ -154,10 +160,12 @@ const UpdateCarAvilabilityService = async (request) => {
     const adminId = request.adminId;
 
     if (!adminId) {
+      logger.warn({ message: 'Please login with admin account ' });
       return customExceptionMessage(401, 'Please login with admin account ');
     }
     const GetCar = await CarDTO.GetCarByIdDTO(car_id);
     if (GetCar.length === 0) {
+      logger.warn({ message: 'No car found to update' });
       return customExceptionMessage(400, 'No car found to update');
     }
     const data = await CarDTO.UpdateAvilabilityDTO(car_id, availability, adminId);
@@ -176,10 +184,12 @@ const UpdateCarImageService = async (request) => {
     const image = request.file.buffer;
     const fileName = request.file.originalname.split('.').pop();
     if (!adminId) {
-      return customExceptionMessage(401, 'Please login with admin account ');
+      logger.warn({ message: 'Please login with admin account' });
+      return customExceptionMessage(401, 'Please login with admin account');
     }
     const GetCar = await CarDTO.GetCarByIdDTO(car_id);
     if (GetCar.length === 0) {
+      logger.warn({ message: 'No car found to update' });
       return customExceptionMessage(400, 'No car found to update');
     }
     const data = await CarDTO.UpdatecarImageDTO(car_id, image, fileName, adminId);
