@@ -20,13 +20,13 @@ const GetAuthService = async (request) => {
     }
     const userData = { adminId: data[0].admin_id };
     const token = JWT.GenerateToken(userData);
-    const userDetails = {
+    const adminDetails = {
       admin_id: data[0].admin_id,
       name: data[0].name,
       email: data[0].email,
       phone_number: data[0].phone_number,
     };
-    return {token,userDetails};
+    return {token,adminDetails};
   } catch (error) {
     logger.error({ GetAuthService: error.message });
     throw new Error(error.message);
