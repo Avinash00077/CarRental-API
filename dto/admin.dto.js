@@ -17,11 +17,11 @@ const GetAdminByEmailDTO = async (email, number) => {
   }
 };
 
-const GetAdminByIdDTO = async (user_id) => {
+const GetAdminByIdDTO = async (admin_id) => {
   try {
     const query = DB.QUERY.GET_ADMINBY_ID;
-    const replacements = { user_id };
-    const data = await pgsql.query(query, { type: QueryTypes.SELECT, replacements: replacements });
+    const replacements = { admin_id };
+    const data = await mysql.query(query, { type: QueryTypes.SELECT, replacements: replacements });
     return data;
   } catch (error) {
     logger.error({ GetAdminByIdDTO: error.message });
@@ -29,7 +29,7 @@ const GetAdminByIdDTO = async (user_id) => {
   }
 };
 
-const AddNewAdminDTO = async (name, email, password, phone_number, created_by) => {
+const AddNewAdminDTO = async (name, email, password, phone_number, user_type, location) => {
   try {
     const query = DB.QUERY.ADD_NEW_ADMIN;
     const replacements = {
@@ -37,7 +37,8 @@ const AddNewAdminDTO = async (name, email, password, phone_number, created_by) =
       email: email,
       password: password,
       phone_number: phone_number,
-      created_by: created_by,
+      user_type: user_type,
+      location: location
     };
     const data = await mysql.query(query, { type: QueryTypes.INSERT, replacements: replacements });
     return data;

@@ -61,6 +61,8 @@ const AppConfig = {
   APPNAME: properties.get('app.appName'),
   JWTEXPIRYTIME: properties.get('app.jwtExpiryTime'),
   JWTSECRETKEY: properties.get('app.jwtSecretKey'),
+  ADMINJWTSECRETKEY: properties.get('app.adminJwtSecretKey'),
+  ADMINJWTEXPIRYTIME: properties.get('app.adminJwtExpiryTime'),
   OTP_CODES: OTP_CODES,
   STATUS_MESSAGES: STATUS_MESSAGES,
   USER_MESSAGES: USER_MESSAGES,

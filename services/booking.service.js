@@ -200,12 +200,8 @@ const GetAvilableSlotsByStartDateService = async (request) => {
   try {
     const { start_date, start_time, car_id } = request.headers;
     const data = await BookingDTO.GetAvilableSlotsByStartDateDTO(start_date, start_time, car_id);
-    const groupedResults = data.reduce((acc, { available_date, time_slot }) => {
-      if (!acc[available_date]) acc[available_date] = [];
-      acc[available_date].push(time_slot);
-      return acc;
-    }, {});
-    return groupedResults;
+    
+    return data;
   } catch (error) {
     logger.error({ GetAvilableSlotsByStartDateService: error.message });
     throw new Error(error.message);

@@ -1,7 +1,7 @@
 'use strict';
 
 import AdminDTO from '../dto/admin.dto.js';
-import JWT from '../middlewares/jwt.middleware.js';
+import ADMINJWT from '../middlewares/jwt.admin.middleware.js';
 import customUtility from '../utility/custom.utility.js';
 import bcrypt from 'bcrypt';
 import logger from '../utility/logger.utility.js';
@@ -18,15 +18,17 @@ const GetAuthService = async (request) => {
     if (!comparePasssword) {
       return customExceptionMessage(401, 'Invalid password please check the password');
     }
-    const userData = { adminId: data[0].admin_id };
-    const token = JWT.GenerateToken(userData);
+    const userData = { adminId: data[0].admin_id, user_type: data[0].user_type, location: data[0].location };
+    const token = ADMINJWT.GenerateToken(userData);
     const adminDetails = {
       admin_id: data[0].admin_id,
       name: data[0].name,
       email: data[0].email,
       phone_number: data[0].phone_number,
+      user_type: data[0].user_type,
+      location: data[0].location,
     };
-    return {token,adminDetails};
+    return { token, adminDetails };
   } catch (error) {
     logger.error({ GetAuthService: error.message });
     throw new Error(error.message);
@@ -34,12 +36,13 @@ const GetAuthService = async (request) => {
 };
 const AddNewAdminService = async (request) => {
   try {
-    const { name, email, password, phone_number } = request.body;
+    const { name, email, password, phone_number, user_type, location } = request.body;
 
     const adminId = request.adminId;
-    const adminData = await AdminDTO.GetUserByIdDTO(adminId);
+    
+    const adminData = await AdminDTO.GetAdminByIdDTO(adminId);
 
-    if(!adminId || adminData.length === 0){
+    if (!adminId || adminData.length === 0) {
       return customExceptionMessage(401, 'Please login with admin account to add admin');
     }
     const GetAdminByEmail = await AdminDTO.GetAdminByEmailDTO(email);
@@ -51,7 +54,7 @@ const AddNewAdminService = async (request) => {
       return customExceptionMessage(400, 'Admin already exist with this mobile number');
     }
     const hashedPassword = await bcrypt.hash(password, 12);
-    const data = await AdminDTO.AddNewAdminDTO(name, email, hashedPassword, phone_number, 'guest');
+    const data = await AdminDTO.AddNewAdminDTO(name, email, hashedPassword, phone_number, user_type, location);
     return data;
   } catch (error) {
     logger.error({ AddNewAdminService: error.message });
@@ -61,15 +64,15 @@ const AddNewAdminService = async (request) => {
 
 const GetAdminByIdService = async (request) => {
   try {
-   let {admin_id} = request.headers;
-    let adminId = admin_id ? admin_id:  request.adminId
+    let { admin_id } = request.headers;
+    let adminId = admin_id ? admin_id : request.adminId;
     const data = await AdminDTO.GetAdminByIdDTO(adminId);
     return data;
   } catch (error) {
     logger.error({ GetAdminByIdService: error.message });
-    throw new Error(error.message); 
+    throw new Error(error.message);
   }
-}
+};
 
 const UpdateAdminService = async (request) => {
   try {
@@ -107,8 +110,6 @@ const UpdateAdminPasswordService = async (request) => {
     throw new Error(error.message);
   }
 };
-
-
 
 const AdminService = { GetAuthService, AddNewAdminService, GetAdminByIdService, UpdateAdminService, UpdateAdminPasswordService };
 

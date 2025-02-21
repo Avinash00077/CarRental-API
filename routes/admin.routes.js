@@ -1,7 +1,7 @@
 'use strict';
 
 import express from 'express';
-import JWT from '../middlewares/jwt.middleware.js';
+import ADMINJWT from '../middlewares/jwt.admin.middleware.js';
 import UserController from '../controllers/user.controller.js';
 import AdminController from '../controllers/admin.controller.js';
 import multer from 'multer';
@@ -20,10 +20,10 @@ Router.use(customUtility.setTimeZone);
 
 Router.get('/auth', AdminController.GetAuthController);
 
-Router.post('/add', AdminController.AddNewAdminController);
-
 //JWT Verfication starts
-Router.use(JWT.VerifyToken);
+Router.use(ADMINJWT.VerifyToken);
+
+Router.post('/add', AdminController.AddNewAdminController);
 
 Router.get('/id', AdminController.GetAdminByIdController);
 
