@@ -200,9 +200,25 @@ const GetAvilableSlotsByStartDateService = async (request) => {
   try {
     const { start_date, start_time, car_id } = request.headers;
     const data = await BookingDTO.GetAvilableSlotsByStartDateDTO(start_date, start_time, car_id);
-    
-    return data;
+    let slotsData = [];
+    data.map((i) => {
+      slotsData.push(i.available_date);
+    });
+    const uniqueDates = [...new Set(slotsData)];
+
+    let formatedData = uniqueDates.map((i) => {
+      let slots = [];
+      data
+        .filter((s) => s.available_date === i)
+        .map((slotItem) => {
+          slots.push(slotItem.time_slot);
+          return true;
+        });
+      return { available_date: i, time_slots: slots };
+    });
+    return formatedData;
   } catch (error) {
+    console.log(error);
     logger.error({ GetAvilableSlotsByStartDateService: error.message });
     throw new Error(error.message);
   }
