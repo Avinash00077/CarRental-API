@@ -292,7 +292,7 @@ const UpdateUserVerficationService = async (request) => {
     if (!adminId) {
       return customExceptionMessage(403, STATUS_MESSAGES[403]);
     }
-    let { user_id, driving_license_verified, aadhar_verified } = request.body;
+    let { user_id, driving_license_verified, aadhar_verified, comments } = request.body;
     const userData = await UserDTO.GetUsersForVerficationDTO();
     const user = userData.filter((u) => u.user_id === user_id);
     if (!user) {
@@ -304,7 +304,7 @@ const UpdateUserVerficationService = async (request) => {
     driving_license_verified = driving_license_verified ? driving_license_verified : user[0].driving_license_verified;
 
     aadhar_verified = aadhar_verified ? aadhar_verified : user[0].aadhar_verified;
-    const data = await UserDTO.UpdateUserVerficationDTO(user_id, driving_license_verified, aadhar_verified);
+    const data = await UserDTO.UpdateUserVerficationDTO(user_id, driving_license_verified, aadhar_verified, comments);
     if (driving_license_verified_email_flag) {
       const approved = driving_license_verified === 'Y' ? true : false;
       const status = driving_license_verified === 'Y' ? 'approved' : 'rejected';

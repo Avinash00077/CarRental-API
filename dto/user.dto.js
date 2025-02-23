@@ -198,12 +198,13 @@ const GetUsersForVerficationDTO = async () => {
   }
 };
 
-const UpdateUserVerficationDTO = async (user_id, driving_license_verified, aadhar_verified) => {
+const UpdateUserVerficationDTO = async (user_id, driving_license_verified, aadhar_verified, comments) => {
   try {
     const replacements = {
       user_id,
       driving_license_verified,
       aadhar_verified,
+      comments: comments ? comments : null
     };
     const query = DB.QUERY.UPDATE_USER_VERFICATION;
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
