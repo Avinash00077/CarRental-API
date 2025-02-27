@@ -24,6 +24,16 @@ const GetCarsController = async (request, response) => {
   }
 };
 
+const GetAllCarsController = async (request, response) => {
+  try {
+    const data = await CarService.GetAllCarsService(request);
+    return response.status(200).json({ message: STATUS_MESSAGES[200], data: data });
+  } catch (error) {
+    logger.error({ GetAllCarsController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
+  }
+};
+
 const GetCarByIdController = async (request, response) => {
   try {
     const data = await CarService.GetCarByIdService(request);
@@ -109,6 +119,7 @@ const CarController = {
   UpdateCarAvilabilityController,
   UpdateCarController,
   UpdateCarImageController,
+  GetAllCarsController,
 };
 
 export default CarController;

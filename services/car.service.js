@@ -5,7 +5,7 @@ import customUtility from '../utility/custom.utility.js';
 import logger from '../utility/logger.utility.js';
 import cloudinaryUtils from '../utility/cloudinary.js';
 const { customExceptionMessage } = customUtility;
-const { uploadToCloudinary } = cloudinaryUtils;
+const { uploadToCloudinary,deleteUserImageService } = cloudinaryUtils;
 
 const GetRandomCarsService = async (request) => {
   try {
@@ -22,6 +22,17 @@ const GetCarsService = async (request) => {
   try {
     const { location, start_date, end_date, start_time, end_time } = request.headers;
     const data = await CarDTO.GetCarsDTO(location, start_date, end_date, start_time, end_time);
+    return data;
+  } catch (error) {
+    logger.error({ GetCarsService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const GetAllCarsService = async (request) => {
+  try {
+    const location = request.location ? request.location  : null;
+    const data = await CarDTO.GetAllCarsDTO(location);
     return data;
   } catch (error) {
     logger.error({ GetCarsService: error.message });
@@ -146,6 +157,7 @@ const UpdateCarService = async (request) => {
       location,
       description,
     );
+    await UpdateCarImageService(request)
     return data;
   } catch (error) {
     logger.error({ UpdateCarService: error.message });
@@ -181,8 +193,8 @@ const UpdateCarImageService = async (request) => {
     const { car_id } = request.body;
 
     const adminId = request.adminId;
-    const image = request.file.buffer;
-    const fileName = request.file.originalname.split('.').pop();
+    // const image = request.file.buffer;
+    // const fileName = request.file.originalname.split('.').pop();
     if (!adminId) {
       logger.warn({ message: 'Please login with admin account' });
       return customExceptionMessage(401, 'Please login with admin account');
@@ -192,7 +204,11 @@ const UpdateCarImageService = async (request) => {
       logger.warn({ message: 'No car found to update' });
       return customExceptionMessage(400, 'No car found to update');
     }
-    const data = await CarDTO.UpdatecarImageDTO(car_id, image, fileName, adminId);
+    if (GetCar[0].car_cover_img_url) {
+      await deleteUserImageService(GetCar[0].car_cover_img_url);
+    }
+    const imageUrl = await uploadToCloudinary(request.files.car_image[0]);
+    const data = await CarDTO.UpdatecarImageDTO(car_id, imageUrl);
     return data;
   } catch (error) {
     logger.error({ UpdateCarImageService: error.message });
@@ -209,6 +225,7 @@ const CarService = {
   UpdateCarAvilabilityService,
   UpdateCarService,
   UpdateCarImageService,
+  GetAllCarsService
 };
 
 export default CarService;

@@ -38,6 +38,20 @@ const GetCarsDTO = async (location, start_date, end_date, start_time, end_time) 
   }
 };
 
+const GetAllCarsDTO = async (location) => {
+  try {
+    const replacements = {
+      location: location ? location : null,
+    };
+    const query = DB.QUERY.GET_ALL_CARS;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetCarsDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetCarByIdDTO = async (car_id) => {
   try {
     const query = DB.QUERY.GET_CAR_BY_ID;
@@ -187,6 +201,7 @@ const CarDTO = {
   UpdateCarDTO,
   UpdateAvilabilityDTO,
   UpdatecarImageDTO,
+  GetAllCarsDTO,
 };
 
 export default CarDTO;

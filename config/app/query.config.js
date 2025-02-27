@@ -33,6 +33,7 @@ const QUERY = {
   CHANGE_ADMIN_PASSWORD: properties.get('query.change_admin_password'),
 
   //cars
+  GET_ALL_CARS : properties.get('query.get_all_cars'),
   GET_RANDOM_CARS: properties.get('query.get_random_cars'),
   GET_CARS: properties.get('query.get_cars'),
   GET_CAR_BY_ID: properties.get('query.get_car_by_id'),
@@ -53,6 +54,10 @@ const QUERY = {
   GET_AVILABLE_SLOTS: properties.get('query.get_avilable_slots'),
   GET_AVILABLE_SLOTS_BY_START_DATE: properties.get('query.get_avilable_slots_by_start_date'),
   UPDATE_BOOKING_STATUS_PICKUP: properties.get('query.update_booking_status_pickup'),
+
+  //utility
+  GET_LOCATIONS :properties.get('query.get_locations'),
+  GET_CAR_BRANDS: properties.get('query.get_car_brands')
   
 };
 

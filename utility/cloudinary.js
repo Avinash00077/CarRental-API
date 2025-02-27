@@ -34,7 +34,7 @@ const deleteUserImageService = async (imageUrl) => {
     return { message: 'Image deleted successfully' };
   } catch (error) {
     logger.error({ message: error.message });
-    throw new Error('Delete Failed: ' + error.message);
+    //throw new Error('Delete Failed: ' + error.message);
   }
 };
 

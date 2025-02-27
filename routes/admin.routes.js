@@ -5,12 +5,11 @@ import ADMINJWT from '../middlewares/jwt.admin.middleware.js';
 import UserController from '../controllers/user.controller.js';
 import AdminController from '../controllers/admin.controller.js';
 import multer from 'multer';
-import UserValidations from '../middlewares/validators/user.validation.js';
 import CarController from '../controllers/car.controller.js';
 import BookingController from '../controllers/booking.controller.js';
 import CarValidations from '../middlewares/validators/car.validation.js';
 import customUtility from '../utility/custom.utility.js';
-import BookingValidation from '../middlewares/validators/booking.validation.js';
+import UtiityController from '../controllers/utility.controller.js';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -36,9 +35,11 @@ Router.put('/user/verfication', UserController.UpdateUsersVerficationController)
 
 Router.get('/car', CarValidations.GetCarCheck, CarController.GetCarsController);
 
+Router.get('/car/all', CarController.GetAllCarsController);
+
 Router.post('/car', upload.fields([{ name: 'car_image', maxCount: 1 }]), CarValidations.AddCarValidation, CarController.AddCarController);
 
-Router.put('/car', CarController.UpdateCarController);
+Router.put('/car', upload.fields([{ name: 'car_image', maxCount: 1 }]), CarController.UpdateCarController);
 
 Router.put('/car/avilability', CarController.UpdateCarAvilabilityController);
 
@@ -56,5 +57,11 @@ Router.get('/bookings/current', BookingController.GetCurrentBookingsController);
 Router.post('/booking', BookingController.AddBookingByAdminController);
 
 Router.put('/booking', BookingController.UpdateBookingByAdminController);
+
+//utility
+
+Router.get('/locations', UtiityController.GetLocationsController);
+
+Router.get('/car-brands', UtiityController.GetCarBrandsController);
 
 export default Router;
