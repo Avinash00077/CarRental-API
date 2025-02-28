@@ -126,6 +126,34 @@ const GetAvilableSlotsByStartDateController = async (request, response) => {
   }
 };
 
+const PostBookingReviewController = async (request, response) => {
+  try {
+    const data = await BookingService.PostBookingsReviewService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      response.status(200).json({ message: STATUS_MESSAGES[201]});
+    }
+  } catch (error) {
+    logger.error({ PostBookingReviewController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+  }
+};
+
+const UpdateBookingReviewController = async (request, response) => {
+  try {
+    const data = await BookingService.UpdateBookingsReviewService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      response.status(200).json({ message: STATUS_MESSAGES[200]});
+    }
+  } catch (error) {
+    logger.error({ UpdateBookingReviewController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+  }
+};
+
 const BookingController = {
   GetUserBookingsController,
   GetBookingsController,
@@ -136,6 +164,8 @@ const BookingController = {
   GetAvilableSlotsByStartDateController,
   GetAvilableSlotsController,
   GetCurrentBookingsController,
+  PostBookingReviewController,
+  UpdateBookingReviewController,
 };
 
 export default BookingController;

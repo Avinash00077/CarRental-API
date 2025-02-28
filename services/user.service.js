@@ -10,7 +10,7 @@ import AppConfig from '../config/app/app.config.js';
 import sendEmail from '../utility/email.utility.js';
 import emailTemplates from '../config/app/email.template.js';
 import cloudinaryUtils from '../utility/cloudinary.js';
-const {uploadToCloudinary, deleteUserImageService }= cloudinaryUtils
+const { uploadToCloudinary, deleteUserImageService } = cloudinaryUtils;
 
 const { OTP_CODES, STATUS_MESSAGES } = AppConfig;
 const { customExceptionMessage, generateOtp, maskEmail } = customUtility;
@@ -242,25 +242,25 @@ const userImageUploadService = async (request) => {
       if (userData.profile_img_url) {
         await deleteUserImageService(userData.profile_img_url);
       }
-      const imageUrl = await uploadToCloudinary(request.files.profile_image[0]);
+      const imageUrl = await uploadToCloudinary(request.files.profile_image[0], 'users');
       data = await UserDTO.UpdateUserProfileDTO(user_id, imageUrl);
     } else if (image_type === 'aadhar') {
       if (userData.aadhar_img_url) {
         await deleteUserImageService(userData.aadhar_img_url);
       }
-      const imageUrl = await uploadToCloudinary(request.files.aadhar_image[0]); 
+      const imageUrl = await uploadToCloudinary(request.files.aadhar_image[0], 'users');
       data = await UserDTO.UpdateUserAadharDTO(user_id, aadhar_number, imageUrl);
     } else if (image_type === 'driving_license') {
       if (userData.driving_license_img_url) {
         await deleteUserImageService(userData.driving_license_img_url);
       }
-      const imageUrl = await uploadToCloudinary(request.files.driving_license_image[0]);
+      const imageUrl = await uploadToCloudinary(request.files.driving_license_image[0], 'users');
       data = await UserDTO.UpdateUserDrivingLicenseDTO(user_id, driving_license_number, imageUrl, driving_license_expiry);
     } else if (image_type === 'cover') {
       if (userData.cover_img_url) {
         await deleteUserImageService(userData.cover_img_url);
       }
-      const imageUrl = await uploadToCloudinary(request.files.cover_image[0]);
+      const imageUrl = await uploadToCloudinary(request.files.cover_image[0], 'users');
       data = await UserDTO.UpdateUserCoverImageDTO(user_id, imageUrl);
     } else {
       return customExceptionMessage(400, 'Invalid Image Type');

@@ -27,7 +27,7 @@ const GetBookingDTO = async (booking_id, email, phone_number, car_id, booking_st
 const GetCurrentBookingsDTO = async (location) => {
   try {
     const replacements = {
-      location: location ? location: null
+      location: location ? location : null,
     };
     const query = DB.QUERY.GET_CURRENT_BOOKINGS;
     const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
@@ -127,7 +127,7 @@ const GetAvilableSlotsByStartDateDTO = async (start_date, start_time, car_id) =>
   try {
     const replacements = { start_date, start_time, car_id };
     const query = DB.QUERY.GET_AVILABLE_SLOTS_BY_START_DATE;
-    console.log(query)
+    console.log(query);
     const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
@@ -135,6 +135,55 @@ const GetAvilableSlotsByStartDateDTO = async (start_date, start_time, car_id) =>
     throw new Error(error.message);
   }
 };
+
+const PostBookingReviewDTO = async (userId, bookingId, rating, comment) => {
+  try {
+    const replacements = { userId, bookingId, rating, comment };
+    const query = DB.QUERY.POST_REVIEW;
+    console.log(query);
+    const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
+    return data;
+  } catch (error) {
+    logger.error({ PostBookingReviewDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateBookingReviewDTO = async (userId, bookingId, rating, comment) => {
+  try {
+    const replacements = { userId, bookingId, rating, comment };
+    const query = DB.QUERY.POST_REVIEW;
+    console.log(query);
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateBookingReviewDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const GetBookingReviewDTO = async (userId, bookingId) => {
+  try {
+    const replacements = { userId, bookingId };
+    const query = DB.QUERY.GET_REVIEW;
+    console.log(query);
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetBookingReviewDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const PostBookingImagesDTO = () => {
+  try {
+    
+  } catch (error) {
+    logger.error({ PostBookingImagesDTO: error.message });
+    throw new Error(error.message);
+  }
+}
+
 const BookingDTO = {
   AddBoookingDTO,
   GetBookingDTO,
@@ -143,6 +192,9 @@ const BookingDTO = {
   GetAvilableSlotsByStartDateDTO,
   GetAvilableSlotsDTO,
   GetCurrentBookingsDTO,
+  PostBookingReviewDTO,
+  UpdateBookingReviewDTO,
+  GetBookingReviewDTO,
 };
 
 export default BookingDTO;

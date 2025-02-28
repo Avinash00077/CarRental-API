@@ -72,4 +72,8 @@ Router.post('/booking', BookingValidation.AddbookingValidation, BookingControlle
 
 Router.put('/booking', BookingController.UpdateBookingController);
 
+Router.post('/booking/review', BookingValidation.validateReview, BookingController.PostBookingReviewController);
+
+Router.put('/booking/review', BookingValidation.validateReview, BookingController.UpdateBookingReviewController);
+
 export default Router;

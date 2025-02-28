@@ -54,6 +54,13 @@ const QUERY = {
   GET_AVILABLE_SLOTS: properties.get('query.get_avilable_slots'),
   GET_AVILABLE_SLOTS_BY_START_DATE: properties.get('query.get_avilable_slots_by_start_date'),
   UPDATE_BOOKING_STATUS_PICKUP: properties.get('query.update_booking_status_pickup'),
+  POST_REVIEW : properties.get('query.post_review'),
+  UPDATE_REVIEW: properties.get('query.update_review'),
+  GET_REVIEW: properties.get('query.get_review'),
+  UPDATE_BOOKING_PICKUP : properties.get('query.update_booking_pickup'),
+  UPDATE_BOOKING_DROP : properties.get('query.update_booking_drop'),
+  UPDATE_BOOKING_IMAGES: properties.get('query.update_booking_images'),
+  GET_BOOKING_IMAGES : properties.get('query.get_booking_images'),
 
   //utility
   GET_LOCATIONS :properties.get('query.get_locations'),

@@ -4,11 +4,11 @@ import cloudinary from '../config/cloud/cloudinary.js';
 import logger from './logger.utility.js';
 
 // Function to upload image to Cloudinary
-const uploadToCloudinary = async (file) => {
+const uploadToCloudinary = async (file, folderName) => {
   try {
     logger.info({ message: 'Image Upload started' });
     return await new Promise((resolve, reject) => {
-      const stream = cloudinary.uploader.upload_stream({ folder: 'car-rental/users' }, (error, result) => {
+      const stream = cloudinary.uploader.upload_stream({ folder: `car-rental/${folderName}`}, (error, result) => {
         if (error) {
           reject(new Error('Cloudinary Upload Failed: ' + error.message));
         } else {

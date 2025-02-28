@@ -105,7 +105,7 @@ const AddCarService = async (request) => {
       logger.warn({ message: 'Car already exist with registration number' });
       return customExceptionMessage(400, 'Car already exist with registration number');
     }
-    const imageUrl = await uploadToCloudinary(request.files.car_image[0]);
+    const imageUrl = await uploadToCloudinary(request.files.car_image[0], 'cars');
     const data = await CarDTO.AddCarDTO(
       name,
       brand,
@@ -207,7 +207,7 @@ const UpdateCarImageService = async (request) => {
     if (GetCar[0].car_cover_img_url) {
       await deleteUserImageService(GetCar[0].car_cover_img_url);
     }
-    const imageUrl = await uploadToCloudinary(request.files.car_image[0]);
+    const imageUrl = await uploadToCloudinary(request.files.car_image[0], 'cars');
     const data = await CarDTO.UpdatecarImageDTO(car_id, imageUrl);
     return data;
   } catch (error) {

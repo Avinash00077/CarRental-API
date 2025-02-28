@@ -66,7 +66,7 @@ const AddbookingValidation = [
   (request, response, next) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
-      logger.error({errors: errors.array()})
+      logger.error({ errors: errors.array() });
       return response.status(400).json({ message: errors.array() });
     }
     next();
@@ -170,10 +170,26 @@ const slotsAfterValidation = [
   },
 ];
 
+const validateReview = [
+  body('booking_id').isInt({ min: 1 }).withMessage('Booking ID must be a positive integer'),
+
+  body('rating').isFloat({ min: 1, max: 5 }).withMessage('Rating must be a number between 1 and 5'),
+
+  body('comment').isString().trim().isLength({ max: 1000 }).withMessage('Comment must be between 0 and 1000 characters'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
 const BookingValidation = {
   AddbookingValidation,
   slotsValidation,
   slotsAfterValidation,
+  validateReview
 };
 
 export default BookingValidation;

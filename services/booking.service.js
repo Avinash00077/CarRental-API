@@ -8,7 +8,7 @@ import customUtility from '../utility/custom.utility.js';
 import logger from '../utility/logger.utility.js';
 import AppConfig from '../config/app/app.config.js';
 import sendEmail from '../utility/email.utility.js';
-const { STATUS_MESSAGES, OTP_CODES } = AppConfig;
+const { STATUS_MESSAGES, OTP_CODES, BOOKING_MESSAGES } = AppConfig;
 const { customExceptionMessage, generateOtp } = customUtility;
 
 const GetUserBookingsService = async (request) => {
@@ -224,6 +224,58 @@ const GetAvilableSlotsByStartDateService = async (request) => {
   }
 };
 
+
+const PostBookingsReviewService = async (request) => {
+  try {
+    const userId = request.userId;
+    const {booking_id, rating, comments} = request.body;
+    const getUserBookings = await BookingDTO.GetBookingDTO(booking_id, null, null,null,null, userId);
+    if(getUserBookings.length === 0){
+      return customExceptionMessage(404, BOOKING_MESSAGES.BOOKING_NOT_FOUND)
+    }
+    if(getUserBookings[0].ride_status !== 'COMPLETED'){
+      return customExceptionMessage(422, `can't add review before ride completion`)
+    }
+    const data = await BookingDTO.PostBookingReviewDTO(userId,booking_id,rating, comments);
+    return data;
+  } catch (error) {
+    logger.error({ PostBookingsReviewService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateBookingsReviewService = async (request) => {
+  try {
+    const userId = request.userId;
+    const {booking_id, rating, comments} = request.body;
+    const getUserBookings = await BookingDTO.GetBookingDTO(booking_id, null, null,null,null, userId);
+    if(getUserBookings.length === 0){
+      return customExceptionMessage(404, BOOKING_MESSAGES.BOOKING_NOT_FOUND)
+    }
+    if(getUserBookings[0].ride_status !== 'COMPLETED'){
+      return customExceptionMessage(422, `can't add review before ride completion`)
+    }
+    const getReview = await BookingDTO.GetBookingReviewDTO(userId, booking_id);
+    if(getReview.length === 0){
+      return customExceptionMessage(404, `Review not found`)
+    }
+    const data = await BookingDTO.UpdateBookingReviewDTO(userId,booking_id,rating, comments);
+    return data;
+  } catch (error) {
+    logger.error({ UpdateBookingsReviewService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const PostBookingImagesService = async (request) => {
+  try {
+    
+  } catch (error) {
+    logger.error({ UpdateBookingsReviewService: error.message });
+    throw new Error(error.message);
+  }
+}
+
 const BookingService = {
   GetUserBookingsService,
   GetBookingsService,
@@ -234,6 +286,8 @@ const BookingService = {
   GetAvilableSlotsService,
   GetAvilableSlotsByStartDateService,
   GetCurrentBookingsService,
+  PostBookingsReviewService,
+  UpdateBookingsReviewService,
 };
 
 export default BookingService;
