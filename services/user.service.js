@@ -47,6 +47,7 @@ const GetAuthService = async (request) => {
       driving_license_verified: data[0].driving_license_verified,
       aadhar_verified: data[0].aadhar_verified,
       driving_license_expiry: driving_license_expiry,
+      profile_img_url: data[0].profile_img_url,
     };
     await UserDTO.UpdateLastLoginDTO(userDetails.user_id);
     return { token, userDetails };
