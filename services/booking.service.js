@@ -156,6 +156,39 @@ const UpdateBookingService = async (request) => {
   }
 };
 
+const CancelBookingService = async (request) => {
+  try {
+    const { booking_id } = request.headers;
+    const user_id = request.userId;
+    const bookingData = await BookingDTO.GetBookingDTO(booking_id);
+    if (bookingData.length === 0 || bookingData[0].booking_status === 'COMPLETED') {
+      logger.warn({ message: 'Car rental already completed or data not available' });
+      return customExceptionMessage(409, 'Car rental already completed or data not available');
+    }
+    const data = await BookingDTO.CancelBoookingDTO(booking_id,'user');
+    // const { name, brand, car_name, user_email, start_date, start_time, end_date, end_time, car_location } = bookingData[0];
+    // const model = `${brand}-${car_name}`;
+    // const emailTemplate = emailTemplates.bookingTemplate(
+    //   name,
+    //   start_date,
+    //   start_time,
+    //   end_date,
+    //   end_time,
+    //   booking_id,
+    //   model,
+    //   car_location,
+    //   otp,
+    // );
+    // const subject = emailTemplate.subject;
+    // const body = emailTemplate.body;
+    // await sendEmail(user_email, subject, body);
+    return data;
+  } catch (error) {
+    logger.error({ UpdateBookingService: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const UpdateBookingByAdminService = async (request) => {
   try {
     const { booking_id, start_date, end_date, total_price, booking_status, payment_mode } = request.body;
@@ -288,6 +321,7 @@ const BookingService = {
   GetCurrentBookingsService,
   PostBookingsReviewService,
   UpdateBookingsReviewService,
+  CancelBookingService,
 };
 
 export default BookingService;

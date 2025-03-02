@@ -84,6 +84,20 @@ const UpdateBookingController = async (request, response) => {
   }
 };
 
+const CancelBookingController = async (request, response) => {
+  try {
+    const data = await BookingService.CancelBookingService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_CANCELED });
+    }
+  } catch (error) {
+    logger.error({ CancelBookingController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+  }
+};
+
 const UpdateBookingByAdminController = async (request, response) => {
   try {
     const data = await BookingService.UpdateBookingByAdminService(request);
@@ -166,6 +180,7 @@ const BookingController = {
   GetCurrentBookingsController,
   PostBookingReviewController,
   UpdateBookingReviewController,
+  CancelBookingController,
 };
 
 export default BookingController;

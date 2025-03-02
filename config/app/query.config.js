@@ -61,6 +61,7 @@ const QUERY = {
   UPDATE_BOOKING_DROP : properties.get('query.update_booking_drop'),
   UPDATE_BOOKING_IMAGES: properties.get('query.update_booking_images'),
   GET_BOOKING_IMAGES : properties.get('query.get_booking_images'),
+  CANCEL_BOOKING : properties.get('query.cancel_booking'),
 
   //utility
   GET_LOCATIONS :properties.get('query.get_locations'),

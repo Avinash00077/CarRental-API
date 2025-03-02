@@ -16,6 +16,7 @@ const VerifyToken = (request, response, next) => {
   try {
     let token = request.get('Authorization');
     if (!token) {
+      logger.warn({ message: AppConfig.STATUS_MESSAGES[401], error: 'JWT NOT FOUND' })
       return response.status(401).json({ message: AppConfig.STATUS_MESSAGES[401] });
     }
     token = request.get('Authorization').split(' ')[1];

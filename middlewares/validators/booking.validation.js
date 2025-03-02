@@ -12,14 +12,15 @@ const AddbookingValidation = [
   body('start_date')
     .matches(/^\d{4}\/\d{2}\/\d{2}$/)
     .withMessage('Start date must be in YYYY/MM/DD format')
-    .custom((value) => {
-      const today = new Date();
-      const inputDate = new Date(value);
-      if (inputDate < today) {
-        throw new Error('Start date must be in the future');
-      }
-      return true;
-    }),
+    // .custom((value) => {
+    //   const today = new Date();
+    //   const inputDate = new Date(value);
+    //   if (inputDate < today) {
+    //     throw new Error('Start date must be in the future');
+    //   }
+    //   return true;
+    // })
+    ,
 
   // End Date - Must be in YYYY-MM-DD format and greater than start date
   body('end_date')
@@ -139,7 +140,7 @@ const slotsAfterValidation = [
     .withMessage('Start date must be in YYYY/MM/DD format')
     .custom((value) => {
       const now = moment().format('YYYY/MM/DD'); // Get current date
-      if (moment(value).isSameOrBefore(now)) {
+      if (moment(value).isBefore(now)) {
         throw new Error('Start date must be in the future');
       }
       return true;
@@ -175,7 +176,7 @@ const validateReview = [
 
   body('rating').isFloat({ min: 1, max: 5 }).withMessage('Rating must be a number between 1 and 5'),
 
-  body('comment').isString().trim().isLength({ max: 1000 }).withMessage('Comment must be between 0 and 1000 characters'),
+  body('comments').isString().trim().isLength({ max: 1000 }).withMessage('Comment must be between 0 and 1000 characters'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

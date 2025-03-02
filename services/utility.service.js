@@ -6,9 +6,8 @@ import logger from '../utility/logger.utility.js';
 const GetLocationsService = async (request) => {
   try {
     let data = await UtiityDTO.GetLocationsDTO();
-    console.log(data)
     const adminType = request.user_type;
-    if (adminType !== 'super_user') {
+    if (adminType !== 'super_user' && adminType) {
       const adminLocation = request.location;
       console.log(adminLocation)
       data = data.filter((i) => {

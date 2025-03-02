@@ -111,6 +111,20 @@ const UpdateBoookingDTO = async (booking_id, booking_status, transaction_id, upd
   }
 };
 
+const CancelBoookingDTO = async (booking_id) => {
+  try {
+    const replacements = {
+      booking_id,
+    };
+    const query = DB.QUERY.CANCEL_BOOKING;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ CancelBoookingDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetAvilableSlotsDTO = async (start_date, start_time, end_date, end_time, car_id) => {
   try {
     const replacements = { start_date, start_time, end_date, end_time, car_id };
@@ -152,7 +166,7 @@ const PostBookingReviewDTO = async (userId, bookingId, rating, comment) => {
 const UpdateBookingReviewDTO = async (userId, bookingId, rating, comment) => {
   try {
     const replacements = { userId, bookingId, rating, comment };
-    const query = DB.QUERY.POST_REVIEW;
+    const query = DB.QUERY.UPDATE_REVIEW;
     console.log(query);
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
@@ -177,12 +191,11 @@ const GetBookingReviewDTO = async (userId, bookingId) => {
 
 const PostBookingImagesDTO = () => {
   try {
-    
   } catch (error) {
     logger.error({ PostBookingImagesDTO: error.message });
     throw new Error(error.message);
   }
-}
+};
 
 const BookingDTO = {
   AddBoookingDTO,
@@ -195,6 +208,7 @@ const BookingDTO = {
   PostBookingReviewDTO,
   UpdateBookingReviewDTO,
   GetBookingReviewDTO,
+  CancelBoookingDTO
 };
 
 export default BookingDTO;
