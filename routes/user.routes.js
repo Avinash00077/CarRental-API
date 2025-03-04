@@ -62,6 +62,8 @@ Router.put(
 //car
 Router.get('/car', CarValidations.GetCarCheck, CarController.GetCarsController);
 
+Router.get('/car/id',  CarController.GetCarByIdController);
+
 //booking
 
 Router.get('/bookings/slots', BookingValidation.slotsValidation, BookingController.GetAvilableSlotsController);

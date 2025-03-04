@@ -52,11 +52,15 @@ const GetAllCarsDTO = async (location) => {
   }
 };
 
-const GetCarByIdDTO = async (car_id) => {
+const GetCarByIdDTO = async (car_id, start_date, end_date, start_time, end_time) => {
   try {
     const query = DB.QUERY.GET_CAR_BY_ID;
     const replacements = {
       car_id,
+      end_date: end_date ? end_date : null,
+      start_date: start_date ? start_date : null,
+      start_time: start_time ? start_time : null,
+      end_time: end_time ? end_time : null,
     };
     const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;

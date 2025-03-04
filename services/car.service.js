@@ -42,14 +42,14 @@ const GetAllCarsService = async (request) => {
 
 const GetCarByIdService = async (request) => {
   try {
-    const { car_id } = request.headers;
-    const adminId = request.adminId;
+    const { car_id, start_date, end_date, start_time, end_time } = request.headers;
+    // const adminId = request.adminId;
 
-    if (!adminId) {
-      logger.warn({ message: 'Please login with admin account to add car' });
-      return customExceptionMessage(401, 'Please login with admin account to add car');
-    }
-    const data = await CarDTO.GetCarByIdDTO(car_id);
+    // if (!adminId) {
+    //   logger.warn({ message: 'Please login with admin account to add car' });
+    //   return customExceptionMessage(401, 'Please login with admin account to add car');
+    // }
+    const data = await CarDTO.GetCarByIdDTO(car_id, start_date, end_date, start_time, end_time);
     return data;
   } catch (error) {
     logger.error({ GetCarByIdService: error.message });

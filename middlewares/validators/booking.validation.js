@@ -82,7 +82,7 @@ const slotsValidation = [
     .withMessage('Start date must be in YYYY/MM/DD format')
     .custom((value) => {
       const now = moment().format('YYYY/MM/DD'); // Get current date
-      if (moment(value).isSameOrBefore(now)) {
+      if (moment(value).isBefore(now)) {
         throw new Error('Start date must be in the future');
       }
       return true;
@@ -96,7 +96,7 @@ const slotsValidation = [
     .custom((value, { req }) => {
       const now = moment();
       const startDateTime = moment(`${req.headers.start_date} ${value}`, 'YYYY-MM-DD HH:mm');
-      if (startDateTime.isSameOrBefore(now)) {
+      if (startDateTime.isBefore(now)) {
         throw new Error('Start time must be in the future');
       }
       return true;
