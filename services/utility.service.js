@@ -9,9 +9,9 @@ const GetLocationsService = async (request) => {
     const adminType = request.user_type;
     if (adminType !== 'super_user' && adminType) {
       const adminLocation = request.location;
-      console.log(adminLocation)
+      console.log(adminLocation);
       data = data.filter((i) => {
-         return i.location === adminLocation;
+        return i.location === adminLocation;
       });
     }
     return data;
@@ -31,9 +31,33 @@ const GetCarBrandsService = async (request) => {
   }
 };
 
+const GetFeedbacksService = async (request) => {
+  try {
+    const data = await UtiityDTO.GetFeedbacksDTO();
+    return data;
+  } catch (error) {
+    logger.error({ GetFeedbacksService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const PostFeedbacksService = async (request) => {
+  try {
+    const userId = request.userId;
+    const {rating, comments } = request.body;
+    const data = await UtiityDTO.PostFeedbackDTO(userId, rating, comments);
+    return data;
+  } catch (error) {
+    logger.error({ PostFeedbacksService: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const UtilityService = {
   GetCarBrandsService,
   GetLocationsService,
+  GetFeedbacksService,
+  PostFeedbacksService,
 };
 
 export default UtilityService;

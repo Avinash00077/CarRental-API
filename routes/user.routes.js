@@ -39,6 +39,8 @@ Router.get('/user-name/confirm', UserValidations.GetUserNameCheck, UserControlle
 //car
 Router.get('/car/random', CarValidations.LocationCheck, CarController.GetRandomCarsController);
 
+Router.get('/feedback', UtiityController.GetFeedbacksController)
+
 //JWT Verfication starts
 Router.use(JWT.VerifyToken);
 
@@ -81,5 +83,7 @@ Router.put('/booking/cancel', BookingController.CancelBookingController);
 Router.post('/booking/review', BookingValidation.validateReview, BookingController.PostBookingReviewController);
 
 Router.put('/booking/review', BookingValidation.validateReview, BookingController.UpdateBookingReviewController);
+
+Router.post('/feedback', UtiityController.PostFeedbacksController)
 
 export default Router;

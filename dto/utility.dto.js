@@ -27,9 +27,38 @@ const GetCarBrandsDTO = async (user_name) => {
   }
 };
 
+const PostFeedbackDTO = async (user_id, rating, comments) => {
+  try {
+    const query = DB.QUERY.POST_FEEDBACK;
+    const replacements = {
+      user_id,
+      rating,
+      comments,
+    };
+    const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
+    return data;
+  } catch (error) {
+    logger.error({ PostFeedbackDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const GetFeedbacksDTO = async () => {
+  try {
+    const query = DB.QUERY.GET_FEEDBACKS
+    const data = await mysql.query(query, { type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetFeedbacksDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const UtiityDTO = {
   GetLocationsDTO,
-  GetCarBrandsDTO
+  GetCarBrandsDTO,
+  PostFeedbackDTO,
+  GetFeedbacksDTO
 };
 
 export default UtiityDTO;
