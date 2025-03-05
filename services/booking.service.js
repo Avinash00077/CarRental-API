@@ -165,7 +165,7 @@ const CancelBookingService = async (request) => {
       logger.warn({ message: 'Car rental already completed or data not available' });
       return customExceptionMessage(409, 'Car rental already completed or data not available');
     }
-    const data = await BookingDTO.CancelBoookingDTO(booking_id,'user');
+    const data = await BookingDTO.CancelBoookingDTO(booking_id, 'user');
     // const { name, brand, car_name, user_email, start_date, start_time, end_date, end_time, car_location } = bookingData[0];
     // const model = `${brand}-${car_name}`;
     // const emailTemplate = emailTemplates.bookingTemplate(
@@ -257,19 +257,18 @@ const GetAvilableSlotsByStartDateService = async (request) => {
   }
 };
 
-
 const PostBookingsReviewService = async (request) => {
   try {
     const userId = request.userId;
-    const {booking_id, rating, comments} = request.body;
-    const getUserBookings = await BookingDTO.GetBookingDTO(booking_id, null, null,null,null, userId);
-    if(getUserBookings.length === 0){
-      return customExceptionMessage(404, BOOKING_MESSAGES.BOOKING_NOT_FOUND)
+    const { booking_id, rating, comments } = request.body;
+    const getUserBookings = await BookingDTO.GetBookingDTO(booking_id, null, null, null, null, userId);
+    if (getUserBookings.length === 0) {
+      return customExceptionMessage(404, BOOKING_MESSAGES.BOOKING_NOT_FOUND);
     }
-    if(getUserBookings[0].ride_status !== 'COMPLETED'){
-      return customExceptionMessage(422, `can't add review before ride completion`)
+    if (getUserBookings[0].ride_status !== 'COMPLETED') {
+      return customExceptionMessage(422, `can't add review before ride completion`);
     }
-    const data = await BookingDTO.PostBookingReviewDTO(userId,booking_id,rating, comments);
+    const data = await BookingDTO.PostBookingReviewDTO(userId, booking_id, rating, comments);
     return data;
   } catch (error) {
     logger.error({ PostBookingsReviewService: error.message });
@@ -280,19 +279,19 @@ const PostBookingsReviewService = async (request) => {
 const UpdateBookingsReviewService = async (request) => {
   try {
     const userId = request.userId;
-    const {booking_id, rating, comments} = request.body;
-    const getUserBookings = await BookingDTO.GetBookingDTO(booking_id, null, null,null,null, userId);
-    if(getUserBookings.length === 0){
-      return customExceptionMessage(404, BOOKING_MESSAGES.BOOKING_NOT_FOUND)
+    const { booking_id, rating, comments } = request.body;
+    const getUserBookings = await BookingDTO.GetBookingDTO(booking_id, null, null, null, null, userId);
+    if (getUserBookings.length === 0) {
+      return customExceptionMessage(404, BOOKING_MESSAGES.BOOKING_NOT_FOUND);
     }
-    if(getUserBookings[0].ride_status !== 'COMPLETED'){
-      return customExceptionMessage(422, `can't add review before ride completion`)
+    if (getUserBookings[0].ride_status !== 'COMPLETED') {
+      return customExceptionMessage(422, `can't add review before ride completion`);
     }
     const getReview = await BookingDTO.GetBookingReviewDTO(userId, booking_id);
-    if(getReview.length === 0){
-      return customExceptionMessage(404, `Review not found`)
+    if (getReview.length === 0) {
+      return customExceptionMessage(404, `Review not found`);
     }
-    const data = await BookingDTO.UpdateBookingReviewDTO(userId,booking_id,rating, comments);
+    const data = await BookingDTO.UpdateBookingReviewDTO(userId, booking_id, rating, comments);
     return data;
   } catch (error) {
     logger.error({ UpdateBookingsReviewService: error.message });
@@ -300,14 +299,43 @@ const UpdateBookingsReviewService = async (request) => {
   }
 };
 
-const PostBookingImagesService = async (request) => {
+const UpdateBookingPickUpService = async (request) => {
   try {
-    
+    const { booking_id } = request.body;
+    const admin = request.adminId;
+    if (!admin) {
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
+    }
+    const bookingData = await BookingDTO.GetBookingDTO(booking_id);
+    if (bookingData.length === 0 || bookingData[0].booking_status === 'COMPLETED') {
+      return customExceptionMessage(409, 'Car rental already completed or data not available');
+    }
+    const data = await BookingDTO.UpdateBookingPickUpDTO(booking_id);
+    return data;
   } catch (error) {
-    logger.error({ UpdateBookingsReviewService: error.message });
+    logger.error({ UpdateBookingPickUpService: error.message });
     throw new Error(error.message);
   }
-}
+};
+
+const UpdateBookingDropService = async (request) => {
+  try {
+    const { booking_id } = request.body;
+    const admin = request.adminId;
+    if (!admin) {
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
+    }
+    const bookingData = await BookingDTO.GetBookingDTO(booking_id);
+    if (bookingData.length === 0) {
+      return customExceptionMessage(409, 'Car rental already completed or data not available');
+    }
+    const data = await BookingDTO.UpdateBookingDropDTO(booking_id);
+    return data;
+  } catch (error) {
+    logger.error({ UpdateBookingDropService: error.message });
+    throw new Error(error.message);
+  }
+};
 
 const BookingService = {
   GetUserBookingsService,
@@ -322,6 +350,8 @@ const BookingService = {
   PostBookingsReviewService,
   UpdateBookingsReviewService,
   CancelBookingService,
+  UpdateBookingPickUpService,
+  UpdateBookingDropService,
 };
 
 export default BookingService;

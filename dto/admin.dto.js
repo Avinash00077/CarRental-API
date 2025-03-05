@@ -17,6 +17,17 @@ const GetAdminByEmailDTO = async (email, number) => {
   }
 };
 
+const GetAdminsDTO = async (email, number) => {
+  try {
+    const query = DB.QUERY.GET_ADMINS;
+    const data = await mysql.query(query, { type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetAdminsDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetAdminByIdDTO = async (admin_id) => {
   try {
     const query = DB.QUERY.GET_ADMINBY_ID;
@@ -38,7 +49,7 @@ const AddNewAdminDTO = async (name, email, password, phone_number, user_type, lo
       password: password,
       phone_number: phone_number,
       user_type: user_type,
-      location: location
+      location: location,
     };
     const data = await mysql.query(query, { type: QueryTypes.INSERT, replacements: replacements });
     return data;
@@ -48,13 +59,17 @@ const AddNewAdminDTO = async (name, email, password, phone_number, user_type, lo
   }
 };
 
-const UpdateAdminDTO = async (name, email, user_id) => {
+const UpdateAdminDTO = async (name, email, admin_id, phone_number, active, user_type, location) => {
   try {
     const query = DB.QUERY.UPDATE_ADMIN;
     const replacements = {
       name,
       email,
-      user_id,
+      admin_id,
+      phone_number,
+      active,
+      user_type,
+      location,
     };
     const data = await mysql.query(query, { type: QueryTypes.UPDATE, replacements: replacements });
     return data;
@@ -80,6 +95,6 @@ const AdminPasswordDTO = async (password, user_id) => {
   }
 };
 
-const AdminDTO = { GetAdminByEmailDTO, AddNewAdminDTO, UpdateAdminDTO, GetAdminByIdDTO, AdminPasswordDTO };
+const AdminDTO = { GetAdminByEmailDTO, AddNewAdminDTO, UpdateAdminDTO, GetAdminByIdDTO, AdminPasswordDTO, GetAdminsDTO };
 
 export default AdminDTO;

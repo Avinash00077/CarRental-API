@@ -22,7 +22,11 @@ Router.get('/auth', AdminController.GetAuthController);
 //JWT Verfication starts
 Router.use(ADMINJWT.VerifyToken);
 
+Router.get('/', AdminController.GetAdminsController);
+
 Router.post('/add', AdminController.AddNewAdminController);
+
+Router.post('/add', AdminController.UpdateAdminController);
 
 Router.get('/id', AdminController.GetAdminByIdController);
 
@@ -57,6 +61,10 @@ Router.get('/bookings/current', BookingController.GetCurrentBookingsController);
 Router.post('/booking', BookingController.AddBookingByAdminController);
 
 Router.put('/booking', BookingController.UpdateBookingByAdminController);
+
+Router.put('/booking/pickup', BookingController.UpdateBookingPickUpController);
+
+Router.put('/booking/drop', BookingController.UpdateBookingDropController);
 
 //utility
 

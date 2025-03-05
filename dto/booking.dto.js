@@ -189,10 +189,30 @@ const GetBookingReviewDTO = async (userId, bookingId) => {
   }
 };
 
-const PostBookingImagesDTO = () => {
+const UpdateBookingPickUpDTO = async (booking_id) => {
   try {
+    const query = DB.QUERY.UPDATE_BOOKING_PICKUP;
+    const replacements = {
+      booking_id,
+    };
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
   } catch (error) {
-    logger.error({ PostBookingImagesDTO: error.message });
+    logger.error({ UpdateBookingPickUpDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateBookingDropDTO = async (booking_id) => {
+  try {
+    const query = DB.QUERY.UPDATE_BOOKING_DROP;
+    const replacements = {
+      booking_id,
+    };
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateBookingDropDTO: error.message });
     throw new Error(error.message);
   }
 };
@@ -208,7 +228,9 @@ const BookingDTO = {
   PostBookingReviewDTO,
   UpdateBookingReviewDTO,
   GetBookingReviewDTO,
-  CancelBoookingDTO
+  CancelBoookingDTO,
+  UpdateBookingDropDTO,
+  UpdateBookingPickUpDTO,
 };
 
 export default BookingDTO;

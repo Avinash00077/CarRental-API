@@ -5,6 +5,9 @@ import ADMINJWT from '../middlewares/jwt.admin.middleware.js';
 import customUtility from '../utility/custom.utility.js';
 import bcrypt from 'bcrypt';
 import logger from '../utility/logger.utility.js';
+import AppConfig from '../config/app/app.config.js';
+
+const { STATUS_MESSAGES } = AppConfig;
 
 const { customExceptionMessage } = customUtility;
 const GetAuthService = async (request) => {
@@ -34,16 +37,34 @@ const GetAuthService = async (request) => {
     throw new Error(error.message);
   }
 };
+
+const GetAdminsService = async (request) => {
+  try {
+    const adminType = request.user_type;
+    if (adminType !== 'super_user') {
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
+    }
+    const data = await AdminDTO.GetAdminsDTO();
+    return data;
+  } catch (error) {
+    logger.error({ GetAdminsService: error.message });
+    throw new Error(error.message);
+  }
+};
 const AddNewAdminService = async (request) => {
   try {
     const { name, email, password, phone_number, user_type, location } = request.body;
 
     const adminId = request.adminId;
-    
+
     const adminData = await AdminDTO.GetAdminByIdDTO(adminId);
 
     if (!adminId || adminData.length === 0) {
       return customExceptionMessage(401, 'Please login with admin account to add admin');
+    }
+    const adminType = request.user_type;
+    if (adminType !== 'super_user') {
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
     }
     const GetAdminByEmail = await AdminDTO.GetAdminByEmailDTO(email);
     if (GetAdminByEmail.length > 0) {
@@ -76,17 +97,20 @@ const GetAdminByIdService = async (request) => {
 
 const UpdateAdminService = async (request) => {
   try {
-    const { user_id, name, email } = request.body;
-
-    const user = await AdminDTO.GetAdminByIdDTO(user_id);
+    const { admin_id, name, email, phone_number, active, user_type, location } = request.body;
+    const adminType = request.user_type;
+    if (adminType !== 'super_user') {
+      return customExceptionMessage(403, STATUS_MESSAGES[403]);
+    }
+    const user = await AdminDTO.GetAdminByIdDTO(admin_id);
     if (user.length === 0) {
       return customExceptionMessage(400, 'Admin not found');
     }
     const GetAdminByEmail = await AdminDTO.GetAdminByEmailDTO(email);
-    if (GetAdminByEmail.length > 0 && GetAdminByEmail[0].user_id != user_id) {
+    if (GetAdminByEmail.length > 0 && GetAdminByEmail[0].admin_id != admin_id) {
       return customExceptionMessage(400, 'Admin already exist with this email');
     }
-    const data = await AdminDTO.UpdateAdminDTO(name, email, user_id);
+    const data = await AdminDTO.UpdateAdminDTO(name, email, admin_id, phone_number, active, user_type, location);
     return data;
   } catch (error) {
     logger.error({ UpdateAdminService: error.message });
@@ -111,6 +135,13 @@ const UpdateAdminPasswordService = async (request) => {
   }
 };
 
-const AdminService = { GetAuthService, AddNewAdminService, GetAdminByIdService, UpdateAdminService, UpdateAdminPasswordService };
+const AdminService = {
+  GetAuthService,
+  GetAdminsService,
+  AddNewAdminService,
+  GetAdminByIdService,
+  UpdateAdminService,
+  UpdateAdminPasswordService,
+};
 
 export default AdminService;

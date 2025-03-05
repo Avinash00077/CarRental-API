@@ -7,7 +7,7 @@ import express from 'express';
 import AppConfig from './config/app/app.config.js';
 import cors from 'cors';
 import helmet from 'helmet';
-import pgsql from './config/database/database.config.js';
+import mysql from './config/database/database.config.js';
 import UserRoutes from './routes/user.routes.js';
 import AdminRoutes from './routes/admin.routes.js'
 import logger from './utility/logger.utility.js';
@@ -39,7 +39,7 @@ app.get('/health', async (req, res) => {
   let dbStatus;
   try {
     logger.info('Health check initiated for db');
-    await pgsql.authenticate();
+    await mysql.authenticate();
     dbStatus = 'healthy';
   } catch (error) {
     dbStatus = 'unhealthy';
@@ -88,7 +88,7 @@ app.use((request, response) => {
 
 const databaseConnection = async () => {
   try {
-    await pgsql.authenticate();
+    await mysql.authenticate();
     logger.info('Database connected sucessfully');
   } catch (error) {
     logger.error(` database connection failed with ${error.message}`);

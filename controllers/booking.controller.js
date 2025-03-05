@@ -2,7 +2,7 @@
 import BookingService from '../services/booking.service.js';
 import logger from '../utility/logger.utility.js';
 import AppConfig from '../config/app/app.config.js';
-const {STATUS_MESSAGES, BOOKING_MESSAGES} = AppConfig
+const { STATUS_MESSAGES, BOOKING_MESSAGES } = AppConfig;
 
 const GetUserBookingsController = async (request, response) => {
   try {
@@ -10,7 +10,7 @@ const GetUserBookingsController = async (request, response) => {
     response.status(200).json({ message: STATUS_MESSAGES[200], data: data });
   } catch (error) {
     logger.error({ GetUserBookingsController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -20,11 +20,11 @@ const GetBookingsController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: STATUS_MESSAGES[200] , data: data });
+      response.status(200).json({ message: STATUS_MESSAGES[200], data: data });
     }
   } catch (error) {
     logger.error({ GetBookingsController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -34,11 +34,11 @@ const GetCurrentBookingsController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: STATUS_MESSAGES[200] , data: data });
+      response.status(200).json({ message: STATUS_MESSAGES[200], data: data });
     }
   } catch (error) {
     logger.error({ GetCurrentBookingsController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -52,7 +52,7 @@ const AddBookingController = async (request, response) => {
     }
   } catch (error) {
     logger.error({ AddBookingController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -66,7 +66,7 @@ const AddBookingByAdminController = async (request, response) => {
     }
   } catch (error) {
     logger.error({ AddBookingByAdminController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -80,7 +80,7 @@ const UpdateBookingController = async (request, response) => {
     }
   } catch (error) {
     logger.error({ UpdateBookingController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -94,7 +94,35 @@ const CancelBookingController = async (request, response) => {
     }
   } catch (error) {
     logger.error({ CancelBookingController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
+  }
+};
+
+const UpdateBookingPickUpController = async (request, response) => {
+  try {
+    const data = await BookingService.UpdateBookingPickUpService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_CONFIRMED });
+    }
+  } catch (error) {
+    logger.error({ UpdateBookingPickUpController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
+  }
+};
+
+const UpdateBookingDropController = async (request, response) => {
+  try {
+    const data = await BookingService.UpdateBookingDropService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_CONFIRMED });
+    }
+  } catch (error) {
+    logger.error({ UpdateBookingDropController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -104,11 +132,11 @@ const UpdateBookingByAdminController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_CONFIRMED});
+      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_CONFIRMED });
     }
   } catch (error) {
     logger.error({ UpdateBookingByAdminController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -118,11 +146,11 @@ const GetAvilableSlotsController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: STATUS_MESSAGES[200] , data: data });
+      response.status(200).json({ message: STATUS_MESSAGES[200], data: data });
     }
   } catch (error) {
     logger.error({ GetAvilableSlotsController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -132,11 +160,11 @@ const GetAvilableSlotsByStartDateController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: STATUS_MESSAGES[200] , data: data });
+      response.status(200).json({ message: STATUS_MESSAGES[200], data: data });
     }
   } catch (error) {
     logger.error({ GetAvilableSlotsByStartDateController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -146,11 +174,11 @@ const PostBookingReviewController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: STATUS_MESSAGES[201]});
+      response.status(200).json({ message: STATUS_MESSAGES[201] });
     }
   } catch (error) {
     logger.error({ PostBookingReviewController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -160,11 +188,11 @@ const UpdateBookingReviewController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: STATUS_MESSAGES[200]});
+      response.status(200).json({ message: STATUS_MESSAGES[200] });
     }
   } catch (error) {
     logger.error({ UpdateBookingReviewController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500]  });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
   }
 };
 
@@ -181,6 +209,8 @@ const BookingController = {
   PostBookingReviewController,
   UpdateBookingReviewController,
   CancelBookingController,
+  UpdateBookingPickUpController,
+  UpdateBookingDropController,
 };
 
 export default BookingController;

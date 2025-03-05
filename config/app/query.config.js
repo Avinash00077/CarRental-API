@@ -27,6 +27,7 @@ const QUERY = {
 
   //admin
   GET_ADMIN_BY_EMAIL: properties.get('query.get_adminbyemail'),
+  GET_ADMINS : properties.get('query.get_admins'),
   GET_ADMINBY_ID: properties.get('query.get_adminby_id'),
   ADD_NEW_ADMIN: properties.get('query.post_newadmin'),
   UPDATE_ADMIN: properties.get('query.update_admin'),
