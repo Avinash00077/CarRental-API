@@ -12,7 +12,7 @@ const userRegestartionTemplate = (user_name) => {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #fef4e6;
+            background-color: white;
             margin: 0;
             padding: 0;
             display: flex;
@@ -30,7 +30,7 @@ const userRegestartionTemplate = (user_name) => {
             text-align: center;
         }
         .header {
-            background: #6f82c6;
+            background: #121212;
             color: #ffffff;
             padding: 20px;
             font-size: 26px;
@@ -45,7 +45,7 @@ const userRegestartionTemplate = (user_name) => {
         }
         .button {
             display: inline-block;
-            background: #6f82c6;
+            background: #121212;
             color: #ffffff;
             padding: 14px 30px;
             text-decoration: none;
@@ -56,7 +56,6 @@ const userRegestartionTemplate = (user_name) => {
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .button:hover {
-            background: #425599;
             transform: scale(1.05);
         }
         .footer {
@@ -110,8 +109,7 @@ const userRegestartionTemplate = (user_name) => {
         </div>
     </div>
 </body>
-</html>
-`,
+</html>`,
   };
 };
 
@@ -127,7 +125,7 @@ const passwordResetTemplate = (user_name, otp) => {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #fef4e6;
+            background-color: white;
             margin: 0;
             padding: 0;
             display: flex;
@@ -145,7 +143,7 @@ const passwordResetTemplate = (user_name, otp) => {
             text-align: center;
         }
         .header {
-            background: #6f82c6;
+            background: #121212;
             color: #ffffff;
             padding: 20px;
             font-size: 22px;
@@ -161,7 +159,7 @@ const passwordResetTemplate = (user_name, otp) => {
         .otp {
             font-size: 24px;
             font-weight: bold;
-            background: #6f82c6;
+            background: #121212;
             color: #ffffff;
             display: inline-block;
             padding: 10px 20px;
@@ -291,7 +289,7 @@ const bookingTemplate = (name, start_date, start_time, end_date, end_time, booki
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: white;
             margin: 0;
             padding: 0;
         }
@@ -302,10 +300,10 @@ const bookingTemplate = (name, start_date, start_time, end_date, end_time, booki
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #6f82c6;
+            border-top: 5px solid #121212;
         }
         h2 {
-            color: #6f82c6;
+            color: #121212;
             text-align: center;
         }
         .details, .policies {
@@ -322,11 +320,10 @@ const bookingTemplate = (name, start_date, start_time, end_date, end_time, booki
             text-align: center;
             font-size: 22px;
             font-weight: bold;
-            color: #6f82c6;
-            background: #D3D9ED;
+            color: white;
+            background: #121212;
             padding: 12px;
             border-radius: 8px;
-            border: 2px dashed #D3D9ED;
         }
         ul {
             padding-left: 20px;
@@ -351,22 +348,23 @@ const bookingTemplate = (name, start_date, start_time, end_date, end_time, booki
             margin: 20px auto;
             padding: 12px;
             text-align: center;
-            background-color:  #6f82c6;;
-            color: #ffffff;
+            background-color:  #121212;;
+            color: white;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
             transition: 0.3s;
         }
         .btn:hover {
-            background-color: #D3D9ED;
-            color: #6f82c6;
+            background-color: #121212;
+            color: white;
+            transform: scale(1.05);
         }
         .section-title {
             font-weight: bold;
             font-size: 16px;
             margin-top: 10px;
-            color:  #6f82c6;;
+            color:  #121212;;
         }
     </style>
 </head>
@@ -451,7 +449,7 @@ const verficationTemplate = (STATUS, USER_NAME, APPROVED, DOCUMENT_TYPE) => {
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            background-color: white;
             margin: 0;
             padding: 0;
         }
@@ -462,10 +460,10 @@ const verficationTemplate = (STATUS, USER_NAME, APPROVED, DOCUMENT_TYPE) => {
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid #6f82c6;
+            border-top: 5px solid #121212;
         }
         .header {
-            background-color: #6f82c6;
+            background-color: #121212;
             color: #ffffff;
             text-align: center;
             padding: 20px;
@@ -512,7 +510,7 @@ const verficationTemplate = (STATUS, USER_NAME, APPROVED, DOCUMENT_TYPE) => {
             margin: 20px auto;
             padding: 12px;
             text-align: center;
-            background-color: #6f82c6;
+            background-color: #121212;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -520,8 +518,9 @@ const verficationTemplate = (STATUS, USER_NAME, APPROVED, DOCUMENT_TYPE) => {
             transition: background 0.3s ease-in-out;
         }
         .button:hover {
-            background-color: #D3D9ED;
-            color: #6f82c6;
+            background-color: #121212;
+            color: white;
+            transform: scale(1.05);
         }
         .note {
             font-size: 14px;
