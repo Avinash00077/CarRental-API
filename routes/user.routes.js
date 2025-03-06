@@ -84,6 +84,10 @@ Router.post('/booking/review', BookingValidation.validateReview, BookingControll
 
 Router.put('/booking/review', BookingValidation.validateReview, BookingController.UpdateBookingReviewController);
 
+Router.get('/user-feedback', UtiityController.GetUserFeedbacksController)
+
 Router.post('/feedback', UtiityController.PostFeedbacksController)
+
+Router.put('/feedback', UtiityController.UpdateFeedbacksController)
 
 export default Router;

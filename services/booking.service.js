@@ -88,7 +88,6 @@ const AddBookingService = async (request) => {
       payment_mode,
       'user',
     );
-    console.log(data.booking_id);
     return data;
   } catch (error) {
     logger.error({ AddBookingService: error.message });
@@ -251,7 +250,6 @@ const GetAvilableSlotsByStartDateService = async (request) => {
     });
     return formatedData;
   } catch (error) {
-    console.log(error);
     logger.error({ GetAvilableSlotsByStartDateService: error.message });
     throw new Error(error.message);
   }

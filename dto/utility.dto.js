@@ -43,6 +43,22 @@ const PostFeedbackDTO = async (user_id, rating, comments) => {
   }
 };
 
+const UpdateFeedbackDTO = async (user_id, rating, comments) => {
+  try {
+    const query = DB.QUERY.UPDATE_FEEDBACK;
+    const replacements = {
+      user_id,
+      rating,
+      comments,
+    };
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateFeedbackDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetFeedbacksDTO = async () => {
   try {
     const query = DB.QUERY.GET_FEEDBACKS
@@ -58,7 +74,8 @@ const UtiityDTO = {
   GetLocationsDTO,
   GetCarBrandsDTO,
   PostFeedbackDTO,
-  GetFeedbacksDTO
+  GetFeedbacksDTO,
+  UpdateFeedbackDTO
 };
 
 export default UtiityDTO;

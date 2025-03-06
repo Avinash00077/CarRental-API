@@ -8,6 +8,7 @@ import logger from '../utility/logger.utility.js';
 import OtpDTO from '../dto/otp.dto.js';
 import AppConfig from '../config/app/app.config.js';
 import sendEmail from '../utility/email.utility.js';
+import UtiityDTO from '../dto/utility.dto.js';
 import emailTemplates from '../config/app/email.template.js';
 import cloudinaryUtils from '../utility/cloudinary.js';
 const { uploadToCloudinary, deleteUserImageService } = cloudinaryUtils;
@@ -169,7 +170,6 @@ const UpdateUserService = async (request) => {
       return customExceptionMessage(400, 'User not found');
     }
     const GetUserByEmail = await UserDTO.GetUserByEmailDTO(email);
-    console.log(GetUserByEmail[0].user_id != userId, GetUserByEmail[0].user_id, userId);
     if (GetUserByEmail.length > 0 && GetUserByEmail[0].user_id != userId) {
       return customExceptionMessage(400, 'User already exist with this email');
     }

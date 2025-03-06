@@ -25,6 +25,16 @@ const GetCarBrandsController = async (request, response) => {
   }
 };
 
+const GetUserFeedbacksController = async (request, response) => {
+  try {
+    const data = await UtilityService.GetUserFeedbacksService(request);
+    response.status(200).json({ message: STATUS_MESSAGES[200], data: data });
+  } catch (error) {
+    logger.error({ GetUserFeedbacksController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
+  }
+};
+
 const GetFeedbacksController = async (request, response) => {
   try {
     const data = await UtilityService.GetFeedbacksService(request);
@@ -49,11 +59,27 @@ const PostFeedbacksController = async (request, response) => {
   }
 };
 
+const UpdateFeedbacksController = async (request, response) => {
+  try {
+    const data = await UtilityService.UpdateFeedbacksService(request);
+    if (data.errorCode) {
+      return response.status(data.errorCode).json({ message: data.errorMessage });
+    } else {
+      return response.status(200).json({ message: STATUS_MESSAGES[201] });
+    }
+  } catch (error) {
+    logger.error({ UpdateFeedbacksController: error.message });
+    response.status(500).json({ message: STATUS_MESSAGES[500] });
+  }
+};
+
 const UtiityController = {
   GetCarBrandsController,
   GetLocationsController,
   GetFeedbacksController,
   PostFeedbacksController,
+  GetUserFeedbacksController,
+  UpdateFeedbacksController,
 };
 
 export default UtiityController;

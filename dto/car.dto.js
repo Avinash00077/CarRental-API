@@ -122,7 +122,6 @@ const AddCarDTO = async (
       fastag_availability,
       location_address,
     };
-    console.log(replacements);
     const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
     return data;
   } catch (error) {

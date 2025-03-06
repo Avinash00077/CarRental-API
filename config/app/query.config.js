@@ -68,6 +68,7 @@ const QUERY = {
   GET_LOCATIONS :properties.get('query.get_locations'),
   GET_CAR_BRANDS: properties.get('query.get_car_brands'),
   POST_FEEDBACK: properties.get('query.post_feedback'),
+  UPDATE_FEEDBACK: properties.get('query.update_feedback'),
   GET_FEEDBACKS: properties.get('query.get_feedbacks')
   
 };

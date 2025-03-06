@@ -85,10 +85,8 @@ const AddBoookingDTO = async (
     const query = DB.QUERY.ADD_BOOKING;
     const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
     const [bookingData] = await mysql.query('SELECT LAST_INSERT_ID() AS booking_id');
-    console.log(bookingData);
     return bookingData;
   } catch (error) {
-    console.log(error);
     logger.error({ AddBoookingDTO: error.message });
     throw new Error(error.message);
   }
@@ -141,7 +139,6 @@ const GetAvilableSlotsByStartDateDTO = async (start_date, start_time, car_id) =>
   try {
     const replacements = { start_date, start_time, car_id };
     const query = DB.QUERY.GET_AVILABLE_SLOTS_BY_START_DATE;
-    console.log(query);
     const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
@@ -154,7 +151,6 @@ const PostBookingReviewDTO = async (userId, bookingId, rating, comment) => {
   try {
     const replacements = { userId, bookingId, rating, comment };
     const query = DB.QUERY.POST_REVIEW;
-    console.log(query);
     const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
     return data;
   } catch (error) {
@@ -167,7 +163,6 @@ const UpdateBookingReviewDTO = async (userId, bookingId, rating, comment) => {
   try {
     const replacements = { userId, bookingId, rating, comment };
     const query = DB.QUERY.UPDATE_REVIEW;
-    console.log(query);
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
@@ -180,7 +175,6 @@ const GetBookingReviewDTO = async (userId, bookingId) => {
   try {
     const replacements = { userId, bookingId };
     const query = DB.QUERY.GET_REVIEW;
-    console.log(query);
     const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
     return data;
   } catch (error) {
