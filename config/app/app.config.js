@@ -69,6 +69,8 @@ const AppConfig = {
   CAR_MESSAGES: CAR_MESSAGES,
   BOOKING_MESSAGES: BOOKING_MESSAGES,
   USER_IMAGE_NAMES: USER_IMAGE_NAMES,
+  EMAIL_ADDRESS: properties.get('email.email'),
+  EMAIL_PASSWORD: properties.get('email.password'),
 };
 
 export default AppConfig;
