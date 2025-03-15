@@ -21,6 +21,7 @@ const sendEmail = async (recipientEmail, subject, body) => {
     };
     const info = await transporter.sendMail(mailOptions);
     logger.info({ EmailSent: info.response });
+    logger.info({ message: `EmailSent Sucessfully to ${recipientEmail}` });
   } catch (error) {
     logger.error({ ErrorSendingEmail: error });
   }
