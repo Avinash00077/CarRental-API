@@ -196,86 +196,87 @@ const passwordResetTemplate = (user_name, otp) => {
 };
 
 const getUserNameTemplate = (user_name, name) => {
-  return {
-    subject: 'Your OTP for retrive Your user name 🔐',
-    body: `<!DOCTYPE html>
-  <html>
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>OTP for Password Reset</title>
-      <style>
-          body {
-              font-family: Arial, sans-serif;
-              background-color: white;
-              margin: 0;
-              padding: 0;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              height: 100vh;
-          }
-          .container {
-            max-width: 600px;
-            margin: 20px auto;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
-        }
-          .header {
-              background: black;
-              color: #ffffff;
-              padding: 20px;
-              font-size: 22px;
-              font-weight: bold;
-              border-radius: 10px 10px 0 0;
-          }
-          .content {
-              padding: 20px;
-              font-size: 18px;
-              color: #333;
-              line-height: 1.6;
-          }
-          .otp {
-              font-size: 24px;
-              font-weight: bold;
-              background: black;
-              color: #ffffff;
-              display: inline-block;
-              padding: 10px 20px;
-              border-radius: 5px;
-              margin: 15px 0;
-          }
-          .footer {
-              margin-top: 20px;
-              font-size: 14px;
-              color: #777;
-              border-top: 1px solid #ddd;
-              padding-top: 15px;
-          }
-      </style>
-  </head>
-  <body>
-      <div class="container">
-          <div class="header">OTP for Retrive user name</div>
-          <div class="content">
-              <p>Hi <strong>${name}</strong>,</p>
-              <p>your username is</p>
-              <div class="otp">${user_name}</div>
-              <p>Please use this username to login to application.</p>
-              <p>If you did not request retrive username, please ignore this email.</p>
-          </div>
-          <div class="footer">
-              <p>&copy; 2025 Car Rental Services. All rights reserved.</p>
-          </div>
-      </div>
-  </body>
-  </html>
-  `,
+    return {
+      subject: 'Your Username Retrieval Request 🔐',
+      body: `<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Username Retrieval</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f9f9f9;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+            }
+            .container {
+                max-width: 600px;
+                margin: 20px auto;
+                background: #ffffff;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                text-align: center;
+            }
+            .header {
+                background: #4CAF50;
+                color: #ffffff;
+                padding: 20px;
+                font-size: 22px;
+                font-weight: bold;
+                border-radius: 10px 10px 0 0;
+            }
+            .content {
+                padding: 20px;
+                font-size: 18px;
+                color: #333;
+                line-height: 1.6;
+            }
+            .username-box {
+                font-size: 24px;
+                font-weight: bold;
+                background: #4CAF50;
+                color: #ffffff;
+                display: inline-block;
+                padding: 10px 20px;
+                border-radius: 5px;
+                margin: 15px 0;
+            }
+            .footer {
+                margin-top: 20px;
+                font-size: 14px;
+                color: #777;
+                border-top: 1px solid #ddd;
+                padding-top: 15px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">Username Retrieval Request</div>
+            <div class="content">
+                <p>Dear <strong>${name}</strong>,</p>
+                <p>We received a request to retrieve your username. Your username is:</p>
+                <div class="username-box">${user_name}</div>
+                <p>Use this username to log in to your account.</p>
+                <p>If you did not request this, please ignore this email or contact our support team immediately for assistance.</p>
+            </div>
+            <div class="footer">
+                <p>&copy; 2025 Car Rental Services. All rights reserved.</p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `,
+    };
   };
-};
+  
 
 const bookingTemplate = (name, start_date, start_time, end_date, end_time, bookingId, model, location, otp) => {
   return {
@@ -435,6 +436,142 @@ const bookingTemplate = (name, start_date, start_time, end_date, end_time, booki
   };
 };
 
+const cancellationTemplate = (name, start_date, start_time, end_date, end_time, bookingId, model, location, refundAmount) => {
+    return {
+      subject: 'Booking Cancellation Confirmation 🚫',
+      body: `<!DOCTYPE html>
+  <html>
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Car Booking Cancellation</title>
+      <style>
+          body {
+              font-family: 'Arial', sans-serif;
+              background-color: white;
+              margin: 0;
+              padding: 0;
+          }
+          .container {
+              max-width: 600px;
+              margin: 20px auto;
+              background: #ffffff;
+              padding: 20px;
+              border-radius: 10px;
+              box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+              border-top: 5px solid #d9534f;
+          }
+          h2 {
+              color: #d9534f;
+              text-align: center;
+          }
+          .details, .refund {
+              background: #f9f9f9;
+              padding: 15px;
+              border-radius: 5px;
+              margin-bottom: 15px;
+          }
+          .details p, .refund p {
+              margin: 8px 0;
+              color: #333;
+          }
+          .refund-amount {
+              text-align: center;
+              font-size: 22px;
+              font-weight: bold;
+              color: #d9534f;
+              background: #fce4e4;
+              padding: 12px;
+              border-radius: 8px;
+          }
+          .note {
+              font-size: 14px;
+              color: #6c757d;
+              margin-top: 15px;
+          }
+          .footer {
+              text-align: center;
+              font-size: 14px;
+              color: #6c757d;
+              margin-top: 20px;
+              border-top: 1px solid #ddd;
+              padding-top: 10px;
+          }
+          .btn {
+              display: block;
+              width: 100%;
+              max-width: 220px;
+              margin: 20px auto;
+              padding: 12px;
+              text-align: center;
+              background-color: #d9534f;
+              color: white;
+              text-decoration: none;
+              border-radius: 5px;
+              font-weight: bold;
+              transition: 0.3s;
+          }
+          .btn:hover {
+              background-color: #c9302c;
+              color: white;
+              transform: scale(1.05);
+          }
+          .section-title {
+              font-weight: bold;
+              font-size: 16px;
+              margin-top: 10px;
+              color: #d9534f;
+          }
+      </style>
+  </head>
+  <body>
+  
+  <div class="container">
+      <h2>🚫 Car Booking Cancelled</h2>
+  
+      <p>Dear <strong>${name}</strong>,</p>
+      <p>We regret to inform you that your car booking with <strong>DND CarRental</strong> has been cancelled. Below are the cancellation details:</p>
+  
+      <div class="details">
+          <p><strong>Booking ID:</strong> ${bookingId}</p>
+          <p><strong>Car:</strong> ${model}</p>
+          <p><strong>Original Pickup Date & Time:</strong> ${start_date} ${start_time}</p>
+          <p><strong>Original Drop-off Date & Time:</strong> ${end_date} ${end_time}</p>
+          <p><strong>Pickup Location:</strong> ${location}</p>
+          <p><strong>Drop-off Location:</strong> ${location}</p>
+      </div>
+  
+      <div class="refund">
+          <p class="section-title">💸 Refund Details:</p>
+          <div class="refund-amount">Refund Amount: ₹${refundAmount}</div>
+          <p>Please allow 5-7 business days for the refund to reflect in your account.</p>
+      </div>
+  
+      <p class="section-title">📢 Important Information:</p>
+      <ul>
+          <li>If you wish to rebook, you can visit our website or contact our support team.</li>
+          <li>For urgent concerns, please reach out to our support helpline.</li>
+      </ul>
+  
+      <a href="[Company Website]" class="btn">Visit Our Website</a>
+  
+      <div class="footer">
+          <p>For any assistance, contact us at <a href="mailto:[Customer Support Email]" style="color: #007bff;">[Customer Support Email]</a> or call <strong>[Customer Support Number]</strong>.</p>
+          <p>&copy; <span id="year"></span>DND CarRental. All rights reserved.</p>
+      </div>
+  </div>
+  
+  <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+  
+  </body>
+  </html>
+  `,
+    };
+  };
+  
+
 const verficationTemplate = (STATUS, USER_NAME, APPROVED, DOCUMENT_TYPE) => {
   return {
     subject: APPROVED
@@ -565,6 +702,7 @@ const emailTemplates = {
   getUserNameTemplate,
   bookingTemplate,
   verficationTemplate,
+  cancellationTemplate,
 };
 
 export default emailTemplates;
