@@ -102,7 +102,7 @@ const GetUserByIdService = async (request) => {
   }
 };
 
-const GenerateOtpForUserNameService = async (request) => {
+const GetUserNameService = async (request) => {
   try {
     const { email, dob } = request.headers;
     const userDetails = await UserDTO.GetUserNameDTO(email, dob);
@@ -111,44 +111,44 @@ const GenerateOtpForUserNameService = async (request) => {
     }
     const user_id = userDetails[0].user_id;
     const user_email = userDetails[0].email;
-    const otp = generateOtp();
-    await OtpDTO.InserOtpDTO(user_id, otp, OTP_CODES.USER_NAME);
+    // const otp = generateOtp();
+    // await OtpDTO.InserOtpDTO(user_id, otp, OTP_CODES.USER_NAME);
     const name = `${userDetails[0].first_name + ' ' + userDetails[0].last_name}`;
-    const emailTemplate = emailTemplates.getUserNameTemplate(name, otp);
+    const emailTemplate = emailTemplates.getUserNameTemplate( userDetails[0].user_name, name);
     const subject = emailTemplate.subject;
     const body = emailTemplate.body;
     await sendEmail(user_email, subject, body);
     return maskEmail(user_email);
   } catch (error) {
-    logger.error({ GenerateOtpForUserName: error.message });
-    throw new Error(error.message);
-  }
-};
-
-const GetUserNameService = async (request) => {
-  try {
-    const { email, dob, otp } = request.headers;
-    const userDetails = await UserDTO.GetUserNameDTO(email, dob);
-    if (userDetails.length === 0) {
-      return customExceptionMessage(404, 'No user found with email and dob');
-    }
-    const user_id = userDetails[0].user_id;
-    const [otpDetails] = await OtpDTO.GetOtpDTO(user_id, OTP_CODES.USER_NAME);
-    if (otpDetails.is_verified) {
-      return customExceptionMessage(400, 'Otp already verified');
-    }
-    if (otpDetails.is_expired) {
-      return customExceptionMessage(401, 'otp expired please generate new otp');
-    }
-    if (otpDetails.otp_code != otp) {
-      return customExceptionMessage(401, 'Invalid otp');
-    }
-    return userDetails[0].user_name;
-  } catch (error) {
     logger.error({ GetUserNameService: error.message });
     throw new Error(error.message);
   }
 };
+
+// const GetUserNameService = async (request) => {
+//   try {
+//     const { email, dob, otp } = request.headers;
+//     const userDetails = await UserDTO.GetUserNameDTO(email, dob);
+//     if (userDetails.length === 0) {
+//       return customExceptionMessage(404, 'No user found with email and dob');
+//     }
+//     const user_id = userDetails[0].user_id;
+//     const [otpDetails] = await OtpDTO.GetOtpDTO(user_id, OTP_CODES.USER_NAME);
+//     if (otpDetails.is_verified) {
+//       return customExceptionMessage(400, 'Otp already verified');
+//     }
+//     if (otpDetails.is_expired) {
+//       return customExceptionMessage(401, 'otp expired please generate new otp');
+//     }
+//     if (otpDetails.otp_code != otp) {
+//       return customExceptionMessage(401, 'Invalid otp');
+//     }
+//     return userDetails[0].user_name;
+//   } catch (error) {
+//     logger.error({ GetUserNameService: error.message });
+//     throw new Error(error.message);
+//   }
+// };
 
 const GetUserNameAvailabilityService = async (request) => {
   try {
@@ -340,7 +340,7 @@ const UserService = {
   GenerateOtpForUserPassword,
   userImageUploadService,
   GetUserNameAvailabilityService,
-  GenerateOtpForUserNameService,
+  //GenerateOtpForUserNameService,
   GetUserNameService,
   GetUsersForVerficationService,
   UpdateUserVerficationService,

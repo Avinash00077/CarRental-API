@@ -109,19 +109,19 @@ const UpdateUserPasswordController = async (request, response) => {
   }
 };
 
-const GenerateOtpForUserNameController = async (request, response) => {
-  try {
-    const data = await UserService.GenerateOtpForUserNameService(request);
-    if (data.errorCode) {
-      return response.status(data.errorCode).json({ message: data.errorMessage });
-    } else {
-      return response.status(200).json({ message: `OTP sent Successfully to ${data}` });
-    }
-  } catch (error) {
-    logger.error({ GenerateOtpForUserNameController: error.message });
-    response.status(500).json({ message: STATUS_MESSAGES[500] });
-  }
-};
+// const GenerateOtpForUserNameController = async (request, response) => {
+//   try {
+//     const data = await UserService.GenerateOtpForUserNameService(request);
+//     if (data.errorCode) {
+//       return response.status(data.errorCode).json({ message: data.errorMessage });
+//     } else {
+//       return response.status(200).json({ message: `OTP sent Successfully to ${data}` });
+//     }
+//   } catch (error) {
+//     logger.error({ GenerateOtpForUserNameController: error.message });
+//     response.status(500).json({ message: STATUS_MESSAGES[500] });
+//   }
+// };
 
 const GetUserNameController = async (request, response) => {
   try {
@@ -129,7 +129,7 @@ const GetUserNameController = async (request, response) => {
     if (data?.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      return response.status(200).json({ message: `Your user name is ${data}` });
+      return response.status(200).json({ message: `Your user name is sent to email sucessfully` });
     }
   } catch (error) {
     logger.error({ GetUserNameController: error.message });
@@ -174,7 +174,7 @@ const UserController = {
   UpdateUserController,
   UserImageUploadController,
   GetUserNameAvailabilityController,
-  GenerateOtpForUserNameController,
+  //GenerateOtpForUserNameController,
   GetUserNameController,
   GetUsersForVerficationController,
   UpdateUsersVerficationController,

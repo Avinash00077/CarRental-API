@@ -32,9 +32,9 @@ Router.get('/password-reset/otp', UserValidations.UserNameValidation, UserContro
 
 Router.put('/password-reset/confirm', UserValidations.ConfirmPasswordCheck, UserController.UpdateUserPasswordController);
 
-Router.get('/user-name/otp', UserValidations.UserEmailDobCheck, UserController.GenerateOtpForUserNameController);
+//Router.get('/user-name/otp', UserValidations.UserEmailDobCheck, UserController.GenerateOtpForUserNameController);
 
-Router.get('/user-name/confirm', UserValidations.GetUserNameCheck, UserController.GetUserNameController);
+Router.get('/user-name/email', UserValidations.GetUserNameCheck, UserController.GetUserNameController);
 
 //car
 Router.get('/car/random', CarValidations.LocationCheck, CarController.GetRandomCarsController);

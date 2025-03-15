@@ -261,7 +261,7 @@ const GetUserNameCheck = [
       }
       return true;
     }),
-  header('otp').trim().isLength({ min: 6, max: 6 }).withMessage('Enter valid otp'),
+  //header('otp').trim().isLength({ min: 6, max: 6 }).withMessage('Enter valid otp'),
   (request, response, next) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {

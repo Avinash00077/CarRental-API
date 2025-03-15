@@ -195,7 +195,7 @@ const passwordResetTemplate = (user_name, otp) => {
   };
 };
 
-const getUserNameTemplate = (user_name, otp) => {
+const getUserNameTemplate = (user_name, name) => {
   return {
     subject: 'Your OTP for retrive Your user name 🔐',
     body: `<!DOCTYPE html>
@@ -207,7 +207,7 @@ const getUserNameTemplate = (user_name, otp) => {
       <style>
           body {
               font-family: Arial, sans-serif;
-              background-color: #fef4e6;
+              background-color: white;
               margin: 0;
               padding: 0;
               display: flex;
@@ -225,7 +225,7 @@ const getUserNameTemplate = (user_name, otp) => {
             text-align: center;
         }
           .header {
-              background: #6f82c6;
+              background: black;
               color: #ffffff;
               padding: 20px;
               font-size: 22px;
@@ -241,7 +241,7 @@ const getUserNameTemplate = (user_name, otp) => {
           .otp {
               font-size: 24px;
               font-weight: bold;
-              background: #6f82c6;
+              background: black;
               color: #ffffff;
               display: inline-block;
               padding: 10px 20px;
@@ -261,10 +261,10 @@ const getUserNameTemplate = (user_name, otp) => {
       <div class="container">
           <div class="header">OTP for Retrive user name</div>
           <div class="content">
-              <p>Hi <strong>${user_name}</strong>,</p>
-              <p>Your One-Time Password (OTP) to retrive your username is:</p>
-              <div class="otp">${otp}</div>
-              <p>Please use this OTP to  retrive your username. It is valid for a limited time only.</p>
+              <p>Hi <strong>${name}</strong>,</p>
+              <p>your username is</p>
+              <div class="otp">${user_name}</div>
+              <p>Please use this username to login to application.</p>
               <p>If you did not request retrive username, please ignore this email.</p>
           </div>
           <div class="footer">
