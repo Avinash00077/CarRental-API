@@ -8,7 +8,7 @@ const GetCarCheck = [
   header('start_date')
     .notEmpty()
     .withMessage('Start date is required')
-    .matches(/^\d{4}\/\d{2}\/\d{2}$/)
+    //.matches(/^\d{4}\/\d{2}\/\d{2}$/)
     .withMessage('Invalid date format (use YYYY/MM/DD)')
     .custom((value) => {
       const today = moment().format('YYYY/MM/DD');
@@ -21,7 +21,7 @@ const GetCarCheck = [
   header('end_date')
     .notEmpty()
     .withMessage('End date is required')
-    .matches(/^\d{4}\/\d{2}\/\d{2}$/)
+    //.matches(/^\d{4}\/\d{2}\/\d{2}$/)
     .withMessage('Invalid date format (use YYYY/MM/DD)')
     .custom((value, { req }) => {
       const today = moment().format('YYYY/MM/DD');

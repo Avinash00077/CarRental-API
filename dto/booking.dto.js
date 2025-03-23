@@ -24,6 +24,37 @@ const GetBookingDTO = async (booking_id, email, phone_number, car_id, booking_st
   }
 };
 
+const GetUserBookingDTO = async (user_id,type , bookingStatus) => {
+  try {
+    const replacements = {
+      type: type ? type : 'current',
+      bookingStatus: bookingStatus ? bookingStatus : true,
+      user_id: user_id ? user_id : null,
+    };
+    const query = DB.QUERY.GET_USER_BOOKINGS;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetUserBookingDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const GetAdminBookingDTO = async (location,type) => {
+  try {
+    const replacements = {
+      type: type ? type : 'ongoing',
+      location: location ? location: null,
+    };
+    const query = DB.QUERY.GET_BOOKINGS_ADMIN;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.SELECT });
+    return data;
+  } catch (error) {
+    logger.error({ GetAdminBookingDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetCurrentBookingsDTO = async (location) => {
   try {
     const replacements = {
@@ -256,6 +287,8 @@ const BookingDTO = {
   UpdateBookingDropDTO,
   UpdateBookingPickUpDTO,
   bookingCarImagesDTO,
+  GetUserBookingDTO,
+  GetAdminBookingDTO,
 };
 
 export default BookingDTO;

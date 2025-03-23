@@ -48,6 +48,8 @@ const QUERY = {
 
   //booking
   GET_CURRENT_BOOKINGS: properties.get('query.get_current_bookings'),
+  GET_USER_BOOKINGS : properties.get('query.get_user_bookings'),
+  GET_BOOKINGS_ADMIN: properties.get('query.get_bookings_admin'),
   GET_BOOKING: properties.get('query.get_booking'),
   ADD_BOOKING: properties.get('query.add_booking'),
   UPDATE_BOOKING: properties.get('query.update_booking'),

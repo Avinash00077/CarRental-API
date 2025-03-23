@@ -16,7 +16,8 @@ const { uploadToCloudinary,deleteUserImageService } = cloudinaryUtils;
 const GetUserBookingsService = async (request) => {
   try {
     const userId = request.userId;
-    const data = await BookingDTO.GetBookingDTO(null, null, null, null, null, userId);
+    const {type, booking_status} = request.headers;
+    const data = await BookingDTO.GetUserBookingDTO(userId, type, booking_status);
     return data;
   } catch (error) {
     logger.error({ GetUserBookingsService: error.message });
@@ -27,12 +28,13 @@ const GetUserBookingsService = async (request) => {
 const GetBookingsService = async (request) => {
   try {
     const adminId = request.adminId;
-    const { booking_id, email, phone_number, car_id, booking_status, user_id } = request.headers;
+    const { location } = request.headers;
+    const { type } = request.headers;
     if (!adminId) {
       logger.warn({ message: STATUS_MESSAGES[403] });
       return customExceptionMessage(403, STATUS_MESSAGES[403]);
     }
-    const data = await BookingDTO.GetBookingDTO(booking_id, email, phone_number, car_id, booking_status, user_id);
+    const data = await BookingDTO.GetAdminBookingDTO(location,type);
     return data;
   } catch (error) {
     logger.error({ GetBookingsService: error.message });
