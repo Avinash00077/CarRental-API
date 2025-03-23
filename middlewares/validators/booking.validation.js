@@ -11,17 +11,16 @@ const AddbookingValidation = [
   // Start Date - Must be in YYYY-MM-DD format and should be in the future
   body('start_date')
     .matches(/^\d{4}\/\d{2}\/\d{2}$/)
-    .withMessage('Start date must be in YYYY/MM/DD format')
-    // .custom((value) => {
-    //   const today = new Date();
-    //   const inputDate = new Date(value);
-    //   if (inputDate < today) {
-    //     throw new Error('Start date must be in the future');
-    //   }
-    //   return true;
-    // })
-    ,
+    .withMessage('Start date must be in YYYY/MM/DD format'),
 
+  // .custom((value) => {
+  //   const today = new Date();
+  //   const inputDate = new Date(value);
+  //   if (inputDate < today) {
+  //     throw new Error('Start date must be in the future');
+  //   }
+  //   return true;
+  // })
   // End Date - Must be in YYYY-MM-DD format and greater than start date
   body('end_date')
     .matches(/^\d{4}\/\d{2}\/\d{2}$/)
@@ -186,11 +185,101 @@ const validateReview = [
   },
 ];
 
+export const pickUpValidate = [
+  body('booking_id').trim().notEmpty().isInt().withMessage('Enter valid booking id'),
+  body('startKm').trim().notEmpty().isInt().withMessage('Enter valid start KM'),
+  check('car_image_front').custom((value, { req }) => {
+    if (!req.files || !req.files['car_image_front']) {
+      throw new Error('Front image of the car is required');
+    }
+    return true;
+  }),
+  check('car_image_back').custom((value, { req }) => {
+    if (!req.files || !req.files['car_image_back']) {
+      throw new Error('Back image of the car is required');
+    }
+    return true;
+  }),
+  check('car_image_side_1').custom((value, { req }) => {
+    if (!req.files || !req.files['car_image_side_1']) {
+      throw new Error('Side 1 image of the car is required');
+    }
+    return true;
+  }),
+  check('car_image_side_2').custom((value, { req }) => {
+    if (!req.files || !req.files['car_image_side_2']) {
+      throw new Error('Side 2 image of the car is required');
+    }
+    return true;
+  }),
+  check('extraImge')
+    .optional() // This field is optional
+    .custom((value, { req }) => {
+      if (req.files && req.files['extraImge']) {
+        return true;
+      }
+      return true;
+    }),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
+export const dropValidate = [
+  body('booking_id').trim().notEmpty().isInt().withMessage('Enter valid booking id'),
+  body('endKm').trim().notEmpty().isInt().withMessage('Enter valid end KM'),
+  check('car_image_front').custom((value, { req }) => {
+    if (!req.files || !req.files['car_image_front']) {
+      throw new Error('Front image of the car is required');
+    }
+    return true;
+  }),
+  check('car_image_back').custom((value, { req }) => {
+    if (!req.files || !req.files['car_image_back']) {
+      throw new Error('Back image of the car is required');
+    }
+    return true;
+  }),
+  check('car_image_side_1').custom((value, { req }) => {
+    if (!req.files || !req.files['car_image_side_1']) {
+      throw new Error('Side 1 image of the car is required');
+    }
+    return true;
+  }),
+  check('car_image_side_2').custom((value, { req }) => {
+    if (!req.files || !req.files['car_image_side_2']) {
+      throw new Error('Side 2 image of the car is required');
+    }
+    return true;
+  }),
+  check('extraImge')
+    .optional() // This field is optional
+    .custom((value, { req }) => {
+      if (req.files && req.files['extraImge']) {
+        return true;
+      }
+      return true;
+    }),
+  (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    next();
+  },
+];
+
 const BookingValidation = {
   AddbookingValidation,
   slotsValidation,
   slotsAfterValidation,
-  validateReview
+  validateReview,
+  pickUpValidate,
+  dropValidate,
 };
 
 export default BookingValidation;

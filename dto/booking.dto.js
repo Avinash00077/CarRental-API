@@ -183,11 +183,12 @@ const GetBookingReviewDTO = async (userId, bookingId) => {
   }
 };
 
-const UpdateBookingPickUpDTO = async (booking_id) => {
+const UpdateBookingPickUpDTO = async (booking_id, startKm) => {
   try {
     const query = DB.QUERY.UPDATE_BOOKING_PICKUP;
     const replacements = {
       booking_id,
+      startKm,
     };
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
@@ -197,16 +198,45 @@ const UpdateBookingPickUpDTO = async (booking_id) => {
   }
 };
 
-const UpdateBookingDropDTO = async (booking_id) => {
+const UpdateBookingDropDTO = async (booking_id, endKm) => {
   try {
     const query = DB.QUERY.UPDATE_BOOKING_DROP;
     const replacements = {
       booking_id,
+      endKm,
     };
     const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
     return data;
   } catch (error) {
     logger.error({ UpdateBookingDropDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const bookingCarImagesDTO = async (
+  booking_id,
+  car_image_front,
+  car_image_back,
+  car_image_side_1,
+  car_image_side_2,
+  is_before_after,
+  extraImge,
+) => {
+  try {
+    const query = DB.QUERY.POST_BOOKING_IMAGES;
+    const replacements = {
+      booking_id,
+      car_image_front,
+      car_image_back,
+      car_image_side_1,
+      car_image_side_2,
+      is_before_after,
+      extraImge: extraImge ? extraImge : null,
+    };
+    const rData = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
+    return rData;
+  } catch (error) {
+    logger.error({ bookingCarImagesDTO: error.message });
     throw new Error(error.message);
   }
 };
@@ -225,6 +255,7 @@ const BookingDTO = {
   CancelBoookingDTO,
   UpdateBookingDropDTO,
   UpdateBookingPickUpDTO,
+  bookingCarImagesDTO,
 };
 
 export default BookingDTO;

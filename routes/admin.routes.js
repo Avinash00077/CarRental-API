@@ -10,6 +10,7 @@ import BookingController from '../controllers/booking.controller.js';
 import CarValidations from '../middlewares/validators/car.validation.js';
 import customUtility from '../utility/custom.utility.js';
 import UtiityController from '../controllers/utility.controller.js';
+import BookingValidation from '../middlewares/validators/booking.validation.js';
 
 const upload = multer({ storage: multer.memoryStorage() });
 
@@ -62,13 +63,39 @@ Router.post('/booking', BookingController.AddBookingByAdminController);
 
 Router.put('/booking', BookingController.UpdateBookingByAdminController);
 
-Router.put('/booking/pickup', BookingController.UpdateBookingPickUpController);
+Router.put(
+  '/booking/pickup',
+  upload.fields([
+    { name: 'car_image_front', maxCount: 1 },
+    { name: 'car_image_back', maxCount: 1 },
+    { name: 'car_image_side_1', maxCount: 1 },
+    { name: 'car_image_side_2', maxCount: 1 },
+    { name: 'extraImge', maxCount: 1 },
+  ]),
+  BookingValidation.pickUpValidate,
+  BookingController.UpdateBookingPickUpController,
+);
 
-Router.put('/booking/drop', BookingController.UpdateBookingDropController);
+Router.put(
+  '/booking/drop',
+  upload.fields([
+    { name: 'car_image_front', maxCount: 1 },
+    { name: 'car_image_back', maxCount: 1 },
+    { name: 'car_image_side_1', maxCount: 1 },
+    { name: 'car_image_side_2', maxCount: 1 },
+    { name: 'extraImge', maxCount: 1 },
+  ]),
+  BookingValidation.dropValidate,
+  BookingController.UpdateBookingDropController,
+);
 
 //utility
 
 Router.get('/locations', UtiityController.GetLocationsController);
+
+Router.post('/locations', UtiityController.PostLocationController);
+
+Router.put('/locations', UtiityController.UpdateLocationController);
 
 Router.get('/car-brands', UtiityController.GetCarBrandsController);
 

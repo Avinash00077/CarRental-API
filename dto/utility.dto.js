@@ -5,13 +5,41 @@ import DB from '../config/app/query.config.js';
 import mysql from '../config/database/database.config.js';
 import logger from '../utility/logger.utility.js';
 
-const GetLocationsDTO = async (user_name) => {
+const GetLocationsDTO = async () => {
   try {
     const query = DB.QUERY.GET_LOCATIONS;
     const data = await mysql.query(query, { type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetLocationsDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const PostLocationsDTO = async (location, address, activeInd, latitude, longitude) => {
+  try {
+    const replacements = {
+      location, address, activeInd, latitude, longitude
+    }
+    const query = DB.QUERY.POST_LOCATIONS;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
+    return data;
+  } catch (error) {
+    logger.error({ PostLocationsDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateLocationsDTO = async (location_id,location, address, activeInd, latitude, longitude) => {
+  try {
+    const replacements = {
+      location_id, location, address, activeInd, latitude, longitude
+    }
+    const query = DB.QUERY.UPDATE_LOCATIONS;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateLocationsDTO: error.message });
     throw new Error(error.message);
   }
 };
@@ -75,7 +103,9 @@ const UtiityDTO = {
   GetCarBrandsDTO,
   PostFeedbackDTO,
   GetFeedbacksDTO,
-  UpdateFeedbackDTO
+  UpdateFeedbackDTO,
+  PostLocationsDTO,
+  UpdateLocationsDTO,
 };
 
 export default UtiityDTO;

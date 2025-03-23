@@ -23,6 +23,42 @@ const GetLocationsService = async (request) => {
   }
 };
 
+const PostLocationsService = async (request) => {
+  try {
+    const { location, address, latitude, longitude } = request.body;
+    let data = await UtiityDTO.GetLocationsDTO();
+    const isLocationExists = data.filter((i) => {
+      return i.location === location;
+    });
+    if (isLocationExists.length > 0) {
+      return customExceptionMessage(409, 'Location already exists');
+    }
+    const locationData = await UtiityDTO.PostLocationsDTO(location, address, 'Y', latitude, longitude);
+    return locationData;
+  } catch (error) {
+    logger.error({ GetLocationsService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateLocationsService = async (request) => {
+  try {
+    const { location_id,location, address, activeInd, latitude, longitude } = request.body;
+    let data = await UtiityDTO.GetLocationsDTO();
+    const isLocationExists = data.filter((i) => {
+      return i.location === location;
+    });
+    if (isLocationExists.length === 0) {
+      return customExceptionMessage(404, 'Location not found');
+    }
+    const locationData = await UtiityDTO.UpdateLocationsDTO(location_id, location, address, activeInd, latitude, longitude);
+    return locationData;
+  } catch (error) {
+    logger.error({ UpdateLocationsService: error.message });
+    throw new Error(error.message);
+  }
+};
+
 const GetCarBrandsService = async (request) => {
   try {
     const data = await UtiityDTO.GetCarBrandsDTO();
@@ -95,7 +131,9 @@ const UtilityService = {
   GetFeedbacksService,
   PostFeedbacksService,
   GetUserFeedbacksService,
-  UpdateFeedbacksService
+  UpdateFeedbacksService,
+  PostLocationsService,
+  UpdateLocationsService,
 };
 
 export default UtilityService;

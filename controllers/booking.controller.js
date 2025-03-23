@@ -104,7 +104,7 @@ const UpdateBookingPickUpController = async (request, response) => {
     if (data.errorCode) {
       return response.status(data.errorCode).json({ message: data.errorMessage });
     } else {
-      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_CONFIRMED });
+      response.status(200).json({ message: BOOKING_MESSAGES.BOOKING_UPDATED });
     }
   } catch (error) {
     logger.error({ UpdateBookingPickUpController: error.message });

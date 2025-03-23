@@ -8,8 +8,10 @@ import customUtility from '../utility/custom.utility.js';
 import logger from '../utility/logger.utility.js';
 import AppConfig from '../config/app/app.config.js';
 import sendEmail from '../utility/email.utility.js';
+import cloudinaryUtils from '../utility/cloudinary.js';
 const { STATUS_MESSAGES, OTP_CODES, BOOKING_MESSAGES } = AppConfig;
 const { customExceptionMessage, generateOtp } = customUtility;
+const { uploadToCloudinary,deleteUserImageService } = cloudinaryUtils;
 
 const GetUserBookingsService = async (request) => {
   try {
@@ -299,7 +301,7 @@ const UpdateBookingsReviewService = async (request) => {
 
 const UpdateBookingPickUpService = async (request) => {
   try {
-    const { booking_id } = request.body;
+    const { booking_id, startKm } = request.body;
     const admin = request.adminId;
     if (!admin) {
       return customExceptionMessage(403, STATUS_MESSAGES[403]);
@@ -308,7 +310,28 @@ const UpdateBookingPickUpService = async (request) => {
     if (bookingData.length === 0 || bookingData[0].booking_status === 'COMPLETED') {
       return customExceptionMessage(409, 'Car rental already completed or data not available');
     }
-    const data = await BookingDTO.UpdateBookingPickUpDTO(booking_id);
+        const uploadedImages = {};
+        const imageFields = [
+          'car_image_front',
+          'car_image_back',
+          'car_image_side_1',
+          'car_image_side_2',
+          'extraImge'
+        ];
+    
+        for (const field of imageFields) {
+          if (request.files[field]) {
+            uploadedImages[field] = await uploadToCloudinary(request.files[field][0], 'bookings');
+          }
+        }
+    const data = await BookingDTO.UpdateBookingPickUpDTO(booking_id,startKm);
+    await BookingDTO.bookingCarImagesDTO(booking_id,
+      uploadedImages.car_image_front,
+      uploadedImages.car_image_back,
+      uploadedImages.car_image_side_1,
+      uploadedImages.car_image_side_2,
+      'B',
+      uploadedImages?.extraImge,)
     return data;
   } catch (error) {
     logger.error({ UpdateBookingPickUpService: error.message });
@@ -318,7 +341,7 @@ const UpdateBookingPickUpService = async (request) => {
 
 const UpdateBookingDropService = async (request) => {
   try {
-    const { booking_id } = request.body;
+    const { booking_id,endKm } = request.body;
     const admin = request.adminId;
     if (!admin) {
       return customExceptionMessage(403, STATUS_MESSAGES[403]);
@@ -327,7 +350,28 @@ const UpdateBookingDropService = async (request) => {
     if (bookingData.length === 0) {
       return customExceptionMessage(409, 'Car rental already completed or data not available');
     }
-    const data = await BookingDTO.UpdateBookingDropDTO(booking_id);
+    const uploadedImages = {};
+    const imageFields = [
+      'car_image_front',
+      'car_image_back',
+      'car_image_side_1',
+      'car_image_side_2',
+      'extraImge'
+    ];
+
+    for (const field of imageFields) {
+      if (request.files[field]) {
+        uploadedImages[field] = await uploadToCloudinary(request.files[field][0], 'bookings');
+      }
+    }
+    const data = await BookingDTO.UpdateBookingDropDTO(booking_id,endKm);
+    await BookingDTO.bookingCarImagesDTO(booking_id,
+      uploadedImages.car_image_front,
+      uploadedImages.car_image_back,
+      uploadedImages.car_image_side_1,
+      uploadedImages.car_image_side_2,
+      'A',
+      uploadedImages?.extraImge,)
     return data;
   } catch (error) {
     logger.error({ UpdateBookingDropService: error.message });

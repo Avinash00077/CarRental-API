@@ -2,7 +2,7 @@
   "name": "car-rental-api",
   "version": "1.0.0",
   "description": "car rental system",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js",

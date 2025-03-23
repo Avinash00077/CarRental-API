@@ -63,9 +63,12 @@ const QUERY = {
   UPDATE_BOOKING_IMAGES: properties.get('query.update_booking_images'),
   GET_BOOKING_IMAGES : properties.get('query.get_booking_images'),
   CANCEL_BOOKING : properties.get('query.cancel_booking'),
+  POST_BOOKING_IMAGES: properties.get('query.post_booking_images'),
 
   //utility
   GET_LOCATIONS :properties.get('query.get_locations'),
+  POST_LOCATIONS: properties.get('query.post_locations'),
+  UPDATE_LOCATIONS: properties.get('query.update_locations'),
   GET_CAR_BRANDS: properties.get('query.get_car_brands'),
   POST_FEEDBACK: properties.get('query.post_feedback'),
   UPDATE_FEEDBACK: properties.get('query.update_feedback'),
