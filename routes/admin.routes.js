@@ -27,7 +27,7 @@ Router.get('/', AdminController.GetAdminsController);
 
 Router.post('/add', AdminController.AddNewAdminController);
 
-Router.post('/add', AdminController.UpdateAdminController);
+Router.put('/update', AdminController.UpdateAdminController);
 
 Router.get('/id', AdminController.GetAdminByIdController);
 
