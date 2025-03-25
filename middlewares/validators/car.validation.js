@@ -24,10 +24,10 @@ const GetCarCheck = [
     //.matches(/^\d{4}\/\d{2}\/\d{2}$/)
     .withMessage('Invalid date format (use YYYY/MM/DD)')
     .custom((value, { req }) => {
-      const today = moment().format('YYYY/MM/DD');
-      if (moment(value, 'YYYY/MM/DD').isBefore(today)) {
-        throw new Error('End date must be greater than today');
-      }
+      // const today = moment().format('YYYY/MM/DD');
+      // if (moment(value, 'YYYY/MM/DD').isBefore(today)) {
+      //   throw new Error('End date must be greater than today');
+      // }
       if (moment(value, 'YYYY/MM/DD').isBefore(req.body.start_date)) {
         throw new Error('End date must be greater than start date');
       }
