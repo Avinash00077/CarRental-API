@@ -19,8 +19,12 @@ const GetLocationsDTO = async () => {
 const PostLocationsDTO = async (location, address, activeInd, latitude, longitude) => {
   try {
     const replacements = {
-      location, address, activeInd, latitude, longitude
-    }
+      location,
+      address,
+      activeInd,
+      latitude,
+      longitude,
+    };
     const query = DB.QUERY.POST_LOCATIONS;
     const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
     return data;
@@ -30,11 +34,16 @@ const PostLocationsDTO = async (location, address, activeInd, latitude, longitud
   }
 };
 
-const UpdateLocationsDTO = async (location_id,location, address, activeInd, latitude, longitude) => {
+const UpdateLocationsDTO = async (location_id, location, address, activeInd, latitude, longitude) => {
   try {
     const replacements = {
-      location_id, location, address, activeInd, latitude, longitude
-    }
+      location_id,
+      location,
+      address,
+      activeInd,
+      latitude,
+      longitude,
+    };
     const query = DB.QUERY.UPDATE_LOCATIONS;
     const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
     return data;
@@ -44,13 +53,51 @@ const UpdateLocationsDTO = async (location_id,location, address, activeInd, lati
   }
 };
 
-const GetCarBrandsDTO = async (user_name) => {
+const GetCarBrandsDTO = async () => {
   try {
     const query = DB.QUERY.GET_CAR_BRANDS;
     const data = await mysql.query(query, { type: QueryTypes.SELECT });
     return data;
   } catch (error) {
     logger.error({ GetCarBrandsDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const PostCarBrandDTO = async (car_brand, car_name, car_type, seater, car_modal_year) => {
+  try {
+    const replacements = {
+      car_brand,
+      car_name,
+      car_type,
+      seater,
+      car_modal_year,
+    };
+    const query = DB.QUERY.POST_CAR_BRANDS;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.INSERT });
+    return data;
+  } catch (error) {
+    logger.error({ PostCarBrandDTO: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateCarBrandDTO = async ( car_id ,car_brand, car_name, car_type, seater, car_modal_year, activeInd) => {
+  try {
+    const replacements = {
+      car_id ,
+      car_brand,
+      car_name,
+      car_type,
+      seater,
+      car_modal_year,
+      activeInd,
+    };
+    const query = DB.QUERY.UPDATE_CAR_BRANDS;
+    const data = await mysql.query(query, { replacements, type: QueryTypes.UPDATE });
+    return data;
+  } catch (error) {
+    logger.error({ UpdateCarBrandDTO: error.message });
     throw new Error(error.message);
   }
 };
@@ -89,7 +136,7 @@ const UpdateFeedbackDTO = async (user_id, rating, comments) => {
 
 const GetFeedbacksDTO = async () => {
   try {
-    const query = DB.QUERY.GET_FEEDBACKS
+    const query = DB.QUERY.GET_FEEDBACKS;
     const data = await mysql.query(query, { type: QueryTypes.SELECT });
     return data;
   } catch (error) {
@@ -106,6 +153,8 @@ const UtiityDTO = {
   UpdateFeedbackDTO,
   PostLocationsDTO,
   UpdateLocationsDTO,
+  PostCarBrandDTO,
+  UpdateCarBrandDTO,
 };
 
 export default UtiityDTO;

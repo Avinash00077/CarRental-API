@@ -43,7 +43,7 @@ const PostLocationsService = async (request) => {
 
 const UpdateLocationsService = async (request) => {
   try {
-    const { location_id,location, address, activeInd, latitude, longitude } = request.body;
+    const { location_id, location, address, activeInd, latitude, longitude } = request.body;
     let data = await UtiityDTO.GetLocationsDTO();
     const isLocationExists = data.filter((i) => {
       return i.location === location;
@@ -65,6 +65,48 @@ const GetCarBrandsService = async (request) => {
     return data;
   } catch (error) {
     logger.error({ GetCarBrandsService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const PostCarBrandService = async (request) => {
+  try {
+    const { car_brand, car_name, car_type, seater, car_modal_year } = request.body;
+    let data = await UtiityDTO.GetCarBrandsDTO();
+    const isLocationExists = data.filter((i) => {
+      return (
+        i.car_brand === car_brand &&
+        i.car_name === car_name &&
+        i.car_type === car_type &&
+        i.seater === seater &&
+        i.car_modal_year === car_modal_year
+      );
+    });
+    if (isLocationExists.length > 0) {
+      return customExceptionMessage(409, 'car brand already exists');
+    }
+    const rData = await UtiityDTO.PostCarBrandDTO(car_brand, car_name, car_type, seater, car_modal_year);
+    return rData;
+  } catch (error) {
+    logger.error({ PostCarBrandService: error.message });
+    throw new Error(error.message);
+  }
+};
+
+const UpdateCarBrandService = async (request) => {
+  try {
+    const { car_id, car_brand, car_name, car_type, seater, car_modal_year, activeInd } = request.body;
+    // let data = await UtiityDTO.GetCarBrandsDTO();
+    // const isLocationExists = data.filter((i) => {
+    //   return i.car_brand === car_brand && i.car_name === car_name && i.car_type === car_type && i.seater === seater && i.car_modal_year === car_modal_year;
+    // });
+    // if (isLocationExists.length > 0) {
+    //   return customExceptionMessage(409, 'car brand already exists');
+    // }
+    const rData = await UtiityDTO.UpdateCarBrandDTO(car_id, car_brand, car_name, car_type, seater, car_modal_year, activeInd);
+    return rData;
+  } catch (error) {
+    logger.error({ UpdateCarBrandService: error.message });
     throw new Error(error.message);
   }
 };
@@ -134,6 +176,8 @@ const UtilityService = {
   UpdateFeedbacksService,
   PostLocationsService,
   UpdateLocationsService,
+  PostCarBrandService,
+  UpdateCarBrandService,
 };
 
 export default UtilityService;

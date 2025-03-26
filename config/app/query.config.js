@@ -74,7 +74,9 @@ const QUERY = {
   GET_CAR_BRANDS: properties.get('query.get_car_brands'),
   POST_FEEDBACK: properties.get('query.post_feedback'),
   UPDATE_FEEDBACK: properties.get('query.update_feedback'),
-  GET_FEEDBACKS: properties.get('query.get_feedbacks')
+  GET_FEEDBACKS: properties.get('query.get_feedbacks'),
+  POST_CAR_BRANDS: properties.get('query.post_car_brands'),
+  UPDATE_CAR_BRANDS: properties.get('query.update_car_brands'),
   
 };
 

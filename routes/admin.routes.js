@@ -99,4 +99,8 @@ Router.put('/locations', UtiityController.UpdateLocationController);
 
 Router.get('/car-brands', UtiityController.GetCarBrandsController);
 
+Router.post('/car-brands', UtiityController.PostCarBrandController);
+
+Router.put('/car-brands', UtiityController.UpdateCarBrandController);
+
 export default Router;
